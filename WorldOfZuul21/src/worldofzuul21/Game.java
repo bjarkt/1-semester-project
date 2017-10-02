@@ -17,6 +17,11 @@ public class Game
 
     private void createRooms()
     {
+    
+        Room room00, room01, room02, room03, room04, room05,
+             room06, room07, room08, room09, room10, room11;
+    
+    /*    
         Room outside, theatre, pub, lab, office;
 
         outside = new Room("outside the main entrance of the university");
@@ -39,6 +44,7 @@ public class Game
         office.setExit("west", lab);
 
         currentRoom = outside;
+    */
     }
 
     public void play() 
