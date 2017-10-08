@@ -11,13 +11,13 @@ public class Parser
 {
     private CommandWords commands;
     private Scanner reader;
-
+/* No arg constructor */ 
     public Parser() 
     {
         commands = new CommandWords();
         reader = new Scanner(System.in);
     }
-
+/*Method for getting command from user input*/
     public Command getCommand() 
     {
         String inputLine;
@@ -27,7 +27,7 @@ public class Parser
         System.out.print("> ");
 
         inputLine = reader.nextLine();
-
+/*Cheking for 1 or 2 words in input */
         Scanner tokenizer = new Scanner(inputLine);
         if(tokenizer.hasNext()) {
             word1 = tokenizer.next();
@@ -38,7 +38,7 @@ public class Parser
 
         return new Command(commands.getCommandWord(word1), word2);
     }
-
+/*Method for showing all acceptable commands */
     public void showCommands()
     {
         commands.showAll();
