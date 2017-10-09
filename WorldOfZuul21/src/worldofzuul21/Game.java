@@ -22,36 +22,71 @@ public class Game
     private void createRooms()
     {
     
-    //    Room room00, room01, room02, room03, room04, room05,
-    //         room06, room07, room08, room09, room10, room11;
-    
-        
-        Room outside, theatre, pub, lab, office;
+        Room room00, room01, room02, room03, room04, room05,
+        room06, room07, room08, room09, room10, room11, noRoom;
         // Instantiate the rooms, and write their descriptions.
-        outside = new Room("outside the main entrance of the university");
-        theatre = new Room("in a lecture theatre");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        room00 = new Room("at the entrance of the museum");
+        room01 = new Room("in a room");
+        room02 = new Room("in a room. There is stairs to the upper floor, to the east");
+        room03 = new Room("on the upper floor. There is stairs to the groundfloor, to the west");
+        room04 = new Room("in a room");
+        room05 = new Room("in a room");
+        room06 = new Room("in a room");
+        room07 = new Room("in a room");
+        room08 = new Room("in a room");
+        room09 = new Room("in a room");
+        room10 = new Room("in a room");
+        room11 = new Room("in a room");
+        noRoom = new Room("nowhere");
 
         // Set the exit for each room,
-        // a direction and a room object is required.
-        outside.setExit("east", theatre);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        // a direction and a room object is required.        
+        room00.setExit("east", room01);
+        room00.setExit("south", room04);
 
-        theatre.setExit("west", outside);
+        room01.setExit("east", room02);
+        room01.setExit("west", room00);
+        room01.setExit("south", room05);
 
-        pub.setExit("east", outside);
+        room02.setExit("east", room03);
+        room02.setExit("west", room01);
+        room02.setExit("south", room06);
 
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
+        room03.setExit("west", room02);
+        
+        room04.setExit("north", room00);
+        room04.setExit("east", room05);
+        room04.setExit("south", room08);
+        
+        room05.setExit("north", room01);
+        room05.setExit("east", room06);
+        room05.setExit("west", room04);
+        room05.setExit("south", room09);
+        
+        room06.setExit("north", room02);
+        room06.setExit("east", room07);
+        room06.setExit("west", room05);
+        room06.setExit("south", room10);
+        
+        room07.setExit("west", room06);
+        room07.setExit("south", room11);
+        
+        room08.setExit("north", room04);
+        room08.setExit("east", room09);
+        
+        room09.setExit("north", room05);
+        room09.setExit("east", room10);
+        room09.setExit("west", room08);
+        
+        room10.setExit("north", room06);
+        room10.setExit("east", room11);
+        room10.setExit("west", room09);
+        
+        room11.setExit("north", room07);
+        room11.setExit("west", room10);
 
         // Set the room, in which the player starts.
-        currentRoom = outside;
-    
+        currentRoom = room00;
     }
 
     /* The method in which the main game loop happens. */
