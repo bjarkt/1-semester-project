@@ -10,6 +10,7 @@ package worldofzuul21;
  * @author Nikolaj Brandt Filipsen
  */
 public class Start {
+
     public static void main(String[] args) {
         Game newGame = new Game();
         newGame.play();
