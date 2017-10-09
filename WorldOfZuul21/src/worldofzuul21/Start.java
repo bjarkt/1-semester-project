@@ -7,7 +7,7 @@ package worldofzuul21;
 
 /**
  *
- * Nikolaj Brandt Filipsen
+ * @author Nikolaj Brandt Filipsen
  */
 public class Start {
     public static void main(String[] args) {

@@ -25,7 +25,7 @@ public class Game
         Room room00, room01, room02, room03, room04, room05,
         room06, room07, room08, room09, room10, room11, noRoom;
         // Instantiate the rooms, and write their descriptions.
-        room00 = new Room("at the entrance of the museum");
+        room00 = new Room("in a room");
         room01 = new Room("in a room");
         room02 = new Room("in a room. There is stairs to the upper floor, to the east");
         room03 = new Room("on the upper floor. There is stairs to the groundfloor, to the west");
@@ -33,7 +33,7 @@ public class Game
         room05 = new Room("in a room");
         room06 = new Room("in a room");
         room07 = new Room("in a room");
-        room08 = new Room("in a room");
+        room08 = new Room("at the entrance of the museum");
         room09 = new Room("in a room");
         room10 = new Room("in a room");
         room11 = new Room("in a room");
@@ -86,7 +86,7 @@ public class Game
         room11.setExit("west", room10);
 
         // Set the room, in which the player starts.
-        currentRoom = room00;
+        currentRoom = room08;
     }
 
     /* The method in which the main game loop happens. */
@@ -111,8 +111,8 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
+        System.out.println("Welcome to Night at the Museum");
+        System.out.println("Night at the Museum is a new, incredibly amazing strategy game.");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
