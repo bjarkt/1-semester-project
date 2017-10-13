@@ -8,10 +8,16 @@ public class Game {
 
     private Parser parser;
     private Room currentRoom;
+    private Room[] rooms;
+    private boolean item;
+    private PowerSwitch powerSwitch;
+    private Guard[] guards;
 
     /* zero argument constructor. */
     public Game() {
         createRooms();
+        
+        item = false;
 
         // Instantiate the parser used to parse commands.
         parser = new Parser();
@@ -82,9 +88,25 @@ public class Game {
 
         room11.setExit("north", room07);
         room11.setExit("west", room10);
-
+        
+        // Add the rooms to an array
+        rooms = new Room[13];
+        rooms[0] = room00;
+        rooms[1] = room01;
+        rooms[2] = room02;
+        rooms[3] = room03;
+        rooms[4] = room04;
+        rooms[5] = room05;
+        rooms[6] = room06;
+        rooms[7] = room07;
+        rooms[8] = room08;
+        rooms[9] = room09;
+        rooms[10] = room10;
+        rooms[11] = room11;
+        rooms[12] = noRoom;
+        
         // Set the room, in which the player starts.
-        currentRoom = room08;
+        currentRoom = rooms[8];
     }
 
     /* The method in which the main game loop happens. */
