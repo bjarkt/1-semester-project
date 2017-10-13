@@ -3,19 +3,23 @@ package worldofzuul21;
 
 public class PowerSwitch {
 
-boolean status;
+    private boolean isOn;
 
     PowerSwitch() {
     }
 
     void turnPowerOff() {
-        status = false;
+        isOn = false;
 
     }
 
     void turnPowerOn() {
-        status = true;
+        isOn = true;
 
+    }
+
+    public boolean getIsOn() {
+        return isOn;
     }
 
 
