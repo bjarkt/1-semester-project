@@ -1,5 +1,9 @@
 package worldofzuul21;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * @author Michael Kolling and David J. Barnes
  * @version 2006.03.30
@@ -8,7 +12,7 @@ public class Game {
 
     private Parser parser;
     private Room currentRoom;
-    private Room[] rooms;
+    private HashMap<Integer, Room> rooms;
     private boolean item;
     private PowerSwitch powerSwitch;
     private Guard[] guards;
@@ -16,7 +20,7 @@ public class Game {
     /* zero argument constructor. */
     public Game() {
         createRooms();
-        
+
         item = false;
 
         // Instantiate the parser used to parse commands.
@@ -29,84 +33,81 @@ public class Game {
         Room room00, room01, room02, room03, room04, room05,
                 room06, room07, room08, room09, room10, room11, noRoom;
         // Instantiate the rooms, and write their descriptions.
-        room00 = new Room("in a room");
-        room01 = new Room("in a room");
-        room02 = new Room("in a room. There is stairs to the upper floor, to the east");
-        room03 = new Room("on the upper floor. There is stairs to the groundfloor, to the west");
-        room04 = new Room("in a room");
-        room05 = new Room("in a room");
-        room06 = new Room("in a room");
-        room07 = new Room("in a room");
-        room08 = new Room("at the entrance of the museum");
-        room09 = new Room("in a room");
-        room10 = new Room("in a room");
-        room11 = new Room("in a room");
-        noRoom = new Room("nowhere");
+        room00 = new Room("in a room", 0, 0);
+        room01 = new Room("in a room", 1, 0);
+        room02 = new Room("in a room. There is stairs to the upper floor, to the east", 2, 0);
+        room03 = new Room("on the upper floor. There is stairs to the groundfloor, to the west", 3, 0);
+        room04 = new Room("in a room", 0, 1);
+        room05 = new Room("in a room", 1, 1);
+        room06 = new Room("in a room", 2, 1);
+        room07 = new Room("in a room", 3, 1);
+        room08 = new Room("at the entrance of the museum", 0, 2);
+        room09 = new Room("in a room", 1, 2);
+        room10 = new Room("in a room", 2, 2);
+        room11 = new Room("in a room", 3, 2);
+        noRoom = new Room("nowhere", 9, 9);
+
+        // Add the rooms to an array
+        rooms = new HashMap<>();
+        rooms.put(room00.getLocation().getXY(), room00);
+        rooms.put(room01.getLocation().getXY(), room01);
+        rooms.put(room02.getLocation().getXY(), room02);
+        rooms.put(room03.getLocation().getXY(), room03);
+        rooms.put(room04.getLocation().getXY(), room04);
+        rooms.put(room05.getLocation().getXY(), room05);
+        rooms.put(room06.getLocation().getXY(), room06);
+        rooms.put(room07.getLocation().getXY(), room07);
+        rooms.put(room08.getLocation().getXY(), room08);
+        rooms.put(room09.getLocation().getXY(), room09);
+        rooms.put(room10.getLocation().getXY(), room10);
+        rooms.put(room11.getLocation().getXY(), room11);
+        rooms.put(noRoom.getLocation().getXY(), noRoom);
+
+        // Set the room, in which the player starts.
+        Location loc = new Location(room08.getLocation().getX(), room08.getLocation().getY());
+        currentRoom = rooms.get(room08.getLocation().getXY());
+        System.out.println(currentRoom == null);
 
         // Set the exit for each room,
-        // a direction and a room object is required.        
-        room00.setExit("east", room01);
-        room00.setExit("south", room04);
-
-        room01.setExit("east", room02);
-        room01.setExit("west", room00);
-        room01.setExit("south", room05);
-
-        room02.setExit("east", room03);
-        room02.setExit("west", room01);
-        room02.setExit("south", room06);
-
-        room03.setExit("west", room02);
-
-        room04.setExit("north", room00);
-        room04.setExit("east", room05);
-        room04.setExit("south", room08);
-
-        room05.setExit("north", room01);
-        room05.setExit("east", room06);
-        room05.setExit("west", room04);
-        room05.setExit("south", room09);
-
-        room06.setExit("north", room02);
-        room06.setExit("east", room07);
-        room06.setExit("west", room05);
-        room06.setExit("south", room10);
-
-        room07.setExit("west", room06);
-        room07.setExit("south", room11);
-
-        room08.setExit("north", room04);
-        room08.setExit("east", room09);
-
-        room09.setExit("north", room05);
-        room09.setExit("east", room10);
-        room09.setExit("west", room08);
-
-        room10.setExit("north", room06);
-        room10.setExit("east", room11);
-        room10.setExit("west", room09);
-
-        room11.setExit("north", room07);
-        room11.setExit("west", room10);
-        
-        // Add the rooms to an array
-        rooms = new Room[13];
-        rooms[0] = room00;
-        rooms[1] = room01;
-        rooms[2] = room02;
-        rooms[3] = room03;
-        rooms[4] = room04;
-        rooms[5] = room05;
-        rooms[6] = room06;
-        rooms[7] = room07;
-        rooms[8] = room08;
-        rooms[9] = room09;
-        rooms[10] = room10;
-        rooms[11] = room11;
-        rooms[12] = noRoom;
-        
-        // Set the room, in which the player starts.
-        currentRoom = rooms[8];
+        // a direction and a room object is required.
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+            if (room.getValue().getLocation().getX() == 0) {
+                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
+                room.getValue().setExit("east", loca.getXY());
+            }
+            if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2) {
+                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
+                room.getValue().setExit("east", loca.getXY());
+                Location loca2 = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
+                room.getValue().setExit("west", loca2.getXY());
+            }
+            if (room.getValue().getLocation().getX() == 3) {
+                Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
+                room.getValue().setExit("west", loca.getXY());
+            }
+            if (room.getValue().getLocation().getY() == 2) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+                room.getValue().setExit("north", loca.getXY());
+            }
+            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() < 3) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+                room.getValue().setExit("north", loca.getXY());
+                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                room.getValue().setExit("south", loca2.getXY());
+            }
+            if (room.getValue().getLocation().getY() == 0 && room.getValue().getLocation().getX() < 3) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                room.getValue().setExit("south", loca.getXY());
+            }
+            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() == 3) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                room.getValue().setExit("south", loca.getXY());
+            }
+            if (room.getValue().getLocation().getY() == 0 && room.getValue().getLocation().getX() == 3) {
+                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
+                room.getValue().setExit("west", loca.getXY());
+            }
+        }
     }
 
     /* The method in which the main game loop happens. */
@@ -183,7 +184,9 @@ public class Game {
 
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
-        Room nextRoom = currentRoom.getExit(direction);
+        Room nextRoom = rooms.get(currentRoom.getExit(direction));
+        System.out.println(nextRoom == null);
+        //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
             System.out.println("There is no door!");

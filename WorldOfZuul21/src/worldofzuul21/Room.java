@@ -10,15 +10,17 @@ import java.util.Iterator;
  */
 public class Room {
 
+    private Location location;
     private String description;
-    private HashMap<String, Room> exits;
+    private HashMap<String, Integer> exits;
 
-    public Room(String description) {
+    public Room(String description, int x, int y) {
         this.description = description;
-        exits = new HashMap<String, Room>();
+        location = new Location(x, y);
+        exits = new HashMap<String, Integer>();
     }
 
-    public void setExit(String direction, Room neighbor) {
+    public void setExit(String direction, Integer neighbor) {
         exits.put(direction, neighbor);
     }
 
@@ -46,7 +48,11 @@ public class Room {
 
     /* Returns room, that has the corresponding direction. 
        Returns null if there is no room, for a certain direction. */
-    public Room getExit(String direction) {
+    public Integer getExit(String direction) {
         return exits.get(direction);
+    }
+    
+    Location getLocation() {
+        return location;
     }
 }

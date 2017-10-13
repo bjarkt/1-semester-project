@@ -7,11 +7,17 @@ package worldofzuul21;
 
 /**
  *
- * @author Bruger
+ * @author Nikolaj
  */
 public class Guard {
 
-    Guard() {
-
+    private Location location;
+    
+    Guard(Location location) {
+        this.location = location;
+    }
+    
+    Location getLocation() {
+        return location;
     }
 }
