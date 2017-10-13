@@ -120,7 +120,7 @@ public class Game {
                 room.getValue().setExit("south", loca.getXY());
             }
             if (room.getValue().getLocation().getY() == 0 && room.getValue().getLocation().getX() == 3) {
-                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
+                Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca.getXY());
             }
         }
