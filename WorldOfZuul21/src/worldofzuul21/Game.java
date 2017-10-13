@@ -51,12 +51,15 @@ public class Game {
 
         switch (number) {
             case 0:
+                room02.setPowerSwitch(new PowerSwitch());
                 room02.getPowerSwitch().turnPowerOn();
                 break;
             case 1:
+                room04.setPowerSwitch(new PowerSwitch());
                 room04.getPowerSwitch().turnPowerOn();
                 break;
             case 2:
+                room11.setPowerSwitch(new PowerSwitch());
                 room11.getPowerSwitch().turnPowerOn();
                 break;
         }
@@ -172,7 +175,7 @@ public class Game {
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
-            interact();
+                interact();
         }
         return wantToQuit;
     }
@@ -222,7 +225,10 @@ public class Game {
     }
 
     private void interact() {
-        if (currentRoom.getPowerSwitch() == null) {
+        if(currentRoom.getPowerSwitch() == null) {
+            return;
+        }
+        if (!currentRoom.getPowerSwitch().getIsOn()) {
             return;
         } else if (currentRoom.getPowerSwitch().getIsOn()) {
             currentRoom.getPowerSwitch().turnPowerOff();
