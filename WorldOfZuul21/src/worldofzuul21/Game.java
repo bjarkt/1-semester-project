@@ -47,6 +47,19 @@ public class Game {
         room11 = new Room("in a room", 3, 2);
         noRoom = new Room("nowhere", 9, 9);
 
+        int number = (int) (Math.random() * 3);
+
+        switch (number) {
+            case 0:
+                room02.getPowerSwitch().turnPowerOn();
+                break;
+            case 1:
+                room04.getPowerSwitch().turnPowerOn();
+                break;
+            case 2:
+                room11.getPowerSwitch().turnPowerOn();
+                break;
+        }
         // Add the rooms to an array
         rooms = new HashMap<>();
         rooms.put(room00.getLocation().getXY(), room00);
@@ -158,6 +171,8 @@ public class Game {
             goRoom(command);
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
+        } else if (commandWord == CommandWord.INTERACT) {
+            interact();
         }
         return wantToQuit;
     }
@@ -203,6 +218,15 @@ public class Game {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void interact() {
+        if (currentRoom.getPowerSwitch() == null) {
+            return;
+        } else if (currentRoom.getPowerSwitch().getIsOn()) {
+            currentRoom.getPowerSwitch().turnPowerOff();
+            System.out.println("The lights will be turned off, for 10 turns");
         }
     }
 }
