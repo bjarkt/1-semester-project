@@ -61,7 +61,8 @@ public class Room {
         return powerSwitch;
     }
     public String getPowerSwitchString() {
-        if(this.powerSwitch == null) {
+        if(this.powerSwitch
+                == null) {
             return "";
         }
         if (!this.powerSwitch.getIsOn()) {
