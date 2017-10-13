@@ -45,3 +45,4 @@ tjekke statement. if(currentroom.powerswitch.status) {
 
     
 }
+*/
