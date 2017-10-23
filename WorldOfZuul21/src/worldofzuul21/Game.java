@@ -10,29 +10,29 @@ import java.util.Map.Entry;
  * @version 2006.03.30
  */
 public class Game {
-    
+
     private Parser parser;
     private Room currentRoom;
     private HashMap<Integer, Room> rooms;
-    private boolean item;
     private PowerSwitch powerSwitch;
     private Guard[] guards;
     private List<Room> itemSpawnPointRooms;
+    private Inventory inventory;
+    private int timer;
 
     /* zero argument constructor. */
     public Game() {
         itemSpawnPointRooms = new ArrayList<>();
         createRooms();
-        
-        item = false;
 
         // Instantiate the parser used to parse commands.
         parser = new Parser();
+        inventory = new Inventory();
     }
 
     /* Create the rooms and set the current room. */
     private void createRooms() {
-        
+
         Room room00, room01, room02, room03, room04, room05,
                 room06, room07, room08, room09, room10, room11, noRoom;
         // Instantiate the rooms, and write their descriptions.
@@ -49,9 +49,9 @@ public class Game {
         room10 = new Room("in a room", 2, 2);
         room11 = new Room("in a room", 3, 2);
         noRoom = new Room("nowhere", 9, 9);
-        
+
         int number = (int) (Math.random() * 3);
-        
+
         switch (number) {
             case 0:
                 room02.setPowerSwitch(new PowerSwitch());
@@ -66,7 +66,7 @@ public class Game {
                 room11.getPowerSwitch().turnPowerOn();
                 break;
         }
-        
+
         Collections.addAll(itemSpawnPointRooms, room01, room03, room07, room10);
         Item.spawnItem(itemSpawnPointRooms);
 
@@ -164,7 +164,7 @@ public class Game {
        If true is returned, the game quits. */
     private boolean processCommand(Command command) {
         boolean wantToQuit = false;
-        
+
         CommandWord commandWord = command.getCommandWord();
 
         // Check if the first part of the command is an actual command.
@@ -183,7 +183,10 @@ public class Game {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
             interact();
+        } else if (commandWord == CommandWord.STEAL) {
+            stealItem();
         }
+
         return wantToQuit;
     }
 
@@ -230,9 +233,10 @@ public class Game {
             return true;
         }
     }
-    
+
     private void interact() {
         if (currentRoom.getPowerSwitch() == null) {
+            System.out.println("There is no powerswitch in this room");
             return;
         }
         if (!currentRoom.getPowerSwitch().getIsOn()) {
@@ -242,7 +246,32 @@ public class Game {
             System.out.println("The lights will be turned off, for 10 turns");
         }
     }
+
     private void stealItem() {
-        
+        if (currentRoom.getItems() != null) {
+            if (inventory.addToInventory(currentRoom.getItems())) {
+                System.out.println("You have stolen an item");
+            } else {
+                System.out.println("Your inventory is full");
+            }
+        } else {
+            System.out.println("There is no item to steal");
+        }
     }
+
+    private void escape() {
+        if (currentRoom.getLocation().getXY() == 2) {
+
+        }
+
+    }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
 }
