@@ -1,5 +1,6 @@
 package worldofzuul21;
 
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,18 +10,20 @@ import java.util.Map.Entry;
  * @version 2006.03.30
  */
 public class Game {
-
+    
     private Parser parser;
     private Room currentRoom;
     private HashMap<Integer, Room> rooms;
     private boolean item;
     private PowerSwitch powerSwitch;
     private Guard[] guards;
+    private List<Room> itemSpawnPointRooms;
 
     /* zero argument constructor. */
     public Game() {
+        itemSpawnPointRooms = new ArrayList<>();
         createRooms();
-
+        
         item = false;
 
         // Instantiate the parser used to parse commands.
@@ -29,7 +32,7 @@ public class Game {
 
     /* Create the rooms and set the current room. */
     private void createRooms() {
-
+        
         Room room00, room01, room02, room03, room04, room05,
                 room06, room07, room08, room09, room10, room11, noRoom;
         // Instantiate the rooms, and write their descriptions.
@@ -46,9 +49,9 @@ public class Game {
         room10 = new Room("in a room", 2, 2);
         room11 = new Room("in a room", 3, 2);
         noRoom = new Room("nowhere", 9, 9);
-
+        
         int number = (int) (Math.random() * 3);
-
+        
         switch (number) {
             case 0:
                 room02.setPowerSwitch(new PowerSwitch());
@@ -63,6 +66,10 @@ public class Game {
                 room11.getPowerSwitch().turnPowerOn();
                 break;
         }
+        
+        Collections.addAll(itemSpawnPointRooms, room01, room03, room07, room10);
+        Item.spawnItem(itemSpawnPointRooms);
+
         // Add the rooms to an array
         rooms = new HashMap<>();
         rooms.put(room00.getLocation().getXY(), room00);
@@ -157,7 +164,7 @@ public class Game {
        If true is returned, the game quits. */
     private boolean processCommand(Command command) {
         boolean wantToQuit = false;
-
+        
         CommandWord commandWord = command.getCommandWord();
 
         // Check if the first part of the command is an actual command.
@@ -175,7 +182,7 @@ public class Game {
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
-                interact();
+            interact();
         }
         return wantToQuit;
     }
@@ -223,9 +230,9 @@ public class Game {
             return true;
         }
     }
-
+    
     private void interact() {
-        if(currentRoom.getPowerSwitch() == null) {
+        if (currentRoom.getPowerSwitch() == null) {
             return;
         }
         if (!currentRoom.getPowerSwitch().getIsOn()) {
@@ -234,5 +241,8 @@ public class Game {
             currentRoom.getPowerSwitch().turnPowerOff();
             System.out.println("The lights will be turned off, for 10 turns");
         }
+    }
+    private void stealItem() {
+        
     }
 }

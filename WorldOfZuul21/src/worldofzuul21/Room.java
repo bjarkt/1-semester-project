@@ -14,11 +14,13 @@ public class Room {
     private String description;
     private HashMap<String, Integer> exits;
     private PowerSwitch powerSwitch;
+    private Item [] items;
 
     public Room(String description, int x, int y) {
         this.description = description;
         location = new Location(x, y);
         exits = new HashMap<String, Integer>();
+        items = new Item [1];
     }
 
     public void setExit(String direction, Integer neighbor) {
@@ -31,7 +33,7 @@ public class Room {
 
     /* Returns the description of the room, and exits for the room. */
     public String getLongDescription() {
-        return "You are " + description + ".\n" + getExitString() + getPowerSwitchString();
+        return "You are " + description + ".\n" + getExitString() + getPowerSwitchToString() + getItemToString();
     }
 
     /* Returns all the exits for the room as a string. */
@@ -60,7 +62,7 @@ public class Room {
     public PowerSwitch getPowerSwitch() {
         return powerSwitch;
     }
-    public String getPowerSwitchString() {
+    public String getPowerSwitchToString() {
         if(this.powerSwitch
                 == null) {
             return "";
@@ -68,7 +70,7 @@ public class Room {
         if (!this.powerSwitch.getIsOn()) {
             return "";
         } else if (this.powerSwitch.getIsOn()) {
-            return "\n There is a powerswitch in here";
+            return "\nThere is a powerswitch in here";
         } else {
             return "";
         }
@@ -79,4 +81,14 @@ public class Room {
         this.powerSwitch = powerSwitch;
     }
     
+    public String getItemToString() {
+        if(items[0] != null) {
+            return "\nThere is an item here";
+        } else
+            return "";
+    }
+    
+    public void setItem(Item item) {
+        items[0] = item;
+    }
 }
