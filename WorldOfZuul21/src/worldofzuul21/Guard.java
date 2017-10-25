@@ -11,13 +11,22 @@ package worldofzuul21;
  */
 public class Guard {
 
-    private Location location;
+    private final int ID;
+    private Room currentRoom;
     
-    Guard(Location location) {
-        this.location = location;
+    Guard(int ID) {
+        this.ID = ID;
     }
     
-    Location getLocation() {
-        return location;
+    public int getID() {
+        return ID;
+    }
+    
+    public Room getRoom() {
+        return currentRoom;
+    }
+    
+    public void setRoom(Room room) {
+        currentRoom = room;
     }
 }

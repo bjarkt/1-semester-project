@@ -33,6 +33,10 @@ public class Location {
         return xy;
     }
     
+    public String toString() {
+        return xy + "";
+    }
+    
     @Override
     public int hashCode()
     {

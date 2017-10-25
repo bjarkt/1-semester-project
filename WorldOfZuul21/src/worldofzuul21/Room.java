@@ -10,19 +10,27 @@ import java.util.Iterator;
  */
 public class Room {
 
+    private String name;
     private Location location;
     private String description;
     private HashMap<String, Integer> exits;
     private PowerSwitch powerSwitch;
     private Item[] items;
+    private Guard[] guards;
 
-    public Room(String description, int x, int y) {
+    public Room(String name, String description, int x, int y) {
+        this.name = name;
         this.description = description;
         location = new Location(x, y);
         exits = new HashMap<String, Integer>();
         items = new Item[1];
+        guards = new Guard[2];
     }
 
+    public String getName() {
+        return name;
+    }
+    
     public void setExit(String direction, Integer neighbor) {
         exits.put(direction, neighbor);
     }
@@ -96,5 +104,29 @@ public class Room {
 
     public void setItem(Item item) {
         items[0] = item;
+    }
+
+    public void removeItem() {
+        items[0] = null;
+    }
+    
+    public Guard[] getGuards() {
+        return guards;
+    }
+
+    public void addGuard(Guard guard) {
+        if (guards[0] != null) {
+            guards[1] = guard;
+        } else {
+            guards[0] = guard;
+        }
+    }
+
+    public void removeGuard() {
+        if (guards[0] != null) {
+            guards[0] = null;
+        } else {
+            guards[1] = null;
+        }
     }
 }

@@ -22,6 +22,9 @@ public class Item {
     }
 
     public static void spawnItem(List<Room> rooms) {
+        for (Room room : rooms) {
+            room.setItem(null);
+        }
         String newName;
         int spawnID;
         int index;
