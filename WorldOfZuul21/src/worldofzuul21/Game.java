@@ -270,16 +270,20 @@ public class Game {
             moveGuards();
             printGuardLocations();
             forcedToQuit = checkForBusted();
-            if (timer == timerPoint + powerOffTime/2 && !powerStatus) {
-                System.out.println("You have " + powerOffTime/2 + " turns left before power turns on.");
-            }
-            if (timer >= timerPoint + powerOffTime && !powerStatus) {
-                powerStatus = true;
-                rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
-                System.out.println("The power is back on");
-            }
+            checkTimer();
         }
         return forcedToQuit;
+    }
+
+    public void checkTimer() {
+        if (timer == timerPoint + powerOffTime/2 && !powerStatus) {
+            System.out.println("You have " + powerOffTime/2 + " turns left before power turns on.");
+        }
+        if (timer >= timerPoint + powerOffTime && !powerStatus) {
+            powerStatus = true;
+            rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
+            System.out.println("The power is back on");
+        }
     }
 
     /* returns true, if a second word has not been supplied. */
@@ -399,10 +403,17 @@ public class Game {
 
     public boolean hide() {
         boolean forcedToQuit = false;
+        boolean hasCheckedForTime = false;
         timer += 1;
         moveGuards();
         printGuardLocations();
+        checkTimer();
+        hasCheckedForTime = true;
         while(checkForBusted()) {
+            if (!hasCheckedForTime) {
+                checkTimer();
+            }
+            hasCheckedForTime = false;
             boolean fiftyFifty = Math.random() < 0.5;
             if (fiftyFifty) {
                 forcedToQuit = checkForBusted();
