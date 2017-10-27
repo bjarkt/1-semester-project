@@ -26,6 +26,11 @@ public class CommandWords {
         }
     }
 
+    /**
+     *
+     * @param commandWord
+     * @return the corresponding CommandWord to the parameter. return unknown if the command is not recognized
+     */
     public CommandWord getCommandWord(String commandWord) {
         CommandWord command = validCommands.get(commandWord);
         if (command != null) { //Checks if command isnt null, so it can be returned, else UNKNOWN ("?") is returned
@@ -39,9 +44,12 @@ public class CommandWords {
         return validCommands.containsKey(aString); //Returns true if the HashMap contains an entry for the key
     }
 
+    /**
+     * prints all valid commands, except the commands in noPrintList
+     */
     public void showAll() {
         for (String command : validCommands.keySet()) { //For each loop, that prints out every key in the HashMap validCommands.
-            if (!noPrintList.contains(command)) {
+            if (!noPrintList.contains(command)) { // if the current command is not in noPrintList, print it.
                 System.out.print(command + "  ");
             }
         }

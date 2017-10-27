@@ -22,21 +22,25 @@ public class Location {
     }
     
     int getX() {
+        // Method for getting X
         return x;
     }
     
     int getY() {
+         // Method for getting Y
         return y;
     }
     
     int getXY() {
+         // Method for getting XY
         return xy;
     }
-    
+    @Override
     public String toString() {
+        // Method for returning xy as a string
         return xy + "";
     }
-    
+    // Not in use 
     @Override
     public int hashCode()
     {
