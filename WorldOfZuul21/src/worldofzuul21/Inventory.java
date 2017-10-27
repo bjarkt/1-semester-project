@@ -53,6 +53,7 @@ public class Inventory {
     }
 
     public void printLoot() {
+        System.out.print("You grab the following loot: ");
         for (Item item : loot) {
             System.out.println(item.getName() + "\t");
         }

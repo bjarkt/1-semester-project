@@ -30,7 +30,7 @@ public class Room {
     public String getName() {
         return name;
     }
-    
+
     public void setExit(String direction, Integer neighbor) {
         exits.put(direction, neighbor);
     }
@@ -92,7 +92,7 @@ public class Room {
 
     public String getItemToString() {
         if (items[0] != null) {
-            return "\nThere is an item here";
+            return "\nThere is a " + items[0].getName() + " here";
         } else {
             return "";
         }
@@ -109,7 +109,7 @@ public class Room {
     public void removeItem() {
         items[0] = null;
     }
-    
+
     public Guard[] getGuards() {
         return guards;
     }
