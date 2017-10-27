@@ -425,6 +425,7 @@ public class Game {
         moveGuards();
         printGuardLocations();
         forcedToQuit = checkTimer();
+        System.out.println("You hide.");
         if (forcedToQuit) {
             return forcedToQuit;
         }
