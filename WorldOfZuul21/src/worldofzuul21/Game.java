@@ -11,49 +11,51 @@ import java.util.Map.Entry;
  */
 public class Game {
 
-    private Parser parser;
-    private Room currentRoom;
-    private HashMap<Integer, Room> rooms;
-    private PowerSwitch powerSwitch;
-    private Guard[] guards;
-    private List<Room> itemSpawnPointRooms;
-    private Inventory inventory;
-    private int timer;
-    private int powerSwitchLocation;
-    private boolean powerStatus;
-    private int timerPoint;
-    private int powerOffTime;
-    private boolean policeAlerted;
-    private int alertPoint;
-    private int policeArrivalTime;
-    private boolean gotBusted;
-    private boolean policeArrived;
-    private Room powerSwitchRoom;
-    private String itemName;
+    private Parser parser; // the parser is used to get the players command inputs
+    private Room currentRoom; // the room that the player is currently in
+    private HashMap<Integer, Room> rooms; // a map storing all the rooms
+    private PowerSwitch powerSwitch; // a powerswitch
+    private Room powerSwitchRoom; // the room with the powerswitch
+    private int powerSwitchLocation; // the coordinates of the room with the powerswitch
+    private Guard[] guards; // the guards
+    private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
+    private String itemName; // the name of the last spawned item
+    private Inventory inventory; // the players inventory
+    private int timer; // the amount of turns taken
+    private boolean powerStatus; // true when the power is on
+    private int timerPoint; // the last the powerswitch was turned off
+    private int powerOffTime; // the amount of turns that the power is turned off
+    private boolean policeAlerted; // true when the police is alerted
+    private int alertPoint; // the last time the police was alerted
+    private int policeArrivalTime; // the amount of turns it takes for the police to arrive
+    private boolean gotBusted; // true if you got busted by a guard
+    private boolean policeArrived; // true if the police has arrived
 
     /* zero argument constructor. */
     public Game() {
-        itemSpawnPointRooms = new ArrayList<>();
-        // Instantiate the parser used to parse commands.
-        parser = new Parser();
-        inventory = new Inventory();
-        timer = 0;
-        powerStatus = true;
-        powerOffTime = 10;
-        policeArrivalTime = 5;
-        guards = new Guard[2];
+        parser = new Parser(); // Instantiate the parser used to parse commands.
+        guards = new Guard[2]; // Create the guards
         guards[0] = new Guard(1);
         guards[1] = new Guard(2);
-        createRooms();
-        gotBusted = false;
+        itemSpawnPointRooms = new ArrayList<>(); // Instantiate the spawnpoints of items
+        inventory = new Inventory(); // Instantiate the inventory
+        timer = 0; // Instantiate the timer
+        powerStatus = true; // turn on the power
+        powerOffTime = 10; // set the time that the power is turned
+        policeArrivalTime = 5; // set the time that it takes for the police to arrive
+        gotBusted = false; // the player has not been busted yet
+        policeArrived = false; // the police has not arrived yet
+        createRooms(); // create the rooms
     }
 
     /* Create the rooms and set the current room. */
     private void createRooms() {
 
-        Room room00, room01, room02, room03, room04, room05,
-                room06, room07, room08, room09, room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
-        // Instantiate the rooms, and write their descriptions.
+        // Create the rooms
+        Room room00, room01, room02, room03, room04, room05, room06, room07, room08, room09,
+                room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
+
+// Instantiate the rooms, and write their descriptions.
         room00 = new Room("room00", "at the entrance of the museum", 0, 0);
         room01 = new Room("room01", "in room 1", 1, 0);
         room02 = new Room("room02", "in room 2", 2, 0);
@@ -76,13 +78,14 @@ public class Game {
         room19 = new Room("room19", "on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
         noRoom = new Room("nowhere", "nowhere", 9, 9);
 
+        // spawn the guards
         room04.addGuard(guards[0]);
         room15.addGuard(guards[1]);
         room04.getGuards()[0].setRoom(room04);
         room15.getGuards()[0].setRoom(room15);
 
+        // spawn the powerswitch in one of three rooms
         int number = (int) (Math.random() * 3);
-
         switch (number) {
             case 0:
                 room04.setPowerSwitch(new PowerSwitch());
@@ -101,12 +104,13 @@ public class Game {
                 break;
         }
 
-        powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
+        powerSwitchLocation = powerSwitchRoom.getLocation().getXY(); // save the powerswitch's location's coordinates
 
-        Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19);
-        itemName = Item.spawnItem(itemSpawnPointRooms);
+        Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19); // save the itemspawnpoints
 
-        // Add the rooms to an array
+        itemName = Item.spawnItem(itemSpawnPointRooms); // save the name of the first spawned item
+
+        // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();
         rooms.put(room00.getLocation().getXY(), room00);
         rooms.put(room01.getLocation().getXY(), room01);
@@ -131,45 +135,52 @@ public class Game {
         rooms.put(noRoom.getLocation().getXY(), noRoom);
 
         // Set the room, in which the player starts.
-        currentRoom = rooms.get(room00.getLocation().getXY());
+        currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
 
-        // Set the exit for each room,
-        // a direction and a room object is required.
+        // Set the exits for each room
         for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
             if (room.getValue().getLocation().getX() == 0) {
+                // the leftmost rooms have an exit to the east
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("east", loca.getXY());
             }
             if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2 || room.getValue().getLocation().getX() == 3) {
+                // some rooms have exits to both the east an the west
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("east", loca.getXY());
                 Location loca2 = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca2.getXY());
             }
             if (room.getValue().getLocation().getX() == 4) {
+                // the rightmost rooms have en exit to the west
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca.getXY());
             }
             if (room.getValue().getLocation().getY() == 0) {
+                // the southmost rooms have an exit to the north
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
                 room.getValue().setExit("north", loca.getXY());
             }
             if ((room.getValue().getLocation().getY() == 1 || room.getValue().getLocation().getY() == 2) && room.getValue().getLocation().getX() < 4) {
+                // some rooms have exits to both the north and south
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
                 room.getValue().setExit("north", loca.getXY());
                 Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca2.getXY());
             }
             if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() < 4) {
+                // most northmost rooms have an exit to the south
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca.getXY());
             }
             if (room.getValue().getLocation().getY() == 2 && room.getValue().getLocation().getX() == 4) {
+                // this room have an exit to the south, but not to the north
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca.getXY());
             }
 
             if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() == 4) {
+                // this room have an exit to the west, but not to the south
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca.getXY());
             }
