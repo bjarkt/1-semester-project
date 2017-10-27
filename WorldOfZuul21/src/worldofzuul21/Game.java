@@ -19,12 +19,17 @@ public class Game {
     private List<Room> itemSpawnPointRooms;
     private Inventory inventory;
     private int timer;
-    int powerSwitchLocation;
+    private int powerSwitchLocation;
     private boolean powerStatus;
-    int timerPoint;
-    int powerOffTime;
-    boolean gotBusted;
-    Room powerSwitchRoom;
+    private int timerPoint;
+    private int powerOffTime;
+    private boolean policeAlerted;
+    private int alertPoint;
+    private int policeArrivalTime;
+    private boolean gotBusted;
+    private boolean policeArrived;
+    private Room powerSwitchRoom;
+    private String itemName;
 
     /* zero argument constructor. */
     public Game() {
@@ -35,6 +40,7 @@ public class Game {
         timer = 0;
         powerStatus = true;
         powerOffTime = 10;
+        policeArrivalTime = 5;
         guards = new Guard[2];
         guards[0] = new Guard(1);
         guards[1] = new Guard(2);
@@ -46,51 +52,59 @@ public class Game {
     private void createRooms() {
 
         Room room00, room01, room02, room03, room04, room05,
-                room06, room07, room08, room09, room10, room11, noRoom;
+                room06, room07, room08, room09, room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
         // Instantiate the rooms, and write their descriptions.
-        room00 = new Room("room00", "in a room", 0, 0);
-        room01 = new Room("room01", "in a room", 1, 0);
-        room02 = new Room("room02", "in a room. There is stairs to the upper floor, to the east", 2, 0);
-        room03 = new Room("room03", "on the upper floor. There is stairs to the groundfloor, to the west", 3, 0);
-        room04 = new Room("room04", "in a room", 0, 1);
-        room05 = new Room("room05", "in a room", 1, 1);
-        room06 = new Room("room06", "in a room", 2, 1);
-        room07 = new Room("room07", "in a room", 3, 1);
-        room08 = new Room("room08", "at the entrance of the museum", 0, 2);
-        room09 = new Room("room09", "in a room", 1, 2);
-        room10 = new Room("room10", "in a room", 2, 2);
-        room11 = new Room("room11", "in a room", 3, 2);
+        room00 = new Room("room00", "at the entrance of the museum", 0, 0);
+        room01 = new Room("room01", "in room 1", 1, 0);
+        room02 = new Room("room02", "in room 2", 2, 0);
+        room03 = new Room("room03", "in room 3", 3, 0);
+        room04 = new Room("room04", "in room 4", 4, 0);
+        room05 = new Room("room05", "in room 5", 0, 1);
+        room06 = new Room("room06", "in room 6", 1, 1);
+        room07 = new Room("room07", "in room 7", 2, 1);
+        room08 = new Room("room08", "in room 8", 3, 1);
+        room09 = new Room("room09", "in room 9", 4, 1);
+        room10 = new Room("room10", "in room 10", 0, 2);
+        room11 = new Room("room11", "in room 11", 1, 2);
+        room12 = new Room("room12", "in room 12", 2, 2);
+        room13 = new Room("room13", "in room 13", 3, 2);
+        room14 = new Room("room14", "in room 14", 4, 2);
+        room15 = new Room("room15", "in room 15", 0, 3);
+        room16 = new Room("room16", "in room 16", 1, 3);
+        room17 = new Room("room17", "in room 17", 2, 3);
+        room18 = new Room("room18", "in a room. There are stairs to the upper floor, to the east", 3, 3);
+        room19 = new Room("room19", "on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
         noRoom = new Room("nowhere", "nowhere", 9, 9);
 
-        room00.addGuard(guards[0]);
-        room07.addGuard(guards[1]);
-        room00.getGuards()[0].setRoom(room00);
-        room07.getGuards()[0].setRoom(room07);
+        room04.addGuard(guards[0]);
+        room15.addGuard(guards[1]);
+        room04.getGuards()[0].setRoom(room04);
+        room15.getGuards()[0].setRoom(room15);
 
         int number = (int) (Math.random() * 3);
 
         switch (number) {
             case 0:
-                room02.setPowerSwitch(new PowerSwitch());
-                room02.getPowerSwitch().turnPowerOn();
-                powerSwitchRoom = room02;
-                break;
-            case 1:
                 room04.setPowerSwitch(new PowerSwitch());
                 room04.getPowerSwitch().turnPowerOn();
                 powerSwitchRoom = room04;
                 break;
+            case 1:
+                room07.setPowerSwitch(new PowerSwitch());
+                room07.getPowerSwitch().turnPowerOn();
+                powerSwitchRoom = room07;
+                break;
             case 2:
-                room11.setPowerSwitch(new PowerSwitch());
-                room11.getPowerSwitch().turnPowerOn();
-                powerSwitchRoom = room11;
+                room10.setPowerSwitch(new PowerSwitch());
+                room10.getPowerSwitch().turnPowerOn();
+                powerSwitchRoom = room10;
                 break;
         }
-        
+
         powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
 
-        Collections.addAll(itemSpawnPointRooms, room01, room03, room07, room10);
-        Item.spawnItem(itemSpawnPointRooms);
+        Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19);
+        itemName = Item.spawnItem(itemSpawnPointRooms);
 
         // Add the rooms to an array
         rooms = new HashMap<>();
@@ -106,10 +120,18 @@ public class Game {
         rooms.put(room09.getLocation().getXY(), room09);
         rooms.put(room10.getLocation().getXY(), room10);
         rooms.put(room11.getLocation().getXY(), room11);
+        rooms.put(room12.getLocation().getXY(), room12);
+        rooms.put(room13.getLocation().getXY(), room13);
+        rooms.put(room14.getLocation().getXY(), room14);
+        rooms.put(room15.getLocation().getXY(), room15);
+        rooms.put(room16.getLocation().getXY(), room16);
+        rooms.put(room17.getLocation().getXY(), room17);
+        rooms.put(room18.getLocation().getXY(), room18);
+        rooms.put(room19.getLocation().getXY(), room19);
         rooms.put(noRoom.getLocation().getXY(), noRoom);
 
         // Set the room, in which the player starts.
-        currentRoom = rooms.get(room08.getLocation().getXY());
+        currentRoom = rooms.get(room00.getLocation().getXY());
 
         // Set the exit for each room,
         // a direction and a room object is required.
@@ -118,35 +140,36 @@ public class Game {
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("east", loca.getXY());
             }
-            if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2) {
+            if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2 || room.getValue().getLocation().getX() == 3) {
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("east", loca.getXY());
                 Location loca2 = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca2.getXY());
             }
-            if (room.getValue().getLocation().getX() == 3) {
+            if (room.getValue().getLocation().getX() == 4) {
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca.getXY());
             }
-            if (room.getValue().getLocation().getY() == 2) {
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+            if (room.getValue().getLocation().getY() == 0) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
                 room.getValue().setExit("north", loca.getXY());
             }
-            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() < 3) {
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+            if ((room.getValue().getLocation().getY() == 1 || room.getValue().getLocation().getY() == 2) && room.getValue().getLocation().getX() < 4) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
                 room.getValue().setExit("north", loca.getXY());
-                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca2.getXY());
             }
-            if (room.getValue().getLocation().getY() == 0 && room.getValue().getLocation().getX() < 3) {
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+            if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() < 4) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca.getXY());
             }
-            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() == 3) {
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+            if (room.getValue().getLocation().getY() == 2 && room.getValue().getLocation().getX() == 4) {
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit("south", loca.getXY());
             }
-            if (room.getValue().getLocation().getY() == 0 && room.getValue().getLocation().getX() == 3) {
+
+            if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() == 4) {
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
                 room.getValue().setExit("west", loca.getXY());
             }
@@ -156,11 +179,6 @@ public class Game {
     /* The method in which the main game loop happens. */
     public void play() {
         printWelcome();
-
-        System.out.println("The guards are located in the following rooms");
-        printGuardLocations();
-        System.out.println("You are in the following room: " + currentRoom.getName());
-
         // Finished is assigned to false at the start, so the while loop
         // will execute atleast once.
         boolean finished = false;
@@ -177,11 +195,13 @@ public class Game {
     /* Print welcome and description of the current room. */
     private void printWelcome() {
         System.out.println();
-        System.out.println("Welcome to Night at the Museum");
+        System.out.println("Welcome to Night at the Museum.");
         System.out.println("Night at the Museum is a new, incredibly amazing strategy game.");
-        System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
+        System.out.println("Type '" + CommandWord.HELP + "' for a list of commands.");
+        System.out.println("Type '" + CommandWord.CALL + "' if you don't know what to do.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
+        printGuardLocations();
     }
 
     /* Processes the command, returning either false or true.
@@ -211,6 +231,10 @@ public class Game {
             wantToQuit = stealItem();
         } else if (commandWord == CommandWord.ESCAPE) {
             wantToQuit = escape();
+        } else if (commandWord == CommandWord.HIDE) {
+            wantToQuit = hide();
+        } else if (commandWord == CommandWord.CALL) {
+            call();
         }
 
         return wantToQuit;
@@ -249,17 +273,34 @@ public class Game {
             System.out.println(currentRoom.getLongDescription());
             timer += 1;
             moveGuards();
-            System.out.println("The guards are located in the following rooms");
             printGuardLocations();
-            System.out.println("You are in the following room: " + currentRoom.getName());
             forcedToQuit = checkForBusted();
-            if (timer >= timerPoint + powerOffTime && !powerStatus) {
-                powerStatus = true;
-                rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
-                System.out.println("The power is back on");
+            if (checkTimer()) {
+                return true;
             }
         }
         return forcedToQuit;
+    }
+
+    public boolean checkTimer() {
+        if (timer == timerPoint + powerOffTime / 2 && !powerStatus) {
+            System.out.println("You have " + powerOffTime / 2 + " turns left before power turns on.");
+        }
+        if (timer >= timerPoint + powerOffTime && !powerStatus) {
+            powerStatus = true;
+            rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
+            System.out.println("The power is back on");
+            if (!policeAlerted) {
+                System.out.println("The police has been alerted");
+                policeAlerted = true;
+                alertPoint = timer;
+            }
+        }
+        if (timer >= alertPoint + policeArrivalTime && policeAlerted) {
+            policeArrived = true;
+            return true;
+        }
+        return false;
     }
 
     /* returns true, if a second word has not been supplied. */
@@ -310,7 +351,7 @@ public class Game {
 
     public boolean escape() {
         boolean wantToQuit = false;
-        if (currentRoom.getLocation().getXY() == 2) {
+        if (currentRoom.getLocation().getXY() == 0) {
             wantToQuit = escaped();
         } else {
             System.out.println("There is no door to escape through");
@@ -331,7 +372,7 @@ public class Game {
             Command command = parser.getCommand();
             CommandWord commandWord = command.getCommandWord();
             if (commandWord == CommandWord.YES) {
-                currentRoom.getLongDescription();
+                System.out.println(currentRoom.getLongDescription());
                 return false;
             } else if (commandWord == CommandWord.NO) {
                 return true;
@@ -370,16 +411,66 @@ public class Game {
     }
 
     public void printGuardLocations() {
+        System.out.println("The guards are located in the following rooms");
         for (Guard guard : guards) {
             System.out.print(guard.getRoom().getName() + "\t");
         }
         System.out.println();
     }
 
+    public boolean hide() {
+        boolean forcedToQuit = false;
+        boolean hasCheckedForTime = false;
+        timer += 1;
+        moveGuards();
+        printGuardLocations();
+        forcedToQuit = checkTimer();
+        System.out.println("You hide.");
+        if (forcedToQuit) {
+            return forcedToQuit;
+        }
+        hasCheckedForTime = true;
+        while (checkForBusted()) {
+            if (!hasCheckedForTime) {
+                forcedToQuit = checkTimer();
+                if (forcedToQuit) {
+                    return forcedToQuit;
+                }
+            }
+            hasCheckedForTime = false;
+            boolean fiftyFifty = Math.random() < 0.5;
+            if (fiftyFifty) {
+                forcedToQuit = checkForBusted();
+                return forcedToQuit;
+            } else {
+                System.out.println("A guard entered your room, but didn't see you.");
+                timer += 1;
+                moveGuards();
+                printGuardLocations();
+
+            }
+        }
+        System.out.println("You are in the following room: " + currentRoom.getName());
+        return forcedToQuit;
+    }
+
+    public void call() {
+        System.out.println("\"Mastermind Daniel here\"");
+        if (policeAlerted && inventory.getInventory().isEmpty()) {
+            System.out.println("\"The police has been alerted. You need to get out quickly. You can always go back inside later\"");
+        } else if (policeAlerted) {
+            System.out.println("\"You got the item, but the police are on their way. Get out quickly\"");
+        } else if (inventory.getInventory().isEmpty()) {
+            System.out.println("\"You need to steal a " + itemName + "\"");
+            System.out.println("\"Remember to turn off the power first, or the alarm will trigger\"");
+        } else {
+            System.out.println("\"You got the item. Get out of here quickly\"");
+        }
+    }
+
     public boolean checkForBusted() {
         for (Guard guard : guards) {
             if (currentRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
-                printBusted();
                 gotBusted = true;
                 return true;
             }
@@ -393,7 +484,10 @@ public class Game {
 
     public void quit() {
         if (gotBusted) {
+            printBusted();
             System.out.println("You got busted. No points for you. Better luck next time");
+        } else if (policeArrived) {
+            System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
         } else {
             int points = inventory.calculatePoints();
             if (points > 0) {
@@ -407,13 +501,14 @@ public class Game {
     }
 
     public void reset() {
-        guards[0].setRoom(rooms.get(0));
-        guards[1].setRoom(rooms.get(31));
+        guards[0].setRoom(rooms.get(40));
+        guards[1].setRoom(rooms.get(3));
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
+        policeAlerted = false;
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
-            Item.spawnItem(itemSpawnPointRooms);
+            itemName = Item.spawnItem(itemSpawnPointRooms);
         }
     }
 }
