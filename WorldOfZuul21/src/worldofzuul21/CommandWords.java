@@ -1,6 +1,9 @@
 package worldofzuul21;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Michael Kolling and David J. Barnes
@@ -9,12 +12,15 @@ import java.util.HashMap;
 public class CommandWords {
 
     private HashMap<String, CommandWord> validCommands; //A hashmap with the constants from the enom class CommandWords as values.
+    private List<String> noPrintList;
 
     public CommandWords() // Constructor
     {
         validCommands = new HashMap<String, CommandWord>(); // Creating an object
+        noPrintList = new ArrayList<>();
+        Collections.addAll(noPrintList, CommandWord.YES.toString(), CommandWord.NO.toString());
         for (CommandWord command : CommandWord.values()) { //For each loop - runs 4 times as CommandWord.values has 4 values.
-            if (command != CommandWord.UNKNOWN && command != CommandWord.YES && command != CommandWord.NO) {  //Checks if command isn't UNKNOWN, YES or NO
+            if (command != CommandWord.UNKNOWN) {  //Checks if command isn't UNKNOWN, YES or NO
                 validCommands.put(command.toString(), command); //If it isn't, a new entry is added to the validCommands HashMap
             }
         }
@@ -35,7 +41,9 @@ public class CommandWords {
 
     public void showAll() {
         for (String command : validCommands.keySet()) { //For each loop, that prints out every key in the HashMap validCommands.
-            System.out.print(command + "  ");
+            if (!noPrintList.contains(command)) {
+                System.out.print(command + "  ");
+            }
         }
         System.out.println();
     }

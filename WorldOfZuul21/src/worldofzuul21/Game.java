@@ -331,7 +331,7 @@ public class Game {
             Command command = parser.getCommand();
             CommandWord commandWord = command.getCommandWord();
             if (commandWord == CommandWord.YES) {
-                currentRoom.getLongDescription();
+                System.out.println(currentRoom.getLongDescription());
                 return false;
             } else if (commandWord == CommandWord.NO) {
                 return true;
