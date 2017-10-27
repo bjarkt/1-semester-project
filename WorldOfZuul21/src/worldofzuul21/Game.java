@@ -19,6 +19,7 @@ public class Game {
     private List<Room> itemSpawnPointRooms;
     private Inventory inventory;
     private int timer;
+    int powerSwitchLocation;
     private boolean powerStatus;
     int timerPoint;
     int powerOffTime;
@@ -85,6 +86,8 @@ public class Game {
                 powerSwitchRoom = room11;
                 break;
         }
+        
+        powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
 
         Collections.addAll(itemSpawnPointRooms, room01, room03, room07, room10);
         Item.spawnItem(itemSpawnPointRooms);
@@ -252,6 +255,7 @@ public class Game {
             forcedToQuit = checkForBusted();
             if (timer >= timerPoint + powerOffTime && !powerStatus) {
                 powerStatus = true;
+                rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
                 System.out.println("The power is back on");
             }
         }
@@ -405,7 +409,6 @@ public class Game {
     public void reset() {
         guards[0].setRoom(rooms.get(0));
         guards[1].setRoom(rooms.get(31));
-        int powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
         inventory.getInventory().trimToSize();
