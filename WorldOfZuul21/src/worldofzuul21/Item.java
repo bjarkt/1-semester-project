@@ -21,7 +21,7 @@ public class Item {
         this.name = name;
     }
 
-    public static void spawnItem(List<Room> rooms) {
+    public static String spawnItem(List<Room> rooms) {
         for (Room room : rooms) {
             room.setItem(null);
         }
@@ -36,5 +36,6 @@ public class Item {
         
         index = (int) (Math.random() * rooms.size());
         rooms.get(index).setItem(new Item(newName));
+        return newName;
     }
 }
