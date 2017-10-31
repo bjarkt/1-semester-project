@@ -5,12 +5,12 @@ import java.util.*;
 public class Item {
 
     private String name;
-    //Naming the possible items which can be stolen
+    //Naming the possible items which can be spawned
     private static String[] itemNames = {"Painting", "Bust", "Jewel", "Vase", "Diamond"};
-    //Items which have been stolen are added to this arraylist, so another item can be stolen
+    //Items which have been stolen are added to this arraylist, so it can't be spawned more than once
     private static List<String> usedItems = new ArrayList<>();
     
-    
+    //Constructor for Item.
     public Item(String name) {
         this.name = name;
     }
@@ -24,7 +24,7 @@ public class Item {
         this.name = name;
     }
     
-    /* A loop where items can spawn around. If an item has been spawned before,
+    /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
     it is added to usedItems, so it cannot be spawned agian  
     */
     public static String spawnItem(List<Room> rooms) {
