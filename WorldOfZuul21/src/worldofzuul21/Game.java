@@ -187,23 +187,21 @@ public class Game {
         }
     }
 
-    /* The method in which the main game loop happens. */
+    // The method in which the main game loop happens.
     public void play() {
         printWelcome();
-        // Finished is assigned to false at the start, so the while loop
-        // will execute atleast once.
+        // Finished is assigned to false at the start, so the while loop will execute at least once.
         boolean finished = false;
         while (!finished) {
             // Enter a command and parse it.
             Command command = parser.getCommand();
-
             // Process the command, and assign the result to finished.
             finished = processCommand(command);
         }
         quit();
     }
 
-    /* Print welcome and description of the current room. */
+    // Print welcome and description of the current room.
     private void printWelcome() {
         System.out.println();
         System.out.println("Welcome to Night at the Museum.");
@@ -228,8 +226,7 @@ public class Game {
             return false;
         }
 
-        // Check the first word of the command against each of the enums,
-        // and run the appropriate method.
+        // Check the first word of the command against each of the enums, and run the appropriate method.
         if (commandWord == CommandWord.HELP) {
             printHelp();
         } else if (commandWord == CommandWord.GO) {
@@ -278,12 +275,12 @@ public class Game {
         //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("There is no door!"); // when there is no exit
         } else {
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
             timer += 1;
-            moveGuards();
+            moveGuards(); // move guards
             printGuardLocations();
             forcedToQuit = checkForBusted();
             if (checkTimer()) {
@@ -294,19 +291,24 @@ public class Game {
     }
 
     public boolean checkTimer() {
+        // return true, if the player has lost the game
+        // check how many turns there are left before power turns back on
         if (timer == timerPoint + powerOffTime / 2 && !powerStatus) {
             System.out.println("You have " + powerOffTime / 2 + " turns left before power turns on.");
         }
+        // check if it is time for the power to turn back on
         if (timer >= timerPoint + powerOffTime && !powerStatus) {
             powerStatus = true;
             rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
             System.out.println("The power is back on");
+            // alert the police
             if (!policeAlerted) {
                 System.out.println("The police has been alerted");
                 policeAlerted = true;
                 alertPoint = timer;
             }
         }
+        // check if the police has arrived
         if (timer >= alertPoint + policeArrivalTime && policeAlerted) {
             policeArrived = true;
             return true;
@@ -314,7 +316,7 @@ public class Game {
         return false;
     }
 
-    /* returns true, if a second word has not been supplied. */
+    // return true, if a second word has not been supplied
     private boolean quit(Command command) {
         if (command.hasSecondWord()) {
             System.out.println("Quit what?");
@@ -325,11 +327,13 @@ public class Game {
     }
 
     private void interact() {
+        // used to turn off the powerswitch
         if (currentRoom.getPowerSwitch() == null) {
             System.out.println("There is no powerswitch in this room");
             return;
         }
         if (!currentRoom.getPowerSwitch().getIsOn()) {
+            System.out.println("The power is already turned off ");
             return;
         } else if (currentRoom.getPowerSwitch().getIsOn()) {
             currentRoom.getPowerSwitch().turnPowerOff();
@@ -340,6 +344,7 @@ public class Game {
     }
 
     private boolean stealItem() {
+        // used to steal an item
         boolean forcedToQuit = false;
         if (currentRoom.getItems() != null) {
             if (!powerStatus) {
@@ -361,6 +366,7 @@ public class Game {
     }
 
     public boolean escape() {
+        // used to escape the museum through the entrance
         boolean wantToQuit = false;
         if (currentRoom.getLocation().getXY() == 0) {
             wantToQuit = escaped();
@@ -371,12 +377,14 @@ public class Game {
     }
 
     public boolean escaped() {
+        // reset the game
         reset();
         boolean lootAdded = inventory.addToLoot();
         System.out.println("You hide in the bush outside the museum. The police arrive. For some reason, they don't notice you");
         if (lootAdded) {
             System.out.println("You hide the item you stole, in the bush");
         }
+        // either quit the game, or continue
         System.out.println("Do you want to go back inside?");
         boolean choiceMade = false;
         while (!choiceMade) {
@@ -394,15 +402,8 @@ public class Game {
         return false;
     }
 
-    public int getTimer() {
-        return timer;
-    }
-
-    public void setTimer(int timer) {
-        this.timer = timer;
-    }
-
     public void moveGuards() {
+        // move the guards
         for (Guard guard : guards) {
             Room nextRoom = null;
             while (nextRoom == null) {
@@ -416,12 +417,14 @@ public class Game {
     }
 
     public String generateRandomDirection() {
+        // generate a random direction
         String[] directions = {"north", "south", "east", "west"};
         int number = (int) (Math.random() * directions.length);
         return directions[number];
     }
 
     public void printGuardLocations() {
+        // print the guard's locations
         System.out.println("The guards are located in the following rooms");
         for (Guard guard : guards) {
             System.out.print(guard.getRoom().getName() + "\t");
@@ -430,6 +433,8 @@ public class Game {
     }
 
     public boolean hide() {
+        // used to hide from the guards
+        // return true, if the players has lost the game
         boolean forcedToQuit = false;
         boolean hasCheckedForTime = false;
         timer += 1;
@@ -450,6 +455,7 @@ public class Game {
             }
             hasCheckedForTime = false;
             boolean fiftyFifty = Math.random() < 0.5;
+            // 50% chance to not get busted if a guard enters your room
             if (fiftyFifty) {
                 forcedToQuit = checkForBusted();
                 return forcedToQuit;
@@ -466,11 +472,13 @@ public class Game {
     }
 
     public void call() {
+        // call your friend
+        // your friend tells you, what your current objective is
         System.out.println("\"Mastermind Daniel here\"");
         if (policeAlerted && inventory.getInventory().isEmpty()) {
             System.out.println("\"The police has been alerted. You need to get out quickly. You can always go back inside later\"");
         } else if (policeAlerted) {
-            System.out.println("\"You got the item, but the police are on their way. Get out quickly\"");
+            System.out.println("\"You got the " + itemName + ", but the police are on their way. Get out quickly\"");
         } else if (inventory.getInventory().isEmpty()) {
             System.out.println("\"You need to steal a " + itemName + "\"");
             System.out.println("\"Remember to turn off the power first, or the alarm will trigger\"");
@@ -480,6 +488,7 @@ public class Game {
     }
 
     public boolean checkForBusted() {
+        // return true if there is a guard in the same room as the player
         for (Guard guard : guards) {
             if (currentRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
                 gotBusted = true;
@@ -490,21 +499,28 @@ public class Game {
     }
 
     public void printBusted() {
+        // message that are printed, when the player gets busted by the guards
         System.out.println("Before you are able to scratch your ass, the guards jump you, and beat the shit out of you");
     }
 
     public void quit() {
+        // the game is over
+        // the players points and other information are printed
         if (gotBusted) {
             printBusted();
+            // busted by the guards
             System.out.println("You got busted. No points for you. Better luck next time");
         } else if (policeArrived) {
+            // busted by the police
             System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
         } else {
             int points = inventory.calculatePoints();
             if (points > 0) {
+                // won the game
                 System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
                 inventory.printLoot();
             } else {
+                // escaped without stealing anything
                 System.out.println("You didn't steal anything. You didn't get arrested though. Thumbs up for that");
             }
         }
@@ -512,11 +528,15 @@ public class Game {
     }
 
     public void reset() {
+        // reset the guards
         guards[0].setRoom(rooms.get(40));
         guards[1].setRoom(rooms.get(3));
+        // turn the power back on
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
+        // set the alertstatus of the police to false
         policeAlerted = false;
+        // spawn a new item, if you stole the last one
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
             itemName = Item.spawnItem(itemSpawnPointRooms);
