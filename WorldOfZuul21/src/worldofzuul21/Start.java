@@ -12,6 +12,7 @@ package worldofzuul21;
 public class Start {
 
     public static void main(String[] args) {
+        // Create a new Game, and play
         Game newGame = new Game();
         newGame.play();
     }
