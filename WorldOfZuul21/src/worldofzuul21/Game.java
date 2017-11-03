@@ -30,7 +30,7 @@ public class Game {
     private int policeArrivalTime; // the amount of turns it takes for the police to arrive
     private boolean gotBusted; // true if you got busted by a guard
     private boolean policeArrived; // true if the police has arrived
-
+    private FriendlyNpc friendlyNpc;
     /* zero argument constructor. */
     public Game() {
         parser = new Parser(); // Instantiate the parser used to parse commands.
@@ -45,6 +45,7 @@ public class Game {
         policeArrivalTime = 5; // set the time that it takes for the police to arrive
         gotBusted = false; // the player has not been busted yet
         policeArrived = false; // the police has not arrived yet
+        friendlyNpc = new FriendlyNpc();
         createRooms(); // create the rooms
     }
 
@@ -283,6 +284,7 @@ public class Game {
             moveGuards(); // move guards
             printGuardLocations();
             forcedToQuit = checkForBusted();
+            System.out.println(friendlyNpc.getDirectionOfGuards(currentRoom.getLocation(), guards));
             if (checkTimer()) {
                 return true;
             }
