@@ -15,8 +15,10 @@ public class Game {
     private Room currentRoom; // the room that the player is currently in
     private HashMap<Integer, Room> rooms; // a map storing all the rooms
     private PowerSwitch powerSwitch; // a powerswitch
+    private PowerRelay[] powerrelays;
     private Room powerSwitchRoom; // the room with the powerswitch
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
+    private HashSet<Room> powerRelayLocations;
     private Guard[] guards; // the guards
     private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
     private String itemName; // the name of the last spawned item
@@ -24,6 +26,7 @@ public class Game {
     private int timer; // the amount of turns taken
     private boolean powerStatus; // true when the power is on
     private int timerPoint; // the last the powerswitch was turned off
+    private final int startPowerOffTime;
     private int powerOffTime; // the amount of turns that the power is turned off
     private boolean policeAlerted; // true when the police is alerted
     private int alertPoint; // the last time the police was alerted
@@ -31,9 +34,12 @@ public class Game {
     private boolean gotBusted; // true if you got busted by a guard
     private boolean policeArrived; // true if the police has arrived
     private FriendlyNpc friendlyNpc;
+
     /* zero argument constructor. */
     public Game() {
         parser = new Parser(); // Instantiate the parser used to parse commands.
+        powerrelays = new PowerRelay[3];
+        powerRelayLocations = new HashSet<>();
         guards = new Guard[2]; // Create the guards
         guards[0] = new Guard(1);
         guards[1] = new Guard(2);
@@ -41,7 +47,8 @@ public class Game {
         inventory = new Inventory(); // Instantiate the inventory
         timer = 0; // Instantiate the timer
         powerStatus = true; // turn on the power
-        powerOffTime = 10; // set the time that the power is turned
+        startPowerOffTime = 10;// set the time that the power is turned
+        powerOffTime = startPowerOffTime;
         policeArrivalTime = 5; // set the time that it takes for the police to arrive
         gotBusted = false; // the player has not been busted yet
         policeArrived = false; // the police has not arrived yet
@@ -103,6 +110,62 @@ public class Game {
                 room10.getPowerSwitch().turnPowerOn();
                 powerSwitchRoom = room10;
                 break;
+        }
+
+        // spawn powerrelays in three out of 6 random rooms
+        int numberOfRelays = 0;
+        while (numberOfRelays < 3) {
+            number = (int) (Math.random() * 6);
+            switch (number) {
+                case 0:
+                    if (!this.powerRelayLocations.contains(room03)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room03.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room03);
+                        numberOfRelays++;
+                    }
+                    break;
+                case 1:
+                    if (!this.powerRelayLocations.contains(room05)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room05.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room05);
+                        numberOfRelays++;
+                    }
+                    break;
+                case 2:
+                    if (!this.powerRelayLocations.contains(room09)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room09.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room09);
+                        numberOfRelays++;
+                    }
+                    break;
+                case 3:
+                    if (!this.powerRelayLocations.contains(room11)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room11.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room11);
+                        numberOfRelays++;
+                    }
+                    break;
+                case 4:
+                    if (!this.powerRelayLocations.contains(room14)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room14.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room14);
+                        numberOfRelays++;
+                    }
+                    break;
+                case 5:
+                    if (!this.powerRelayLocations.contains(room18)) {
+                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room18.setPowerRelay(powerrelays[numberOfRelays]);
+                        powerRelayLocations.add(room18);
+                        numberOfRelays++;
+                    }
+                    break;
+            }
         }
 
         powerSwitchLocation = powerSwitchRoom.getLocation().getXY(); // save the powerswitch's location's coordinates
@@ -245,7 +308,9 @@ public class Game {
         } else if (commandWord == CommandWord.CALL) {
             call();
         }
-
+        if (gotBusted || policeArrived) {
+            wantToQuit = true;
+        }
         return wantToQuit;
     }
 
@@ -328,19 +393,29 @@ public class Game {
     }
 
     private void interact() {
-        // used to turn off the powerswitch
-        if (currentRoom.getPowerSwitch() == null) {
-            System.out.println("There is no powerswitch in this room");
-            return;
-        }
-        if (!currentRoom.getPowerSwitch().getIsOn()) {
-            System.out.println("The power is already turned off ");
-            return;
-        } else if (currentRoom.getPowerSwitch().getIsOn()) {
-            currentRoom.getPowerSwitch().turnPowerOff();
-            System.out.println("The power will be turned off, for " + powerOffTime + " turns");
-            timerPoint = timer;
-            powerStatus = false;
+        // used to turn off the powerswitch and sabotage powerrelays
+        if (currentRoom.getPowerRelay() != null) {
+            if (!powerStatus) {
+                currentRoom.getPowerRelay().sabotage();
+                this.powerOffTime += currentRoom.getPowerRelay().getTimeBoost();
+                System.out.println("You sabotaged the relay");
+                System.out.println("You have got " + currentRoom.getPowerRelay().getTimeBoost() + " more rounds before the power comes back");
+            } else {
+                System.out.println("When you try to sabotage the relay, you trigger the alarm");
+                this.gotBusted = true;
+            }
+        } else if (currentRoom.getPowerSwitch() != null) {
+            if (!currentRoom.getPowerSwitch().getIsOn()) {
+                System.out.println("The power is already turned off");
+                return;
+            } else if (currentRoom.getPowerSwitch().getIsOn()) {
+                currentRoom.getPowerSwitch().turnPowerOff();
+                System.out.println("The power will be turned off, for " + powerOffTime + " turns");
+                timerPoint = timer;
+                powerStatus = false;
+            }
+        } else {
+            System.out.println("There is nothing to interact with");
         }
     }
 
@@ -537,6 +612,10 @@ public class Game {
         // turn the power back on
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
+        powerOffTime = startPowerOffTime;
+        for (PowerRelay powerRelay : this.powerrelays) {
+            powerRelay.restore();
+        }
         // set the alertstatus of the police to false
         policeAlerted = false;
         // spawn a new item, if you stole the last one

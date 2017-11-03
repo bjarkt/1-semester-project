@@ -15,11 +15,14 @@ public class Room {
     private String description;
     private HashMap<Direction, Integer> exits;
     private PowerSwitch powerSwitch;
+    private PowerRelay powerRelay;
     private Item[] items;
     private Guard[] guards;
 
     /**
-     * creates a new room, with a name, description and location via x y coordinates.
+     * creates a new room, with a name, description and location via x y
+     * coordinates.
+     *
      * @param name
      * @param description
      * @param x
@@ -44,6 +47,7 @@ public class Room {
 
     /**
      * adds a possible exit for this room.
+     *
      * @param direction
      * @param neighbor
      */
@@ -57,7 +61,7 @@ public class Room {
 
     /* Returns the description of the room, and exits for the room. */
     public String getLongDescription() {
-        return "You are " + description + ".\n" + getExitString() + getPowerSwitchToString() + getItemToString();
+        return "You are " + description + ".\n" + getExitString() + getPowerSwitchToString() + getPowerRelayToString() + getItemToString();
     }
 
     /* Returns all the exits for the room as a string. */
@@ -89,10 +93,19 @@ public class Room {
 
     /**
      *
-     * @return the powerswitch placed in this room. Returns null if there is no powerswitch.
+     * @return the powerswitch placed in this room. Returns null if there is no
+     * powerswitch.
      */
     public PowerSwitch getPowerSwitch() {
         return powerSwitch;
+    }
+
+    public PowerRelay getPowerRelay() {
+        return this.powerRelay;
+    }
+
+    public void setPowerRelay(PowerRelay powerRelay) {
+        this.powerRelay = powerRelay;
     }
 
     /**
@@ -112,11 +125,11 @@ public class Room {
         } else {
             return "";
         }
-
     }
 
     /**
      * Sets a powerswitch in this room.
+     *
      * @param powerSwitch
      */
     public void setPowerSwitch(PowerSwitch powerSwitch) {
@@ -145,6 +158,7 @@ public class Room {
 
     /**
      * sets the first item of the items array.
+     *
      * @param item
      */
     public void setItem(Item item) {
@@ -167,7 +181,9 @@ public class Room {
     }
 
     /**
-     * Adds a guard to this room. The method figures out which array index to place the guard in.
+     * Adds a guard to this room. The method figures out which array index to
+     * place the guard in.
+     *
      * @param guard
      */
     public void addGuard(Guard guard) {
@@ -186,6 +202,20 @@ public class Room {
             guards[0] = null;
         } else {
             guards[1] = null;
+        }
+    }
+
+    public String getPowerRelayToString() {
+        if (this.powerRelay == null) {
+            return "";
+        }
+        if (!this.powerRelay.getStatus()) {
+            return "";
+        } else if (this.powerRelay.getStatus()) {
+            // prints here, because there is a powerswitch in the room, and it is turned on
+            return "\nThere is a powerrelay in here";
+        } else {
+            return "";
         }
     }
 }
