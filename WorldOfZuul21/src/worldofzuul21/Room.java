@@ -13,7 +13,7 @@ public class Room {
     private String name;
     private Location location;
     private String description;
-    private HashMap<String, Integer> exits;
+    private HashMap<Direction, Integer> exits;
     private PowerSwitch powerSwitch;
     private Item[] items;
     private Guard[] guards;
@@ -29,7 +29,7 @@ public class Room {
         this.name = name;
         this.description = description;
         location = new Location(x, y);
-        exits = new HashMap<String, Integer>();
+        exits = new HashMap<Direction, Integer>();
         items = new Item[1]; // only one item per room
         guards = new Guard[2]; // two guards per room
     }
@@ -47,7 +47,7 @@ public class Room {
      * @param direction
      * @param neighbor
      */
-    public void setExit(String direction, Integer neighbor) {
+    public void setExit(Direction direction, Integer neighbor) {
         exits.put(direction, neighbor);
     }
 
@@ -64,8 +64,8 @@ public class Room {
     private String getExitString() {
         String returnString = "Exits:";
         // Get the keys from the exits map (the strings).
-        Set<String> keys = exits.keySet();
-        for (String exit : keys) {
+        Set<Direction> keys = exits.keySet();
+        for (Direction exit : keys) {
             // For each string, called exit, in the Set of keys, 
             // append it to the string.
             returnString += " " + exit;
@@ -75,7 +75,7 @@ public class Room {
 
     /* Returns room, that has the corresponding direction. 
        Returns null if there is no room, for a certain direction. */
-    public Integer getExit(String direction) {
+    public Integer getExit(Direction direction) {
         return exits.get(direction);
     }
 

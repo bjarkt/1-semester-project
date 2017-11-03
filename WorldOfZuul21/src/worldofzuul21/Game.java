@@ -143,47 +143,47 @@ public class Game {
             if (room.getValue().getLocation().getX() == 0) {
                 // the leftmost rooms have an exit to the east
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
-                room.getValue().setExit("east", loca.getXY());
+                room.getValue().setExit(Direction.EAST, loca.getXY());
             }
             if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2 || room.getValue().getLocation().getX() == 3) {
                 // some rooms have exits to both the east an the west
                 Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
-                room.getValue().setExit("east", loca.getXY());
+                room.getValue().setExit(Direction.EAST, loca.getXY());
                 Location loca2 = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit("west", loca2.getXY());
+                room.getValue().setExit(Direction.WEST, loca2.getXY());
             }
             if (room.getValue().getLocation().getX() == 4) {
                 // the rightmost rooms have en exit to the west
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit("west", loca.getXY());
+                room.getValue().setExit(Direction.WEST, loca.getXY());
             }
             if (room.getValue().getLocation().getY() == 0) {
                 // the southmost rooms have an exit to the north
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                room.getValue().setExit("north", loca.getXY());
+                room.getValue().setExit(Direction.NORTH, loca.getXY());
             }
             if ((room.getValue().getLocation().getY() == 1 || room.getValue().getLocation().getY() == 2) && room.getValue().getLocation().getX() < 4) {
                 // some rooms have exits to both the north and south
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                room.getValue().setExit("north", loca.getXY());
+                room.getValue().setExit(Direction.NORTH, loca.getXY());
                 Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit("south", loca2.getXY());
+                room.getValue().setExit(Direction.SOUTH, loca2.getXY());
             }
             if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() < 4) {
                 // most northmost rooms have an exit to the south
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit("south", loca.getXY());
+                room.getValue().setExit(Direction.SOUTH, loca.getXY());
             }
             if (room.getValue().getLocation().getY() == 2 && room.getValue().getLocation().getX() == 4) {
                 // this room have an exit to the south, but not to the north
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit("south", loca.getXY());
+                room.getValue().setExit(Direction.SOUTH, loca.getXY());
             }
 
             if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() == 4) {
                 // this room have an exit to the west, but not to the south
                 Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit("west", loca.getXY());
+                room.getValue().setExit(Direction.WEST, loca.getXY());
             }
         }
     }
@@ -272,7 +272,7 @@ public class Game {
 
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
-        Room nextRoom = rooms.get(currentRoom.getExit(direction));
+        Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
         //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
@@ -284,7 +284,6 @@ public class Game {
             moveGuards(); // move guards
             printGuardLocations();
             forcedToQuit = checkForBusted();
-            System.out.println(friendlyNpc.getDirectionOfGuards(currentRoom.getLocation(), guards));
             if (checkTimer()) {
                 return true;
             }
@@ -409,7 +408,7 @@ public class Game {
         for (Guard guard : guards) {
             Room nextRoom = null;
             while (nextRoom == null) {
-                String direction = generateRandomDirection();
+                Direction direction = generateRandomDirection();
                 nextRoom = rooms.get(guard.getRoom().getExit(direction));
             }
             guard.getRoom().removeGuard();
@@ -418,9 +417,9 @@ public class Game {
         }
     }
 
-    public String generateRandomDirection() {
+    public Direction generateRandomDirection() {
         // generate a random direction
-        String[] directions = {"north", "south", "east", "west"};
+        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
         int number = (int) (Math.random() * directions.length);
         return directions[number];
     }
@@ -432,6 +431,8 @@ public class Game {
             System.out.print(guard.getRoom().getName() + "\t");
         }
         System.out.println();
+
+        System.out.println(friendlyNpc.getDirectionOfGuards(currentRoom.getLocation(), guards));
     }
 
     public boolean hide() {
