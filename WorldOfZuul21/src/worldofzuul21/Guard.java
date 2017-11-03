@@ -14,7 +14,7 @@ public class Guard {
     private final int ID;
     private Room currentRoom;
     
-    Guard(int ID) {
+    public Guard(int ID) {
         // ID for Guard objekt
         this.ID = ID;
     }

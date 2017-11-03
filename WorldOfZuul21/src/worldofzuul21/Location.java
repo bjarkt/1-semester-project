@@ -15,23 +15,23 @@ public class Location {
     private int y;
     private int xy;
     
-    Location(int x, int y) {
+   public Location(int x, int y) {
         this.x = x;
         this.y = y;
         xy = Integer.parseInt("" + x + y);
     }
     
-    int getX() {
+   public int getX() {
         // Method for getting X
         return x;
     }
     
-    int getY() {
+   public int getY() {
          // Method for getting Y
         return y;
     }
     
-    int getXY() {
+   public int getXY() {
          // Method for getting XY
         return xy;
     }

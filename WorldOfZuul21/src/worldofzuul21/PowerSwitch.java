@@ -8,12 +8,12 @@ public class PowerSwitch {
     PowerSwitch() {
     }
 /* Method to set IsOn to false */
-    void turnPowerOff() {
+    public void turnPowerOff() {
         isOn = false;
 
     }
 /* Method to set IsOn to true */
-    void turnPowerOn() {
+    public void turnPowerOn() {
         isOn = true;
 
     }
