@@ -83,7 +83,7 @@ public class Room {
      *
      * @return the location of this room
      */
-    Location getLocation() {
+    public Location getLocation() {
         return location;
     }
 
