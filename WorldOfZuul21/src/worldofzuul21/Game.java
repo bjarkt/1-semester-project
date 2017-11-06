@@ -332,7 +332,7 @@ public class Game {
         CommandWord commandWord;
         boolean fileExists = xmlUtilities.doesFileExist();
         do {
-            System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEWGAME + ")");
+            System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW + ")");
             command  = parser.getCommand();
             commandWord = command.getCommandWord();
             if (commandWord == CommandWord.LOAD) {
@@ -344,9 +344,8 @@ public class Game {
                     System.out.println("File does not exist");
                     commandWord = null;
                 }
-            } else if (commandWord == CommandWord.NEWGAME) {
+            } else if (commandWord == CommandWord.NEW) {
                 if (fileExists) {
-                    System.out.println("hey");
                     xmlUtilities.deleteFile();
                 }
                 play();
@@ -354,7 +353,7 @@ public class Game {
                 System.out.println("The game has been closed.");
             }
         }
-        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEWGAME || commandWord == CommandWord.QUIT));
+        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
 
     }
 

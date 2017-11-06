@@ -18,7 +18,7 @@ public class CommandWords {
     {
         validCommands = new HashMap<String, CommandWord>(); // Creating an object
         noPrintList = new ArrayList<>();
-        Collections.addAll(noPrintList, CommandWord.YES.toString(), CommandWord.NO.toString(), CommandWord.LOAD.toString(), CommandWord.NEWGAME.toString());
+        Collections.addAll(noPrintList, CommandWord.YES.toString(), CommandWord.NO.toString(), CommandWord.LOAD.toString(), CommandWord.NEW.toString());
         for (CommandWord command : CommandWord.values()) { //For each loop - runs 4 times as CommandWord.values has 4 values.
             if (command != CommandWord.UNKNOWN) {  //Checks if command isn't UNKNOWN, YES or NO
                 validCommands.put(command.toString(), command); //If it isn't, a new entry is added to the validCommands HashMap
