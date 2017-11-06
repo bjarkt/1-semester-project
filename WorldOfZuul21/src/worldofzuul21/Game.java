@@ -3,7 +3,6 @@ package worldofzuul21;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author Michael Kolling and David J. Barnes
@@ -33,7 +32,9 @@ public class Game {
     private int policeArrivalTime; // the amount of turns it takes for the police to arrive
     private boolean gotBusted; // true if you got busted by a guard
     private boolean policeArrived; // true if the police has arrived
+    private boolean saved;
     private FriendlyNpc friendlyNpc;
+    private XMLUtilities xmlUtilities;
 
     /* zero argument constructor. */
     public Game() {
@@ -53,6 +54,8 @@ public class Game {
         gotBusted = false; // the player has not been busted yet
         policeArrived = false; // the police has not arrived yet
         friendlyNpc = new FriendlyNpc();
+        xmlUtilities = new XMLUtilities("savegame.xml");
+        saved = false;
         createRooms(); // create the rooms
     }
 
@@ -307,11 +310,32 @@ public class Game {
             wantToQuit = hide();
         } else if (commandWord == CommandWord.CALL) {
             call();
+        } else if(commandWord == CommandWord.SAVE) {
+            save();
+            wantToQuit = true;
         }
         if (gotBusted || policeArrived) {
             wantToQuit = true;
         }
         return wantToQuit;
+    }
+
+    public void startGame() {
+        Command command;
+        CommandWord commandWord;
+        do {
+            System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEWGAME + ")");
+            command  = parser.getCommand();
+            commandWord = command.getCommandWord();
+            if (commandWord == CommandWord.LOAD) {
+                load();
+                play();
+            } else if (commandWord == CommandWord.NEWGAME) {
+                play();
+            }
+        }
+        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEWGAME));
+
     }
 
     /* Prints the commands. */
@@ -584,25 +608,31 @@ public class Game {
     public void quit() {
         // the game is over
         // the players points and other information are printed
-        if (gotBusted) {
-            printBusted();
-            // busted by the guards
-            System.out.println("You got busted. No points for you. Better luck next time");
-        } else if (policeArrived) {
-            // busted by the police
-            System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
+        if (saved) {
+            System.out.println("The game has been saved.");
         } else {
-            int points = inventory.calculatePoints();
-            if (points > 0) {
-                // won the game
-                System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
-                inventory.printLoot();
+
+
+            if (gotBusted) {
+                printBusted();
+                // busted by the guards
+                System.out.println("You got busted. No points for you. Better luck next time");
+            } else if (policeArrived) {
+                // busted by the police
+                System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
             } else {
-                // escaped without stealing anything
-                System.out.println("You didn't steal anything. You didn't get arrested though. Thumbs up for that");
+                int points = inventory.calculatePoints();
+                if (points > 0) {
+                    // won the game
+                    System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
+                    inventory.printLoot();
+                } else {
+                    // escaped without stealing anything
+                    System.out.println("You didn't steal anything. You didn't get arrested though. Thumbs up for that");
+                }
             }
+            System.out.println("Game over");
         }
-        System.out.println("Game over");
     }
 
     public void reset() {
@@ -623,5 +653,143 @@ public class Game {
         if (!inventory.getInventory().isEmpty()) {
             itemName = Item.spawnItem(itemSpawnPointRooms);
         }
+    }
+
+    private void save() {
+        LinkedHashMap<String, String> mapToSave = new LinkedHashMap<>();
+        mapToSave.put("currentRoom", currentRoom.getName());
+        mapToSave.put("powerSwitchStatus", String.valueOf(powerStatus));
+
+        for (int i = 0; i < powerrelays.length; i++) {
+            mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerrelays[i].getStatus()));
+            mapToSave.put("powerRelayID_" + i, String.valueOf(powerrelays[i].getID()));
+        }
+        mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
+
+
+        int ii = 0;
+        for (Room powerRelayLocation : powerRelayLocations) {
+            mapToSave.put("powerRelayLocation_" + ii, powerRelayLocation.getName());
+            ii++;
+        }
+        mapToSave.put("itemName", itemName);
+
+        for (int i = 0; i < inventory.getInventory().size(); i++) {
+            mapToSave.put("inventory_" + i, inventory.getInventory().get(i).getName());
+        }
+        for (int i = 0; i < inventory.getLoot().size(); i++) {
+            mapToSave.put("loot_" + i, inventory.getLoot().get(i).getName());
+        }
+
+        mapToSave.put("timer", String.valueOf(timer));
+        mapToSave.put("timerPoint", String.valueOf(timerPoint));
+        mapToSave.put("powerOffTime", String.valueOf(powerOffTime));
+        mapToSave.put("policeAlerted", String.valueOf(policeAlerted));
+        mapToSave.put("alertPoint", String.valueOf(alertPoint));
+
+        for (Room room : rooms.values()) {
+            if (room.getGuards()[0] != null) {
+                mapToSave.put("guard0", room.getName());
+            }
+            if (room.getGuards()[1] != null) {
+                mapToSave.put("guard1", room.getName());
+            }
+
+            if (room.getItems() != null) {
+                mapToSave.put("itemRoom", room.getName());
+            }
+        }
+        xmlUtilities.save(mapToSave);
+        saved = true;
+    }
+
+    private void load() {
+        Map<String, String> map = new LinkedHashMap<>();
+        map = xmlUtilities.load();
+
+        powerRelayLocations.clear();
+        for (Room room : rooms.values()) {
+            room.removeItem();
+            room.removeGuard();
+            powerRelayLocations = new HashSet<>();
+        }
+
+        for (Room room : rooms.values()) {
+            if (room.getName().equals(map.get("currentRoom"))) {
+                currentRoom = room;
+            }
+        }
+
+        powerStatus = Boolean.parseBoolean(map.get("powerSwitchStatus"));
+
+        for (Room room : rooms.values()) {
+            for (String s : map.keySet()) {
+                if (s.startsWith("powerRelayLocation_")) {
+                    if (room.getName().equals(map.get(s))) {
+                        powerRelayLocations.add(room);
+                    }
+                }
+            }
+        }
+
+        int i = 0;
+        for (String s : map.keySet()) {
+            if (s.startsWith("powerRelayStatus_")) {
+                powerrelays[i].setStatus(Boolean.parseBoolean(map.get(s)));
+                i++;
+            }
+        }
+
+        i = 0;
+        for (String s : map.keySet()) {
+            if (s.startsWith("powerRelayID_")) {
+                powerrelays[i].setID(Integer.parseInt(map.get(s)));
+                i++;
+            }
+        }
+
+        for (Room room : rooms.values()) {
+            if (room.getName().equals(map.get("powerSwitchRoom"))) {
+                powerSwitchRoom = room;
+            }
+        }
+
+        itemName = map.get("itemName");
+
+        for (String s : map.keySet()) {
+            if (s.startsWith("inventory_")) {
+                Item item = new Item(map.get(s));
+                inventory.addToInventory(item);
+            }
+        }
+
+        for (String s : map.keySet()) {
+            if (s.startsWith("loot_")) {
+                Item item = new Item(map.get(s));
+                inventory.getLoot().add(item);
+            }
+        }
+
+        timer = Integer.parseInt(map.get("timer"));
+        timerPoint = Integer.parseInt(map.get("timerPoint"));
+        powerOffTime = Integer.parseInt(map.get("powerOffTime"));
+        policeAlerted = Boolean.parseBoolean(map.get("policeAlerted"));
+        alertPoint = Integer.parseInt(map.get("alertPoint"));
+
+
+        for (Room room : rooms.values()) {
+            if (room.getName().equals(map.get("guard0"))) {
+                room.addGuard(guards[0]);
+            } else if (room.getName().equals(map.get("guard1"))) {
+                room.addGuard((guards[1]));
+            }
+
+            if (room.getName().equals(map.get("itemRoom"))) {
+                Item item = new Item("itemName");
+                room.setItem(item);
+            }
+        }
+
+
     }
 }

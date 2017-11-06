@@ -28,6 +28,10 @@ public class Inventory {
         return inventory;
     }
 
+    public ArrayList<Item> getLoot() {
+        return loot;
+    }
+
     /**
      *
      * @param item to add to inventory

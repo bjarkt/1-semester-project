@@ -11,7 +11,7 @@ package worldofzuul21;
  */
 public class PowerRelay {
     
-    private final int ID;
+    private int ID;
     private boolean status; // false when sabotaged
     private int timeBoost;
     
@@ -43,5 +43,13 @@ public class PowerRelay {
     
     public void setTimeBoost(int timeBoost) {
         this.timeBoost = timeBoost;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 }
