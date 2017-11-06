@@ -20,4 +20,13 @@ public enum Direction {
         return commandString;
     }
 
+    public static boolean isInEnum(String value) {
+        for (Direction direction : Direction.values()) {
+            if (direction.commandString.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

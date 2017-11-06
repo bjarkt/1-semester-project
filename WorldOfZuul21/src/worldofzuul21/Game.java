@@ -375,6 +375,10 @@ public class Game {
         // In the go command, the second word is the direction.
         String direction = command.getSecondWord();
 
+        if (!Direction.isInEnum(direction)) {
+            System.out.println("That is not a correct direction");
+            return false;
+        }
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
         Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
