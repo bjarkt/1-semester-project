@@ -345,6 +345,10 @@ public class Game {
                     commandWord = null;
                 }
             } else if (commandWord == CommandWord.NEWGAME) {
+                if (fileExists) {
+                    System.out.println("hey");
+                    xmlUtilities.deleteFile();
+                }
                 play();
             } else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
@@ -731,6 +735,7 @@ public class Game {
         for (Room room : rooms.values()) {
             room.removeItem();
             room.removeGuard();
+            room.setPowerSwitch(null);
             powerRelayLocations = new HashSet<>();
         }
 
