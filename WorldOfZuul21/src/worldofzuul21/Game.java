@@ -771,6 +771,7 @@ public class Game {
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
+                room.setPowerSwitch(new PowerSwitch());
             }
         }
 
