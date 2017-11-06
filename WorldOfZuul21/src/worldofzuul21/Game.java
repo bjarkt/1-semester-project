@@ -14,7 +14,7 @@ public class Game {
     private Room currentRoom; // the room that the player is currently in
     private HashMap<Integer, Room> rooms; // a map storing all the rooms
     private PowerSwitch powerSwitch; // a powerswitch
-    private PowerRelay[] powerrelays;
+    private PowerRelay[] powerRelays;
     private Room powerSwitchRoom; // the room with the powerswitch
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
     private HashSet<Room> powerRelayLocations;
@@ -39,7 +39,7 @@ public class Game {
     /* zero argument constructor. */
     public Game() {
         parser = new Parser(); // Instantiate the parser used to parse commands.
-        powerrelays = new PowerRelay[3];
+        powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
         guards = new Guard[2]; // Create the guards
         guards[0] = new Guard(1);
@@ -115,55 +115,55 @@ public class Game {
                 break;
         }
 
-        // spawn powerrelays in three out of 6 random rooms
+        // spawn powerRelays in three out of 6 random rooms
         int numberOfRelays = 0;
         while (numberOfRelays < 3) {
             number = (int) (Math.random() * 6);
             switch (number) {
                 case 0:
                     if (!this.powerRelayLocations.contains(room03)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room03.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room03.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room03);
                         numberOfRelays++;
                     }
                     break;
                 case 1:
                     if (!this.powerRelayLocations.contains(room05)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room05.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room05.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room05);
                         numberOfRelays++;
                     }
                     break;
                 case 2:
                     if (!this.powerRelayLocations.contains(room09)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room09.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room09.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room09);
                         numberOfRelays++;
                     }
                     break;
                 case 3:
                     if (!this.powerRelayLocations.contains(room11)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room11.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room11.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room11);
                         numberOfRelays++;
                     }
                     break;
                 case 4:
                     if (!this.powerRelayLocations.contains(room14)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room14.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room14.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room14);
                         numberOfRelays++;
                     }
                     break;
                 case 5:
                     if (!this.powerRelayLocations.contains(room18)) {
-                        this.powerrelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room18.setPowerRelay(powerrelays[numberOfRelays]);
+                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
+                        room18.setPowerRelay(powerRelays[numberOfRelays]);
                         powerRelayLocations.add(room18);
                         numberOfRelays++;
                     }
@@ -441,7 +441,7 @@ public class Game {
     }
 
     private void interact() {
-        // used to turn off the powerswitch and sabotage powerrelays
+        // used to turn off the powerswitch and sabotage powerRelays
         if (currentRoom.getPowerRelay() != null) {
             if (!powerStatus) {
                 currentRoom.getPowerRelay().sabotage();
@@ -667,7 +667,7 @@ public class Game {
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
         powerOffTime = startPowerOffTime;
-        for (PowerRelay powerRelay : this.powerrelays) {
+        for (PowerRelay powerRelay : this.powerRelays) {
             powerRelay.restore();
         }
         // set the alertstatus of the police to false
@@ -684,9 +684,9 @@ public class Game {
         mapToSave.put("currentRoom", currentRoom.getName());
         mapToSave.put("powerSwitchStatus", String.valueOf(powerStatus));
 
-        for (int i = 0; i < powerrelays.length; i++) {
-            mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerrelays[i].getStatus()));
-            mapToSave.put("powerRelayID_" + i, String.valueOf(powerrelays[i].getID()));
+        for (int i = 0; i < powerRelays.length; i++) {
+            mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].getStatus()));
+            mapToSave.put("powerRelayID_" + i, String.valueOf(powerRelays[i].getID()));
         }
         mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
@@ -754,7 +754,7 @@ public class Game {
                 if (s.startsWith("powerRelayLocation_")) {
                     if (room.getName().equals(map.get(s))) {
                         powerRelayLocations.add(room);
-                        room.setPowerRelay(powerrelays[i]);
+                        room.setPowerRelay(powerRelays[i]);
                         i++;
                     }
                 }
@@ -764,7 +764,7 @@ public class Game {
         i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("powerRelayStatus_")) {
-                powerrelays[i].setStatus(Boolean.parseBoolean(map.get(s)));
+                powerRelays[i].setStatus(Boolean.parseBoolean(map.get(s)));
                 i++;
             }
         }
@@ -772,7 +772,7 @@ public class Game {
         i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("powerRelayID_")) {
-                powerrelays[i].setID(Integer.parseInt(map.get(s)));
+                powerRelays[i].setID(Integer.parseInt(map.get(s)));
                 i++;
             }
         }
@@ -780,6 +780,7 @@ public class Game {
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
+                powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
                 room.setPowerSwitch(new PowerSwitch());
                 room.getPowerSwitch().turnPowerOn();
             }
