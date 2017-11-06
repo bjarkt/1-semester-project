@@ -331,6 +331,7 @@ public class Game {
             if (commandWord == CommandWord.LOAD) {
                 if (fileExists) {
                     load();
+                    xmlUtilities.deleteFile();
                     play();
                 } else {
                     System.out.println("File does not exist");

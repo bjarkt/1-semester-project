@@ -24,6 +24,11 @@ public class XMLUtilities {
         return file.exists();
     }
 
+    public boolean deleteFile() {
+        File file = new File(filename);
+        return file.delete();
+    }
+
     public Map<String, String> load() {
         Map<String, String> map = new LinkedHashMap<>();
         StringBuilder xml = new StringBuilder();
