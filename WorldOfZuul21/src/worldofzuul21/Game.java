@@ -816,7 +816,7 @@ public class Game {
             }
 
             if (room.getName().equals(map.get("itemRoom"))) {
-                Item item = new Item("itemName");
+                Item item = new Item(map.get("itemName"));
                 room.setItem(item);
             }
         }
