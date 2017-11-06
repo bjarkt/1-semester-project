@@ -736,6 +736,7 @@ public class Game {
             room.removeItem();
             room.removeGuard();
             room.setPowerSwitch(null);
+            room.setPowerRelay(null);
             powerRelayLocations = new HashSet<>();
         }
 
