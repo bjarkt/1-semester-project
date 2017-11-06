@@ -323,13 +323,19 @@ public class Game {
     public void startGame() {
         Command command;
         CommandWord commandWord;
+        boolean fileExists = xmlUtilities.doesFileExist();
         do {
             System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEWGAME + ")");
             command  = parser.getCommand();
             commandWord = command.getCommandWord();
             if (commandWord == CommandWord.LOAD) {
-                load();
-                play();
+                if (fileExists) {
+                    load();
+                    play();
+                } else {
+                    System.out.println("File does not exist");
+                    commandWord = null;
+                }
             } else if (commandWord == CommandWord.NEWGAME) {
                 play();
             }

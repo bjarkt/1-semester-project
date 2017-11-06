@@ -19,6 +19,11 @@ public class XMLUtilities {
         this.filename = filename;
     }
 
+    public boolean doesFileExist() {
+        File file = new File(filename);
+        return file.exists();
+    }
+
     public Map<String, String> load() {
         Map<String, String> map = new LinkedHashMap<>();
         StringBuilder xml = new StringBuilder();
@@ -38,7 +43,7 @@ public class XMLUtilities {
                 map.put(nodeList.item(i).getNodeName(), nodeList.item(i).getChildNodes().item(0).getNodeValue());
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("File " + filename + " not found");
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {
