@@ -346,9 +346,11 @@ public class Game {
                 }
             } else if (commandWord == CommandWord.NEWGAME) {
                 play();
+            } else if (commandWord == CommandWord.QUIT) {
+                System.out.println("The game has been closed.");
             }
         }
-        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEWGAME));
+        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEWGAME || commandWord == CommandWord.QUIT));
 
     }
 
