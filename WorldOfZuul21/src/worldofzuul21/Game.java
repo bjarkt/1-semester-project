@@ -748,17 +748,20 @@ public class Game {
 
         powerStatus = Boolean.parseBoolean(map.get("powerSwitchStatus"));
 
+        int i = 0;
         for (Room room : rooms.values()) {
             for (String s : map.keySet()) {
                 if (s.startsWith("powerRelayLocation_")) {
                     if (room.getName().equals(map.get(s))) {
                         powerRelayLocations.add(room);
+                        room.setPowerRelay(powerrelays[i]);
+                        i++;
                     }
                 }
             }
         }
 
-        int i = 0;
+        i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("powerRelayStatus_")) {
                 powerrelays[i].setStatus(Boolean.parseBoolean(map.get(s)));
@@ -778,6 +781,7 @@ public class Game {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
                 room.setPowerSwitch(new PowerSwitch());
+                room.getPowerSwitch().turnPowerOn();
             }
         }
 
