@@ -235,6 +235,13 @@ public class Game {
                 Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
                 room.getValue().setExit(Direction.SOUTH, loca2.getXY());
             }
+            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() == 4) {
+                // some rooms have exits to both the north and south
+                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                room.getValue().setExit(Direction.NORTH, loca.getXY());
+                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+                room.getValue().setExit(Direction.SOUTH, loca2.getXY());
+            }
             if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() < 4) {
                 // most northmost rooms have an exit to the south
                 Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
