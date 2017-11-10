@@ -52,7 +52,7 @@ public class Item implements Spawnable {
 
    
     @Override
-    public List<Room> Spawn(Room... rooms) {
+    public List<Room> Spawn(List<Room> rooms) {
         List<Room> rooms_ = new ArrayList<>();
         for (Room room : rooms) {
 
@@ -68,10 +68,10 @@ public class Item implements Spawnable {
         usedItems.add(newName);
         Spawnable obj = new Item(newName);
 
-        index = (int) (Math.random() * rooms.length);
+        index = (int) (Math.random() * rooms.size());
 
-        rooms[index].setSpawn(obj, rooms[index]);
-        rooms_.add(rooms[index]);
+        rooms.get(index).setSpawn(obj);
+        rooms_.add(rooms.get(index));
 
         return rooms_;
     }

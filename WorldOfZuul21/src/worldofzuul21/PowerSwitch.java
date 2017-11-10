@@ -1,6 +1,7 @@
 
 package worldofzuul21;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PowerSwitch implements Spawnable {
@@ -25,8 +26,15 @@ public class PowerSwitch implements Spawnable {
     }
 
     @Override
-    public List<Room> Spawn(Room... rooms) {
-        
+    public List<Room> Spawn(List<Room> rooms) {
+        int number = (int) (Math.random() * 3);
+        List<Room> rooms_ = new ArrayList<>();
+
+        rooms.get(number).setSpawn(new PowerSwitch());
+        rooms.get(number).getPowerSwitch().turnPowerOn();
+        rooms_.add(rooms.get(number));
+
+        return rooms_;
     }
 
 

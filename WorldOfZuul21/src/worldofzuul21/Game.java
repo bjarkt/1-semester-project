@@ -19,7 +19,6 @@ public class Game {
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
     private HashSet<Room> powerRelayLocations;
     private Guard[] guards; // the guards
-    private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
     private String itemName; // the name of the last spawned item
     private Inventory inventory; // the players inventory
     private int timer; // the amount of turns taken
@@ -36,14 +35,25 @@ public class Game {
     private FriendlyNpc friendlyNpc;
     private XMLUtilities xmlUtilities;
 
+    // Dummy objects are only used to spawn themselves
+    private Guard dummyGuard;
+    private PowerSwitch dummySwitch;
+    private PowerRelay dummyRelay;
+    private Item dummyItem;
+
+    // List of rooms, in which Spawnable objects spawn
+    private List<Room> guardSpawnPointRooms;
+    private List<Room> switchSpawnPointRooms;
+    private List<Room> relaySpawnPointRooms;
+    private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
+
+
     /* zero argument constructor. */
     public Game() {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
         guards = new Guard[2]; // Create the guards
-        guards[0] = new Guard(1);
-        guards[1] = new Guard(2);
         itemSpawnPointRooms = new ArrayList<>(); // Instantiate the spawnpoints of items
         inventory = new Inventory(); // Instantiate the inventory
         timer = 0; // Instantiate the timer
@@ -56,6 +66,16 @@ public class Game {
         friendlyNpc = new FriendlyNpc();
         xmlUtilities = new XMLUtilities("savegame.xml");
         saved = false;
+
+        dummyGuard = new Guard(-1);
+        dummySwitch = new PowerSwitch();
+        dummyRelay = new PowerRelay(-1, -1);
+        dummyItem = new Item();
+
+        guardSpawnPointRooms = new ArrayList<>();
+        switchSpawnPointRooms = new ArrayList<>();
+        relaySpawnPointRooms = new ArrayList<>();
+
         createRooms(); // create the rooms
     }
 
@@ -89,96 +109,26 @@ public class Game {
         room19 = new Room("room19", "on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
         noRoom = new Room("nowhere", "nowhere", 9, 9);
 
+
+        Collections.addAll(guardSpawnPointRooms, room04,room15);
+        Collections.addAll(itemSpawnPointRooms, room02,room13,room16, room19);
+        Collections.addAll(switchSpawnPointRooms, room04,room07, room10);
+        Collections.addAll(relaySpawnPointRooms, room03,room05,room09,room11,room14,room18);
+
         // spawn the guards
-        room04.addGuard(guards[0]);
-        room15.addGuard(guards[1]);
-        room04.getGuards()[0].setRoom(room04);
-        room15.getGuards()[0].setRoom(room15);
+        List<Room> guardRooms = dummyGuard.Spawn(guardSpawnPointRooms);
+        guards[0] = guardRooms.get(0).getGuards()[0];
+        guards[1] = guardRooms.get(1).getGuards()[0];
 
         // spawn the powerswitch in one of three rooms
-        int number = (int) (Math.random() * 3);
-        switch (number) {
-            case 0:
-                room04.setPowerSwitch(new PowerSwitch());
-                room04.getPowerSwitch().turnPowerOn();
-                powerSwitchRoom = room04;
-                break;
-            case 1:
-                room07.setPowerSwitch(new PowerSwitch());
-                room07.getPowerSwitch().turnPowerOn();
-                powerSwitchRoom = room07;
-                break;
-            case 2:
-                room10.setPowerSwitch(new PowerSwitch());
-                room10.getPowerSwitch().turnPowerOn();
-                powerSwitchRoom = room10;
-                break;
-        }
+        powerSwitchRoom = dummySwitch.Spawn(switchSpawnPointRooms).get(0);
+        powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
 
         // spawn powerRelays in three out of 6 random rooms
-        int numberOfRelays = 0;
-        while (numberOfRelays < 3) {
-            number = (int) (Math.random() * 6);
-            switch (number) {
-                case 0:
-                    if (!this.powerRelayLocations.contains(room03)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room03.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room03);
-                        numberOfRelays++;
-                    }
-                    break;
-                case 1:
-                    if (!this.powerRelayLocations.contains(room05)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room05.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room05);
-                        numberOfRelays++;
-                    }
-                    break;
-                case 2:
-                    if (!this.powerRelayLocations.contains(room09)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room09.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room09);
-                        numberOfRelays++;
-                    }
-                    break;
-                case 3:
-                    if (!this.powerRelayLocations.contains(room11)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room11.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room11);
-                        numberOfRelays++;
-                    }
-                    break;
-                case 4:
-                    if (!this.powerRelayLocations.contains(room14)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room14.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room14);
-                        numberOfRelays++;
-                    }
-                    break;
-                case 5:
-                    if (!this.powerRelayLocations.contains(room18)) {
-                        this.powerRelays[numberOfRelays] = new PowerRelay(numberOfRelays, 2);
-                        room18.setPowerRelay(powerRelays[numberOfRelays]);
-                        powerRelayLocations.add(room18);
-                        numberOfRelays++;
-                    }
-                    break;
-            }
-        }
+        powerRelayLocations = new HashSet<>(dummyRelay.Spawn(relaySpawnPointRooms));
 
-        powerSwitchLocation = powerSwitchRoom.getLocation().getXY(); // save the powerswitch's location's coordinates
-
-        Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19); // save the itemspawnpoints
-
-        //itemName = Item.spawnItem(itemSpawnPointRooms); // save the name of the first spawned item
-
-        Item dummyItem = new Item();
-        itemName = dummyItem.Spawn(room02,room13,room16,room19).get(0).getItems().getName();
+        // Spawn items
+        itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
 
         // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();
@@ -677,7 +627,7 @@ public class Game {
         // spawn a new item, if you stole the last one
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
-            itemName = Item.spawnItem(itemSpawnPointRooms);
+            itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getName();
         }
     }
 

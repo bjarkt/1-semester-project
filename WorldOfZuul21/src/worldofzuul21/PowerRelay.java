@@ -5,11 +5,14 @@
  */
 package worldofzuul21;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Nikolaj
  */
-public class PowerRelay {
+public class PowerRelay implements Spawnable{
     
     private int ID;
     private boolean status; // false when sabotaged
@@ -51,5 +54,18 @@ public class PowerRelay {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    @Override
+    public List<Room> Spawn(List<Room> rooms) {
+        List<Room> rooms_ = new ArrayList<>();
+        while (rooms_.size() < 3) {
+            int randomIndex = (int) (Math.random() * rooms.size());
+            if (!rooms_.contains(rooms.get(randomIndex))) {
+                rooms.get(randomIndex).setSpawn(new PowerRelay(rooms_.size(), 2));
+                rooms_.add(rooms.get(randomIndex));
+            }
+        }
+        return rooms_;
     }
 }

@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface Spawnable {
 
-    List<Room> Spawn(Room... rooms);
+    List<Room> Spawn(List<Room> rooms);
     
 }

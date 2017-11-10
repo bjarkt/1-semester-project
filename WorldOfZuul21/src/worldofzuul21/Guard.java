@@ -5,11 +5,14 @@
  */
 package worldofzuul21;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Nikolaj
  */
-public class Guard {
+public class Guard implements Spawnable{
 
     private final int ID;
     private Room currentRoom;
@@ -32,5 +35,19 @@ public class Guard {
     public void setRoom(Room room) {
         // set metodhod for room
         currentRoom = room;
+    }
+
+    @Override
+    public List<Room> Spawn(List<Room> rooms) {
+        Guard[] guards = new Guard[2];
+        List<Room> rooms_ = new ArrayList<>();
+        for (int i = 0; i < guards.length; i++) {
+            guards[i] = new Guard(i+1);
+            guards[i].setRoom(rooms.get(i));
+            rooms.get(i).addGuard(guards[i]);
+            rooms_.add(rooms.get(i));
+        }
+
+        return rooms_;
     }
 }
