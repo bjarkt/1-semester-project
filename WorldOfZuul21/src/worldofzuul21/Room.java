@@ -221,21 +221,6 @@ public class Room {
         }
     }
 
-    public void setSpawn(Spawnable obj, Room room) {
-        if (obj instanceof Item) {
-            room.setItem((Item) obj);
-        }
-        if (obj instanceof Guard) {
-            room.addGuard((Guard) obj);
-        }
-        if (obj instanceof PowerRelay) {
-            room.setPowerRelay((PowerRelay) obj);
-        }
-        if (obj instanceof PowerSwitch) {
-            room.setPowerSwitch((PowerSwitch) obj);
-        }
-    }
-
     public void setSpawn(Spawnable obj) {
         if (obj instanceof Item) {
             this.setItem((Item) obj);
