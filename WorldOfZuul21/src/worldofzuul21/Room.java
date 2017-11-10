@@ -218,4 +218,19 @@ public class Room {
             return "";
         }
     }
+    public void setSpawn(Spawnable obj, Room room) {
+	if(obj instanceof Item) {
+		room.setItem((Item) obj);
+	}
+	if(obj instanceof Guard) {
+		room.addGuard((Guard) obj);
+	}
+	if(obj instanceof PowerRelay) {
+		room.setPowerRelay((PowerRelay) obj);
+	}if(obj instanceof PowerSwitch) {
+		room.setPowerSwitch((PowerSwitch) obj);
+	}
+
 }
+}
+

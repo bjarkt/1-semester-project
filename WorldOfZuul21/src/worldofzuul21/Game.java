@@ -175,7 +175,10 @@ public class Game {
 
         Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19); // save the itemspawnpoints
 
-        itemName = Item.spawnItem(itemSpawnPointRooms); // save the name of the first spawned item
+        //itemName = Item.spawnItem(itemSpawnPointRooms); // save the name of the first spawned item
+
+        Item dummyItem = new Item();
+        itemName = dummyItem.Spawn(room02,room13,room16,room19).get(0).getItems().getName();
 
         // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();

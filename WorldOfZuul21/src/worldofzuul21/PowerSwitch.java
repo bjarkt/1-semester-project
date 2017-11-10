@@ -1,7 +1,9 @@
 
 package worldofzuul21;
 
-public class PowerSwitch {
+import java.util.List;
+
+public class PowerSwitch implements Spawnable {
 
     private boolean isOn;
 /* No arg constructer */
@@ -20,6 +22,11 @@ public class PowerSwitch {
 /* Method to return the state of IsON */
     public boolean getIsOn() {
         return isOn;
+    }
+
+    @Override
+    public List<Room> Spawn(Room... rooms) {
+        
     }
 
 
