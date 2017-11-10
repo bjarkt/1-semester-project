@@ -34,6 +34,7 @@ public class Game {
     private boolean saved;
     private FriendlyNpc friendlyNpc;
     private XMLUtilities xmlUtilities;
+    private boolean cheatMode;
 
     // Dummy objects are only used to spawn themselves
     private Guard dummyGuard;
@@ -66,6 +67,7 @@ public class Game {
         friendlyNpc = new FriendlyNpc();
         xmlUtilities = new XMLUtilities("savegame.xml");
         saved = false;
+        cheatMode = false;
 
         dummyGuard = new Guard(-1);
         dummySwitch = new PowerSwitch();
@@ -105,15 +107,14 @@ public class Game {
         room15 = new Room("room15", "in room 15", 0, 3);
         room16 = new Room("room16", "in room 16", 1, 3);
         room17 = new Room("room17", "in room 17", 2, 3);
-        room18 = new Room("room18", "in a room. There are stairs to the upper floor, to the east", 3, 3);
-        room19 = new Room("room19", "on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
+        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", 3, 3);
+        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
         noRoom = new Room("nowhere", "nowhere", 9, 9);
 
-
-        Collections.addAll(guardSpawnPointRooms, room04,room15);
-        Collections.addAll(itemSpawnPointRooms, room02,room13,room16, room19);
-        Collections.addAll(switchSpawnPointRooms, room04,room07, room10);
-        Collections.addAll(relaySpawnPointRooms, room03,room05,room09,room11,room14,room18);
+        Collections.addAll(guardSpawnPointRooms, room04, room15);
+        Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19);
+        Collections.addAll(switchSpawnPointRooms, room04, room07, room10);
+        Collections.addAll(relaySpawnPointRooms, room03, room05, room09, room11, room14, room18);
 
         // spawn the guards
         List<Room> guardRooms = dummyGuard.Spawn(guardSpawnPointRooms);
@@ -158,60 +159,10 @@ public class Game {
         currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
 
         // Set the exits for each room
-        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
-            if (room.getValue().getLocation().getX() == 0) {
-                // the leftmost rooms have an exit to the east
-                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
-                room.getValue().setExit(Direction.EAST, loca.getXY());
-            }
-            if (room.getValue().getLocation().getX() == 1 || room.getValue().getLocation().getX() == 2 || room.getValue().getLocation().getX() == 3) {
-                // some rooms have exits to both the east an the west
-                Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
-                room.getValue().setExit(Direction.EAST, loca.getXY());
-                Location loca2 = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit(Direction.WEST, loca2.getXY());
-            }
-            if (room.getValue().getLocation().getX() == 4) {
-                // the rightmost rooms have en exit to the west
-                Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit(Direction.WEST, loca.getXY());
-            }
-            if (room.getValue().getLocation().getY() == 0) {
-                // the southmost rooms have an exit to the north
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                room.getValue().setExit(Direction.NORTH, loca.getXY());
-            }
-            if ((room.getValue().getLocation().getY() == 1 || room.getValue().getLocation().getY() == 2) && room.getValue().getLocation().getX() < 4) {
-                // some rooms have exits to both the north and south
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                room.getValue().setExit(Direction.NORTH, loca.getXY());
-                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit(Direction.SOUTH, loca2.getXY());
-            }
-            if (room.getValue().getLocation().getY() == 1 && room.getValue().getLocation().getX() == 4) {
-                // some rooms have exits to both the north and south
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                room.getValue().setExit(Direction.NORTH, loca.getXY());
-                Location loca2 = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit(Direction.SOUTH, loca2.getXY());
-            }
-            if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() < 4) {
-                // most northmost rooms have an exit to the south
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit(Direction.SOUTH, loca.getXY());
-            }
-            if (room.getValue().getLocation().getY() == 2 && room.getValue().getLocation().getX() == 4) {
-                // this room have an exit to the south, but not to the north
-                Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                room.getValue().setExit(Direction.SOUTH, loca.getXY());
-            }
-
-            if (room.getValue().getLocation().getY() == 3 && room.getValue().getLocation().getX() == 4) {
-                // this room have an exit to the west, but not to the south
-                Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                room.getValue().setExit(Direction.WEST, loca.getXY());
-            }
-        }
+        HashSet<Room> specialRooms = new HashSet<>();
+        specialRooms.add(room14);
+        specialRooms.add(room19);
+        Room.setExits(rooms, specialRooms);
     }
 
     // The method in which the main game loop happens.
@@ -270,12 +221,15 @@ public class Game {
             wantToQuit = hide();
         } else if (commandWord == CommandWord.CALL) {
             call();
-        } else if(commandWord == CommandWord.SAVE) {
+        } else if (commandWord == CommandWord.SAVE) {
             save();
             wantToQuit = true;
         }
         if (gotBusted || policeArrived) {
             wantToQuit = true;
+        }
+        if (cheatMode) {
+            return false;
         }
         return wantToQuit;
     }
@@ -286,7 +240,7 @@ public class Game {
         boolean fileExists = xmlUtilities.doesFileExist();
         do {
             System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW + ")");
-            command  = parser.getCommand();
+            command = parser.getCommand();
             commandWord = command.getCommandWord();
             if (commandWord == CommandWord.LOAD) {
                 if (fileExists) {
@@ -305,8 +259,7 @@ public class Game {
             } else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
             }
-        }
-        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
+        } while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
 
     }
 
@@ -588,7 +541,6 @@ public class Game {
             System.out.println("The game has been saved.");
         } else {
 
-
             if (gotBusted) {
                 printBusted();
                 // busted by the guards
@@ -641,7 +593,6 @@ public class Game {
             mapToSave.put("powerRelayID_" + i, String.valueOf(powerRelays[i].getID()));
         }
         mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
-
 
         int ii = 0;
         for (Room powerRelayLocation : powerRelayLocations) {
@@ -760,7 +711,6 @@ public class Game {
         policeAlerted = Boolean.parseBoolean(map.get("policeAlerted"));
         alertPoint = Integer.parseInt(map.get("alertPoint"));
 
-
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("guard0"))) {
                 room.addGuard(guards[0]);
@@ -773,7 +723,6 @@ public class Game {
                 room.setItem(item);
             }
         }
-
 
     }
 }

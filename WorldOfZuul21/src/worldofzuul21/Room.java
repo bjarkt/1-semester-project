@@ -2,7 +2,9 @@ package worldofzuul21;
 
 import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Michael Kolling and David J. Barnes
@@ -218,19 +220,131 @@ public class Room {
             return "";
         }
     }
+
+    public void setSpawn(Spawnable obj, Room room) {
+        if (obj instanceof Item) {
+            room.setItem((Item) obj);
+        }
+        if (obj instanceof Guard) {
+            room.addGuard((Guard) obj);
+        }
+        if (obj instanceof PowerRelay) {
+            room.setPowerRelay((PowerRelay) obj);
+        }
+        if (obj instanceof PowerSwitch) {
+            room.setPowerSwitch((PowerSwitch) obj);
+        }
+    }
+
     public void setSpawn(Spawnable obj) {
-	if(obj instanceof Item) {
-		this.setItem((Item) obj);
-	}
-	if(obj instanceof Guard) {
-		this.addGuard((Guard) obj);
-	}
-	if(obj instanceof PowerRelay) {
-		this.setPowerRelay((PowerRelay) obj);
-	}if(obj instanceof PowerSwitch) {
-		this.setPowerSwitch((PowerSwitch) obj);
-	}
+        if (obj instanceof Item) {
+            this.setItem((Item) obj);
+        }
+        if (obj instanceof Guard) {
+            this.addGuard((Guard) obj);
+        }
+        if (obj instanceof PowerRelay) {
+            this.setPowerRelay((PowerRelay) obj);
+        }
+        if (obj instanceof PowerSwitch) {
+            this.setPowerSwitch((PowerSwitch) obj);
+        }
+    }
 
-}
-}
+    public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
+        // set the rooms' exits
+        // The HashMap rooms is expected to contain a series of rooms shaped as a square
+        // the HashSet specialRooms contains rooms, which are not allowed to have exits to each other
 
+        // first the max and min values of x and y are found
+        Integer maxX = null;
+        Integer maxY = null;
+        Integer minX = null;
+        Integer minY = null;
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+            if (room.getValue().getLocation().getX() != 9 && room.getValue().getLocation().getX() != 9) {
+                if (maxX == null) {
+                    maxX = room.getValue().getLocation().getX();
+                }
+                if (maxY == null) {
+                    maxY = room.getValue().getLocation().getY();
+                }
+                if (minX == null) {
+                    minX = room.getValue().getLocation().getX();
+                }
+                if (minY == null) {
+                    minY = room.getValue().getLocation().getY();
+                }
+                if (maxX < room.getValue().getLocation().getX()) {
+                    maxX = room.getValue().getLocation().getX();
+                }
+                if (maxY < room.getValue().getLocation().getY()) {
+                    maxY = room.getValue().getLocation().getY();
+                }
+                if (minX > room.getValue().getLocation().getX()) {
+                    minX = room.getValue().getLocation().getX();
+                }
+                if (minY > room.getValue().getLocation().getY()) {
+                    minY = room.getValue().getLocation().getY();
+                }
+            }
+        }
+
+        HashMap<Direction, Boolean> exitsAllowed = new HashMap<>();
+        exitsAllowed.put(Direction.NORTH, Boolean.TRUE);
+        exitsAllowed.put(Direction.SOUTH, Boolean.TRUE);
+        exitsAllowed.put(Direction.EAST, Boolean.TRUE);
+        exitsAllowed.put(Direction.WEST, Boolean.TRUE);
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+            /* if the current room can be found in specialRooms,
+            it will not be allowed to have exits to the other rooms in specialRooms */
+            if (specialRooms.contains(room.getValue())) {
+                for (Room r : specialRooms) {
+                    if (room.getValue().getLocation().isNextTo(r.getLocation())) {
+                        Direction directionNotAllowed = room.getValue().getLocation().getDirectionOfAdjacentLocation(r.getLocation());
+                        if (exitsAllowed.containsKey(directionNotAllowed)) {
+                            for (Map.Entry<Direction, Boolean> entry : exitsAllowed.entrySet()) {
+                                if (entry.getKey().equals(directionNotAllowed)) {
+                                    entry.setValue(Boolean.FALSE);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            // the exits are set
+            if (exitsAllowed.get(Direction.EAST)) {
+                if (room.getValue().getLocation().getX() != maxX) {
+                    // the leftmost rooms have an exit to the east
+                    Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
+                    room.getValue().setExit(Direction.EAST, loca.getXY());
+                }
+            }
+            if (exitsAllowed.get(Direction.WEST)) {
+                if (room.getValue().getLocation().getX() != minX) {
+                    // the rightmost rooms have en exit to the west
+                    Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
+                    room.getValue().setExit(Direction.WEST, loca.getXY());
+                }
+            }
+            if (exitsAllowed.get(Direction.NORTH)) {
+                if (room.getValue().getLocation().getY() != maxY) {
+                    // the southmost rooms have an exit to the north
+                    Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
+                    room.getValue().setExit(Direction.NORTH, loca.getXY());
+                }
+            }
+            if (exitsAllowed.get(Direction.SOUTH)) {
+                if (room.getValue().getLocation().getY() != minY) {
+                    // the northmost rooms have an exit to the south
+                    Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
+                    room.getValue().setExit(Direction.SOUTH, loca.getXY());
+                }
+            }
+            for (Map.Entry<Direction, Boolean> entry : exitsAllowed.entrySet()) {
+                entry.setValue(Boolean.TRUE);
+            }
+        }
+    }
+}
