@@ -46,25 +46,6 @@ public class Item implements Spawnable {
     /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
     it is added to usedItems, so it cannot be spawned agian  
      */
-    public static String spawnItem(List<Room> rooms) {
-        for (Room room : rooms) {
-            room.setItem(null);
-        }
-        String newName;
-        int spawnID;
-        int index;
-        do {
-            spawnID = (int) (Math.random() * itemNames.length);
-            newName = itemNames[spawnID];
-        } while (usedItems.contains(newName));
-        usedItems.add(newName);
-
-        index = (int) (Math.random() * rooms.size());
-        rooms.get(index).setItem(new Item(newName));
-        return newName;
-    }
-
-   
     @Override
     public List<Room> Spawn(List<Room> rooms) {
         List<Room> rooms_ = new ArrayList<>();
