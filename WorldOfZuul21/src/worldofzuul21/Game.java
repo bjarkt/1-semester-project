@@ -6,6 +6,7 @@ import worldofzuul21.Data.XMLUtilities;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Michael Kolling and David J. Barnes
@@ -276,7 +277,8 @@ public class Game {
         Command command;
         CommandWord commandWord;
         do {
-            System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW + ")");
+            System.out.println("Do you want to start a new game, load a saved game, or print the current highscores? " +
+                    "(" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW +  "/" + CommandWord.HIGHSCORE +")");
             command = parser.getCommand();
             commandWord = command.getCommandWord();
 
@@ -292,7 +294,10 @@ public class Game {
             } else if (commandWord == CommandWord.NEW) {
                 gameSaverLoader.deleteFile();
                 play();
-            } else if (commandWord == CommandWord.QUIT) {
+            } else if (commandWord == CommandWord.HIGHSCORE) {
+                System.out.println(getHighScores());
+            }
+            else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
             }
         } while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
@@ -837,29 +842,43 @@ public class Game {
 
     }
 
-    public void updateHighScore() {
-        List<Integer> highScoreList = new ArrayList<>();
+    public List<HighScore> getHighScores() {
+        Map<String, String> loadedHighScoreMap = new HashMap<>();
+        List<HighScore> highScoreList = new ArrayList<>();
 
         if (highScoreSaverLoader.doesFileExist()) {
-            Map<String, String> highScoreMap = highScoreSaverLoader.load();
+            loadedHighScoreMap = highScoreSaverLoader.load();
+        }
 
-            for (String s : highScoreMap.values()) {
-                highScoreList.add(Integer.parseInt(s));
-            }
+        for (Map.Entry<String, String> entry : loadedHighScoreMap.entrySet()) {
+            highScoreList.add(new HighScore(entry.getKey(), Integer.parseInt(entry.getValue())));
+        }
+
+        Collections.sort(highScoreList);
+        Collections.reverse(highScoreList);
+        if (highScoreList.size() > 5) {
+            return highScoreList.subList(0, 5);
+        } else {
+            return highScoreList;
+        }
+    }
+
+    public void updateHighScore() {
+        Map<String, String> loadedHighScoreMap = new HashMap<>();
+
+        if (highScoreSaverLoader.doesFileExist()) {
+            loadedHighScoreMap = highScoreSaverLoader.load();
         }
         int currentHighScore = inventory.calculatePoints();
-        highScoreList.add(currentHighScore);
-        Collections.sort(highScoreList);
-        if (highScoreList.size() >= 5) {
-            highScoreList.subList(5, highScoreList.size()).clear();
-        }
-        Map<String, String> sortedHighScore = new LinkedHashMap<>();
-        for (int i = 0; i < highScoreList.size(); i++) {
-            String s = String.valueOf(highScoreList.get(i));
-            sortedHighScore.put("highScore_" + i, s);
-        }
-        highScoreSaverLoader.save(sortedHighScore);
+        System.out.println("Whats your name?");
+        Scanner input = new Scanner(System.in);
+        String name = input.next();
 
+        loadedHighScoreMap.put(name, String.valueOf(currentHighScore));
+
+        highScoreSaverLoader.save(loadedHighScoreMap);
+
+        System.out.println(getHighScores());
     }
 
 }

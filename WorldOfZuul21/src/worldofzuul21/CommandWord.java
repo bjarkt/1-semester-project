@@ -7,7 +7,7 @@ package worldofzuul21;
 // Makes a datatype that enables a variable to be set of predifened contants.
 public enum CommandWord {
     GO("go"), QUIT("quit"), HELP("help"), INTERACT("interact"), UNKNOWN("?"), STEAL("steal"), ESCAPE("escape"),
-    YES("yes"), NO("no"), HIDE("hide"), CALL("call"), SAVE("save"), LOAD("load"), NEW("new");
+    YES("yes"), NO("no"), HIDE("hide"), CALL("call"), SAVE("save"), LOAD("load"), NEW("new"), HIGHSCORE("highscore");
 
 //  Here is a atributes of a string defined.     
     private String commandString;
