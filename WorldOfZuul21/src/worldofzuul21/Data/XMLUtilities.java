@@ -34,19 +34,6 @@ public class XMLUtilities implements LoadableSavable{
         return false;
     }
 
-    public void createFile() {
-        File file = new File(filename);
-        FileWriter fileWriter;
-        try {
-            fileWriter = new FileWriter(file);
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public Map<String, String> load() {
         Map<String, String> map = new LinkedHashMap<>();
