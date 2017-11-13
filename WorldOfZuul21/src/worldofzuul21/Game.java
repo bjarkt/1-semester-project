@@ -227,6 +227,11 @@ public class Game {
 
         CommandWord commandWord = command.getCommandWord();
 
+        if (cheatMode) {
+            gotBusted = false;
+            policeArrived = false;
+        }
+
         // Check if the first part of the command is an actual command.
         if (commandWord == CommandWord.UNKNOWN) {
             System.out.println("What do you mean?");
@@ -276,7 +281,7 @@ public class Game {
             commandWord = command.getCommandWord();
 
             if (commandWord == CommandWord.LOAD) {
-               if (gameSaverLoader.doesFileExist()) {
+                if (gameSaverLoader.doesFileExist()) {
                     load();
                     gameSaverLoader.deleteFile();
                     play();
