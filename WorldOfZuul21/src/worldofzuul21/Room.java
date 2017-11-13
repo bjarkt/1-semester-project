@@ -332,4 +332,33 @@ public class Room {
             }
         }
     }
+
+    public static void setExitsTest(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
+        HashMap<Direction, int[]> directions = new HashMap<>();
+        int[] n = {0, 1};
+        int[] e = {1, 0};
+        int[] s = {0, -1};
+        int[] w = {-1, 0};
+        directions.put(Direction.NORTH, n);
+        directions.put(Direction.EAST, e);
+        directions.put(Direction.SOUTH, s);
+        directions.put(Direction.WEST, w);
+
+        HashMap<Direction, Boolean> exitsAllowed = new HashMap<>();
+        exitsAllowed.put(Direction.NORTH, Boolean.TRUE);
+        exitsAllowed.put(Direction.SOUTH, Boolean.TRUE);
+        exitsAllowed.put(Direction.EAST, Boolean.TRUE);
+        exitsAllowed.put(Direction.WEST, Boolean.TRUE);
+
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+            for (HashMap.Entry<Direction, int[]> d : directions.entrySet()) {
+                if (exitsAllowed.get(d.getKey())) {
+                    Location loca = new Location(room.getValue().getLocation().getX() + d.getValue()[0], room.getValue().getLocation().getY() + d.getValue()[1]);
+                    if (rooms.containsKey(loca.getXY())) {
+                        room.getValue().setExit(d.getKey(), loca.getXY());
+                    }
+                }
+            }
+        }
+    }
 }
