@@ -21,7 +21,7 @@ public class Item implements Spawnable {
         isKey = false;
     }
     
-    // constructo for the Key Item
+    // constructor for the Key Item
     public Item(boolean isKey) {
         this.isKey = isKey;
         if (isKey) {
