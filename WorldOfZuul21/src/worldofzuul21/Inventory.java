@@ -84,17 +84,10 @@ public class Inventory {
         removeKeys();
         // trims the capacity of the list, so it is equal to the size
         loot.trimToSize();
-        int numberOfStolenItems = loot.size();
-        switch (numberOfStolenItems) {
-            case 0:
-                return 0;
-            case 1:
-                return 2;
-            case 2:
-                return 6;
-            default:
-                return 10;
-        }
+        // Sets the score to be 2 times the amount of items in the loot ArrayList
+        int score = loot.size() *2;
+        return score;
+        
     }
 
     /**
