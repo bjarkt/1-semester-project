@@ -16,11 +16,11 @@ public class Item implements Spawnable {
         this.name = name;
         isKey = false;
     }
-    
+
     public Item() {
         isKey = false;
     }
-    
+
     // constructor for the Key Item
     public Item(boolean isKey) {
         this.isKey = isKey;
@@ -42,7 +42,7 @@ public class Item implements Spawnable {
     public boolean isKey() {
         return isKey;
     }
-    
+
     /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
     it is added to usedItems, so it cannot be spawned agian  
      */
@@ -53,17 +53,13 @@ public class Item implements Spawnable {
 
             room.setItem(null);
         }
-        String newName;
-        int spawnID;
-        int index;
-        do {
-            spawnID = (int) (Math.random() * itemNames.length);
-            newName = itemNames[spawnID];
-        } while (usedItems.contains(newName));
-        usedItems.add(newName);
+        
+        int spawnID = (int) (Math.random() * itemNames.length);
+        String newName = itemNames[spawnID];
+
         Spawnable obj = new Item(newName);
 
-        index = (int) (Math.random() * rooms.size());
+        int index = (int) (Math.random() * rooms.size());
 
         rooms.get(index).setSpawn(obj);
         rooms_.add(rooms.get(index));

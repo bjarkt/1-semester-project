@@ -617,6 +617,7 @@ public class Game {
                     // won the game
                     System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
                     inventory.printLoot();
+                    updateHighScore();
                 } else {
                     // escaped without stealing anything
                     System.out.println("You didn't steal anything. You didn't get arrested though. Thumbs up for that");
@@ -835,4 +836,27 @@ public class Game {
         }
 
     }
+
+    public void updateHighScore() {
+        if (!highScoreSaverLoader.doesFileExist()) {
+            return;
+        }
+
+        Map<String, String> highScoreMap = highScoreSaverLoader.load();
+        List<Integer> highScoreList = new ArrayList<>();
+        for (String s : highScoreMap.values()) {
+            highScoreList.add(Integer.parseInt(s));
+
+        }
+        int currentHighScore = inventory.calculatePoints();
+        highScoreList.add(currentHighScore);
+        Collections.sort(highScoreList);
+        Map<String, String> sortedHighScore = new LinkedHashMap<>();
+        for (int i = 0; i < highScoreList.size(); i++) {
+            String s = String.valueOf(highScoreList.get(i));
+            sortedHighScore.put("highScore_" + i, s);
+        }
+        highScoreSaverLoader.save(sortedHighScore);
+    }
+
 }
