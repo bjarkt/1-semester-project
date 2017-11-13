@@ -5,12 +5,11 @@ import java.util.*;
 public class Inventory {
 
     // the amount of space in the inventory
-    private final int inventorySpace = 1;
+    private final int inventorySpace = 2;
     // the list of items, in the bush, outside the museum
     private ArrayList<Item> loot;
     // the list of items in your inventory
     private ArrayList<Item> inventory;
-
 
     /**
      * initialises the lists
@@ -35,7 +34,8 @@ public class Inventory {
     /**
      *
      * @param item to add to inventory
-     * @return returns true if the item was added successfully, false if there is not enough room in the inventory.
+     * @return returns true if the item was added successfully, false if there
+     * is not enough room in the inventory.
      */
     public boolean addToInventory(Item item) {
         // trims the capacity of the list, so it is equal to the size
@@ -50,9 +50,11 @@ public class Inventory {
 
     /**
      *
-     * @return true if the item added was successfully, false if there is no item in the inventory
+     * @return true if the item added was successfully, false if there is no
+     * item in the inventory
      */
     public boolean addToLoot() {
+        removeKeys();
         // trims the capacity of the list, so it is equal to the size
         inventory.trimToSize();
         // if there is an item in the inventory, add it to the loot and clear inventory
@@ -65,11 +67,21 @@ public class Inventory {
         }
     }
 
+    private void removeKeys() {
+        for (Item item : inventory) {
+            if (item.isKey()) {
+                inventory.remove(item);
+            }
+        }
+    }
+
     /**
      *
-     * @return the amount of points earned for the amount of items that has been stolen.
+     * @return the amount of points earned for the amount of items that has been
+     * stolen.
      */
     public int calculatePoints() {
+        removeKeys();
         // trims the capacity of the list, so it is equal to the size
         loot.trimToSize();
         int numberOfStolenItems = loot.size();

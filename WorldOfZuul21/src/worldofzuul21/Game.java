@@ -18,6 +18,9 @@ public class Game {
     private Room powerSwitchRoom; // the room with the powerswitch
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
     private HashSet<Room> powerRelayLocations;
+    private HashSet<Room> lockedRooms;
+    private Item key;
+    private Room keyLocation;
     private Guard[] guards; // the guards
     private String itemName; // the name of the last spawned item
     private Inventory inventory; // the players inventory
@@ -54,6 +57,8 @@ public class Game {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
+        lockedRooms = new HashSet<>();
+        key = new Item(true);
         guards = new Guard[2]; // Create the guards
         itemSpawnPointRooms = new ArrayList<>(); // Instantiate the spawnpoints of items
         inventory = new Inventory(); // Instantiate the inventory
@@ -67,7 +72,7 @@ public class Game {
         friendlyNpc = new FriendlyNpc();
         xmlUtilities = new XMLUtilities("savegame.xml");
         saved = false;
-        cheatMode = false;
+        cheatMode = true;
 
         dummyGuard = new Guard(-1);
         dummySwitch = new PowerSwitch();
@@ -110,6 +115,16 @@ public class Game {
         room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", 3, 3);
         room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
         noRoom = new Room("nowhere", "nowhere", 9, 9);
+
+        // lock the appropriate doors
+        lockedRooms.add(room19);
+        for (Room room : lockedRooms) {
+            room.lock();
+        }
+
+        // place the key
+        keyLocation = room15;
+        keyLocation.setItem(key);
 
         Collections.addAll(guardSpawnPointRooms, room04, room15);
         Collections.addAll(itemSpawnPointRooms, room02, room13, room16, room19);
@@ -288,6 +303,14 @@ public class Game {
             System.out.println("That is not a correct direction");
             return false;
         }
+
+        // check if the player has a key
+        boolean gotKey = false;
+        for (Item item : inventory.getInventory()) {
+            if (item.isKey()) {
+                gotKey = true;
+            }
+        }
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
         Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
@@ -295,7 +318,15 @@ public class Game {
 
         if (nextRoom == null) {
             System.out.println("There is no door!"); // when there is no exit
+        } else if (nextRoom.isLocked() && !gotKey) {
+            System.out.println("The door is locked!");
+            System.out.println("\"You need to find a key.\"");
         } else {
+            if (nextRoom.isLocked() && gotKey) {
+                System.out.println("The door is locked.");
+                System.out.println("You use your key to open it.");
+                nextRoom.unlock();
+            }
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
             timer += 1;
@@ -375,8 +406,15 @@ public class Game {
     private boolean stealItem() {
         // used to steal an item
         boolean forcedToQuit = false;
+
+        // check if the room contains a key
+        boolean containsKey = false;
+        if (currentRoom.getItems().isKey()) {
+            containsKey = true;
+        }
+
         if (currentRoom.getItems() != null) {
-            if (!powerStatus) {
+            if (!powerStatus || containsKey) {
                 if (inventory.addToInventory(currentRoom.getItems())) {
                     System.out.println("You have stolen a " + currentRoom.getItems().getName());
                     currentRoom.removeItem();
@@ -574,6 +612,12 @@ public class Game {
         for (PowerRelay powerRelay : this.powerRelays) {
             powerRelay.restore();
         }
+        // lock the appropriate doors
+        for (Room room : lockedRooms) {
+            room.lock();
+        }
+        // place the key
+        keyLocation.setItem(key);
         // set the alertstatus of the police to false
         policeAlerted = false;
         // spawn a new item, if you stole the last one

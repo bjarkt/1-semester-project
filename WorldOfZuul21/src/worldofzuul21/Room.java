@@ -18,6 +18,7 @@ public class Room {
     private HashMap<Direction, Integer> exits;
     private PowerSwitch powerSwitch;
     private PowerRelay powerRelay;
+    private boolean locked;
     private Item[] items;
     private Guard[] guards;
 
@@ -35,6 +36,7 @@ public class Room {
         this.description = description;
         location = new Location(x, y);
         exits = new HashMap<Direction, Integer>();
+        locked = false;
         items = new Item[1]; // only one item per room
         guards = new Guard[2]; // two guards per room
     }
@@ -93,6 +95,18 @@ public class Room {
         return location;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+    
+    public void lock() {
+        locked = true;
+    }
+    
+    public void unlock() {
+        locked = false;
+    }
+    
     /**
      *
      * @return the powerswitch placed in this room. Returns null if there is no
