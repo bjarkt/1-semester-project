@@ -85,14 +85,15 @@ public class Inventory {
         // trims the capacity of the list, so it is equal to the size
         loot.trimToSize();
         int numberOfStolenItems = loot.size();
-        if (numberOfStolenItems == 0) {
-            return 0;
-        } else if (numberOfStolenItems == 1) {
-            return 2;
-        } else if (numberOfStolenItems == 2) {
-            return 6;
-        } else {
-            return 10;
+        switch (numberOfStolenItems) {
+            case 0:
+                return 0;
+            case 1:
+                return 2;
+            case 2:
+                return 6;
+            default:
+                return 10;
         }
     }
 
