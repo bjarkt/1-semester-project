@@ -142,6 +142,11 @@ public class Game {
 
         // spawn powerRelays in three out of 6 random rooms
         powerRelayLocations = new HashSet<>(dummyRelay.Spawn(relaySpawnPointRooms));
+        int i = 0;
+        for (Room relayRoom : powerRelayLocations) {
+            powerRelays[i] = relayRoom.getPowerRelay();
+            i++;
+        }
 
         // Spawn items
         itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
@@ -409,7 +414,8 @@ public class Game {
 
         // check if the room contains a key
         boolean containsKey = false;
-        if (currentRoom.getItems().isKey()) {
+
+        if (currentRoom.getItems() != null && currentRoom.getItems().isKey()) {
             containsKey = true;
         }
 
@@ -670,6 +676,19 @@ public class Game {
                 mapToSave.put("itemRoom", room.getName());
             }
         }
+        int i = 0;
+        for (Room lockedRoom : lockedRooms) {
+            mapToSave.put("lockedRoomName_"+i, lockedRoom.getName());
+            mapToSave.put("lockedRoomStatus_"+i, String.valueOf(lockedRoom.isLocked()));
+        }
+
+        mapToSave.put("keyLocationRoom", keyLocation.getName());
+        if (keyLocation.getItems() != null) {
+            mapToSave.put("doesKeyLocationRoomContainItem", "true");
+        } else {
+            mapToSave.put("doesKeyLocationRoomContainItem", "false");
+        }
+
         xmlUtilities.save(mapToSave);
         saved = true;
     }
@@ -679,6 +698,7 @@ public class Game {
         map = xmlUtilities.load();
 
         powerRelayLocations.clear();
+        lockedRooms.clear();
         for (Room room : rooms.values()) {
             room.removeItem();
             room.removeGuard();
@@ -765,6 +785,33 @@ public class Game {
             if (room.getName().equals(map.get("itemRoom"))) {
                 Item item = new Item(map.get("itemName"));
                 room.setItem(item);
+            }
+        }
+
+        i = 0;
+        for (String s : map.keySet()) {
+            if (s.startsWith("lockedRoomName_")) {
+                for (Room room : rooms.values()) {
+                    if (room.getName().equals(map.get(s))) {
+                        lockedRooms.add(room);
+                        boolean status = Boolean.parseBoolean(map.get("lockedRoomStatus_"+i));
+                        room.setLocked(status);
+                        i++;
+                    }
+                }
+            }
+        }
+
+        for (Room room : rooms.values()) {
+            if (room.getName().equals(map.get("keyLocationRoom"))) {
+                keyLocation = room;
+                Item key = null;
+                if (Boolean.parseBoolean(map.get("doesKeyLocationRoomContainItem"))) {
+                    key = new Item(true);
+                } else {
+                    //key = new Item(false);
+                }
+                keyLocation.setItem(key);
             }
         }
 

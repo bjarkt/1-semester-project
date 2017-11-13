@@ -106,6 +106,10 @@ public class Room {
     public void unlock() {
         locked = false;
     }
+
+    public void setLocked(boolean lockStatus) {
+        locked = lockStatus;
+    }
     
     /**
      *
