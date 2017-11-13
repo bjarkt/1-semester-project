@@ -1,5 +1,8 @@
 package worldofzuul21;
 
+import worldofzuul21.Data.LoadableSavable;
+import worldofzuul21.Data.XMLUtilities;
+
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +39,8 @@ public class Game {
     private boolean policeArrived; // true if the police has arrived
     private boolean saved;
     private FriendlyNpc friendlyNpc;
-    private XMLUtilities xmlUtilities;
+    private LoadableSavable gameSaverLoader;
+    private LoadableSavable highScoreSaverLoader;
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
 
@@ -70,7 +74,8 @@ public class Game {
         gotBusted = false; // the player has not been busted yet
         policeArrived = false; // the police has not arrived yet
         friendlyNpc = new FriendlyNpc();
-        xmlUtilities = new XMLUtilities("savegame.xml");
+        gameSaverLoader = new XMLUtilities("savegame.xml");
+        highScoreSaverLoader = new XMLUtilities("highscore.xml");
         saved = false;
         cheatMode = true;
         forceQuitCheatMode = false;
@@ -265,24 +270,22 @@ public class Game {
     public void startGame() {
         Command command;
         CommandWord commandWord;
-        boolean fileExists = xmlUtilities.doesFileExist();
         do {
             System.out.println("Do you want to start a new game, or load a saved game? (" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW + ")");
             command = parser.getCommand();
             commandWord = command.getCommandWord();
+
             if (commandWord == CommandWord.LOAD) {
-                if (fileExists) {
+               if (gameSaverLoader.doesFileExist()) {
                     load();
-                    xmlUtilities.deleteFile();
+                    gameSaverLoader.deleteFile();
                     play();
                 } else {
                     System.out.println("File does not exist");
                     commandWord = null;
                 }
             } else if (commandWord == CommandWord.NEW) {
-                if (fileExists) {
-                    xmlUtilities.deleteFile();
-                }
+                gameSaverLoader.deleteFile();
                 play();
             } else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
@@ -700,13 +703,13 @@ public class Game {
             mapToSave.put("doesKeyLocationRoomContainItem", "false");
         }
 
-        xmlUtilities.save(mapToSave);
+        gameSaverLoader.save(mapToSave);
         saved = true;
     }
 
     private void load() {
         Map<String, String> map = new LinkedHashMap<>();
-        map = xmlUtilities.load();
+        map = gameSaverLoader.load();
 
         powerRelayLocations.clear();
         lockedRooms.clear();

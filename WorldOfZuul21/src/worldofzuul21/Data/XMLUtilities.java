@@ -1,4 +1,4 @@
-package worldofzuul21;
+package worldofzuul21.Data;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -12,23 +12,29 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class XMLUtilities {
+public class XMLUtilities implements LoadableSavable{
     private String filename;
 
     public XMLUtilities(String filename) {
         this.filename = filename;
     }
 
+    @Override
     public boolean doesFileExist() {
         File file = new File(filename);
         return file.exists();
     }
 
+    @Override
     public boolean deleteFile() {
-        File file = new File(filename);
-        return file.delete();
+        if (!doesFileExist()) {
+            File file = new File(filename);
+            return file.delete();
+        }
+        return false;
     }
 
+    @Override
     public Map<String, String> load() {
         Map<String, String> map = new LinkedHashMap<>();
         StringBuilder xml = new StringBuilder();
@@ -59,6 +65,7 @@ public class XMLUtilities {
         return map;
     }
 
+    @Override
     public void save(Map<String, String> map) {
         StringBuilder buffer = new StringBuilder();
 
