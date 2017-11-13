@@ -613,11 +613,11 @@ public class Game {
                 System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
             } else {
                 int points = inventory.calculatePoints();
+                updateHighScore();
                 if (points > 0) {
                     // won the game
                     System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
                     inventory.printLoot();
-                    updateHighScore();
                 } else {
                     // escaped without stealing anything
                     System.out.println("You didn't steal anything. You didn't get arrested though. Thumbs up for that");
@@ -838,25 +838,28 @@ public class Game {
     }
 
     public void updateHighScore() {
-        if (!highScoreSaverLoader.doesFileExist()) {
-            return;
-        }
-
-        Map<String, String> highScoreMap = highScoreSaverLoader.load();
         List<Integer> highScoreList = new ArrayList<>();
-        for (String s : highScoreMap.values()) {
-            highScoreList.add(Integer.parseInt(s));
 
+        if (highScoreSaverLoader.doesFileExist()) {
+            Map<String, String> highScoreMap = highScoreSaverLoader.load();
+
+            for (String s : highScoreMap.values()) {
+                highScoreList.add(Integer.parseInt(s));
+            }
         }
         int currentHighScore = inventory.calculatePoints();
         highScoreList.add(currentHighScore);
         Collections.sort(highScoreList);
+        if (highScoreList.size() >= 5) {
+            highScoreList.subList(5, highScoreList.size()).clear();
+        }
         Map<String, String> sortedHighScore = new LinkedHashMap<>();
         for (int i = 0; i < highScoreList.size(); i++) {
             String s = String.valueOf(highScoreList.get(i));
             sortedHighScore.put("highScore_" + i, s);
         }
         highScoreSaverLoader.save(sortedHighScore);
+
     }
 
 }

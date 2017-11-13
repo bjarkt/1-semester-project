@@ -8,5 +8,6 @@ public interface LoadableSavable {
     void save(Map<String, String> map);
     boolean deleteFile();
     boolean doesFileExist();
+    void createFile();
 
 }
