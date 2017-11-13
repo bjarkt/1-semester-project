@@ -38,6 +38,7 @@ public class Game {
     private FriendlyNpc friendlyNpc;
     private XMLUtilities xmlUtilities;
     private boolean cheatMode;
+    private boolean forceQuitCheatMode;
 
     // Dummy objects are only used to spawn themselves
     private Guard dummyGuard;
@@ -60,7 +61,6 @@ public class Game {
         lockedRooms = new HashSet<>();
         key = new Item(true);
         guards = new Guard[2]; // Create the guards
-        itemSpawnPointRooms = new ArrayList<>(); // Instantiate the spawnpoints of items
         inventory = new Inventory(); // Instantiate the inventory
         timer = 0; // Instantiate the timer
         powerStatus = true; // turn on the power
@@ -73,13 +73,17 @@ public class Game {
         xmlUtilities = new XMLUtilities("savegame.xml");
         saved = false;
         cheatMode = true;
+        forceQuitCheatMode = false;
 
+        // dummys
         dummyGuard = new Guard(-1);
         dummySwitch = new PowerSwitch();
         dummyRelay = new PowerRelay(-1, -1);
         dummyItem = new Item();
 
+        // spawnpoint rooms
         guardSpawnPointRooms = new ArrayList<>();
+        itemSpawnPointRooms = new ArrayList<>(); // Instantiate the spawnpoints of items
         switchSpawnPointRooms = new ArrayList<>();
         relaySpawnPointRooms = new ArrayList<>();
 
@@ -249,7 +253,11 @@ public class Game {
             wantToQuit = true;
         }
         if (cheatMode) {
-            return false;
+            if (forceQuitCheatMode) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return wantToQuit;
     }
@@ -377,6 +385,9 @@ public class Game {
             System.out.println("Quit what?");
             return false;
         } else {
+            if (cheatMode) {
+                forceQuitCheatMode = true;
+            }
             return true;
         }
     }
@@ -678,8 +689,8 @@ public class Game {
         }
         int i = 0;
         for (Room lockedRoom : lockedRooms) {
-            mapToSave.put("lockedRoomName_"+i, lockedRoom.getName());
-            mapToSave.put("lockedRoomStatus_"+i, String.valueOf(lockedRoom.isLocked()));
+            mapToSave.put("lockedRoomName_" + i, lockedRoom.getName());
+            mapToSave.put("lockedRoomStatus_" + i, String.valueOf(lockedRoom.isLocked()));
         }
 
         mapToSave.put("keyLocationRoom", keyLocation.getName());
@@ -794,7 +805,7 @@ public class Game {
                 for (Room room : rooms.values()) {
                     if (room.getName().equals(map.get(s))) {
                         lockedRooms.add(room);
-                        boolean status = Boolean.parseBoolean(map.get("lockedRoomStatus_"+i));
+                        boolean status = Boolean.parseBoolean(map.get("lockedRoomStatus_" + i));
                         room.setLocked(status);
                         i++;
                     }
