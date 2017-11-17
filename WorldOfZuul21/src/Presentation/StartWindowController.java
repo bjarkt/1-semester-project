@@ -29,7 +29,7 @@ public class StartWindowController {
     }
 
     private void changeScene() {
-        Scene scene = loadButton.getScene().getWindow().getScene();
+        Scene scene = loadButton.getScene();
         try {
             Parent root = FXMLLoader.load(getClass().getResource("FXML/primaryWindow.fxml"));
             scene.setRoot(root);

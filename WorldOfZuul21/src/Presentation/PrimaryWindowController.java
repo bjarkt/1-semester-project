@@ -37,7 +37,7 @@ public class PrimaryWindowController {
     //private Player player;
     //private Enemy enemy;
 
-    final private boolean DRAW_MINIMAP_IMAGES = false;
+    final private boolean DRAW_MINIMAP_IMAGES = true;
 
 
     public PrimaryWindowController() {
@@ -238,7 +238,7 @@ public class PrimaryWindowController {
     }
 
     private ButtonType createAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(type);
         if (header.length() > 0) alert.setHeaderText(header);
         alert.setTitle(title);
         alert.setContentText(content);
