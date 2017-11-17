@@ -5,6 +5,9 @@
  */
 package Business;
 
+import Acq.IPowerRelay;
+import Acq.IRoom;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +15,7 @@ import java.util.List;
  *
  * @author Nikolaj
  */
-public class PowerRelay implements Spawnable{
+public class PowerRelay implements Spawnable, IPowerRelay{
     
     private int ID;
     private boolean status; // false when sabotaged
@@ -57,8 +60,8 @@ public class PowerRelay implements Spawnable{
     }
 
     @Override
-    public List<Room> Spawn(List<Room> rooms) {
-        List<Room> rooms_ = new ArrayList<>();
+    public List<IRoom> Spawn(List<IRoom> rooms) {
+        List<IRoom> rooms_ = new ArrayList<>();
         while (rooms_.size() < 3) {
             int randomIndex = (int) (Math.random() * rooms.size());
             if (!rooms_.contains(rooms.get(randomIndex))) {

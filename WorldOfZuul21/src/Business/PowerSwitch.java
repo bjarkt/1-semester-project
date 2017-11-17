@@ -1,10 +1,13 @@
 
 package Business;
 
+import Acq.IPowerSwitch;
+import Acq.IRoom;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowerSwitch implements Spawnable {
+public class PowerSwitch implements Spawnable, IPowerSwitch {
 
     private boolean isOn;
 /* No arg constructer */
@@ -26,9 +29,9 @@ public class PowerSwitch implements Spawnable {
     }
 
     @Override
-    public List<Room> Spawn(List<Room> rooms) {
+    public List<IRoom> Spawn(List<IRoom> rooms) {
         int number = (int) (Math.random() * 3);
-        List<Room> rooms_ = new ArrayList<>();
+        List<IRoom> rooms_ = new ArrayList<>();
 
         rooms.get(number).setSpawn(new PowerSwitch());
         rooms.get(number).getPowerSwitch().turnPowerOn();

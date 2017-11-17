@@ -1,5 +1,6 @@
 package Data;
 
+import Acq.IData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -12,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class XMLUtilities implements LoadableSavable{
+public class XMLUtilities implements LoadableSavable, IData{
     private String filename;
 
     public XMLUtilities(String filename) {

@@ -5,6 +5,8 @@
  */
 package Business;
 
+import Acq.IRoom;
+
 import java.util.List;
 
 /**
@@ -13,6 +15,6 @@ import java.util.List;
  */
 public interface Spawnable {
 
-    List<Room> Spawn(List<Room> rooms);
+    List<IRoom> Spawn(List<IRoom> rooms);
     
 }

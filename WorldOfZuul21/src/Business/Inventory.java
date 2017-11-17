@@ -1,5 +1,7 @@
 package Business;
 
+import Acq.IItem;
+
 import java.util.*;
 
 public class Inventory {
@@ -7,9 +9,9 @@ public class Inventory {
     // the amount of space in the inventory
     private final int inventorySpace = 2;
     // the list of items, in the bush, outside the museum
-    private ArrayList<Item> loot;
+    private ArrayList<IItem> loot;
     // the list of items in your inventory
-    private ArrayList<Item> inventory;
+    private ArrayList<IItem> inventory;
 
     /**
      * initialises the lists
@@ -23,11 +25,11 @@ public class Inventory {
      *
      * @return the inventory
      */
-    public ArrayList<Item> getInventory() {
+    public ArrayList<IItem> getInventory() {
         return inventory;
     }
 
-    public ArrayList<Item> getLoot() {
+    public ArrayList<IItem> getLoot() {
         return loot;
     }
 
@@ -37,7 +39,7 @@ public class Inventory {
      * @return returns true if the item was added successfully, false if there
      * is not enough room in the inventory.
      */
-    public boolean addToInventory(Item item) {
+    public boolean addToInventory(IItem item) {
         // trims the capacity of the list, so it is equal to the size
         inventory.trimToSize();
         if (inventory.size() == inventorySpace) { // if the amount of items is equal to the max number of items allowed, do not add
@@ -68,7 +70,7 @@ public class Inventory {
     }
 
     private void removeKeys() {
-        for (Item item : inventory) {
+        for (IItem item : inventory) {
             if (item.isKey()) {
                 inventory.remove(item);
             }
@@ -95,7 +97,7 @@ public class Inventory {
      */
     public void printLoot() {
         System.out.print("You grab the following loot: ");
-        for (Item item : loot) {
+        for (IItem item : loot) {
             System.out.println(item.getName() + "\t");
         }
         System.out.println();

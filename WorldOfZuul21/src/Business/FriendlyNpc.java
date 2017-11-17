@@ -5,6 +5,10 @@
  */
 package Business;
 
+import Acq.Direction;
+import Acq.IGuard;
+import Acq.ILocation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +18,8 @@ import java.util.List;
  */
 public class FriendlyNpc {
 
-    public boolean checkForGuard(Location currentLocation, Guard[] guards) {
-        for (Guard guard : guards) {
+    public boolean checkForGuard(ILocation currentLocation, IGuard[] guards) {
+        for (IGuard guard : guards) {
             if (currentLocation.getX() <= guard.getRoom().getLocation().getX() + 1
                     && currentLocation.getX() <= guard.getRoom().getLocation().getX() - 1
                     && currentLocation.getY() <= guard.getRoom().getLocation().getY() + 1
@@ -26,10 +30,10 @@ public class FriendlyNpc {
         return false;
     }
 
-    public List<Direction> getDirectionOfGuards(Location currentLocation, Guard[] guards) {
-        if (checkForGuard(currentLocation, guards) == true) {
+    public List<Direction> getDirectionOfGuards(ILocation currentLocation, IGuard[] guards) {
+        if (checkForGuard(currentLocation, guards)) {
             List<Direction> directions = new ArrayList<>();
-            for (Guard guard : guards) {
+            for (IGuard guard : guards) {
                 if (currentLocation.getX() == guard.getRoom().getLocation().getX()) {
                     if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
                         directions.add(Direction.NORTH);

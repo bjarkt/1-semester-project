@@ -5,6 +5,9 @@
  */
 package Business;
 
+import Acq.IGuard;
+import Acq.IRoom;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +15,10 @@ import java.util.List;
  *
  * @author Nikolaj
  */
-public class Guard implements Spawnable{
+public class Guard implements Spawnable, IGuard {
 
     private final int ID;
-    private Room currentRoom;
+    private IRoom currentRoom;
     
     public Guard(int ID) {
         // ID for Guard objekt
@@ -27,20 +30,20 @@ public class Guard implements Spawnable{
         return ID;
     }
     
-    public Room getRoom() {
+    public IRoom getRoom() {
         //metodhod for getting currentRoom
         return currentRoom;
     }
     
-    public void setRoom(Room room) {
+    public void setRoom(IRoom room) {
         // set metodhod for room
         currentRoom = room;
     }
 
     @Override
-    public List<Room> Spawn(List<Room> rooms) {
+    public List<IRoom> Spawn(List<IRoom> rooms) {
         Guard[] guards = new Guard[2];
-        List<Room> rooms_ = new ArrayList<>();
+        List<IRoom> rooms_ = new ArrayList<>();
         for (int i = 0; i < guards.length; i++) {
             guards[i] = new Guard(i+1);
             guards[i].setRoom(rooms.get(i));

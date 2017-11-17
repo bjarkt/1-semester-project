@@ -1,8 +1,11 @@
 package Business;
 
+import Acq.IItem;
+import Acq.IRoom;
+
 import java.util.*;
 
-public class Item implements Spawnable {
+public class Item implements Spawnable, IItem {
 
     private String name;
     //Naming the possible items which can be spawned
@@ -47,10 +50,9 @@ public class Item implements Spawnable {
     it is added to usedItems, so it cannot be spawned agian  
      */
     @Override
-    public List<Room> Spawn(List<Room> rooms) {
-        List<Room> rooms_ = new ArrayList<>();
-        for (Room room : rooms) {
-
+    public List<IRoom> Spawn(List<IRoom> rooms) {
+        List<IRoom> rooms_ = new ArrayList<>();
+        for (IRoom room : rooms) {
             room.setItem(null);
         }
         

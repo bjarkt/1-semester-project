@@ -5,11 +5,14 @@
  */
 package Business;
 
+import Acq.Direction;
+import Acq.ILocation;
+
 /**
  *
  * @author Nikolaj
  */
-public class Location {
+public class Location implements ILocation {
 
     private int x;
     private int y;
@@ -48,30 +51,30 @@ public class Location {
         return (Integer.toString(x) + "," + Integer.toString(y)).hashCode();
     }
 
-    public boolean isNextTo(Location loc) {
-        if (this.x == loc.x + 1 || this.x == loc.x - 1) {
-            if (this.y == loc.y) {
+    public boolean isNextTo(ILocation loc) {
+        if (this.x == loc.getX() + 1 || this.x == loc.getX() - 1) {
+            if (this.y == loc.getY()) {
                 return true;
             }
-        } else if (this.y == loc.y + 1 || this.y == loc.y - 1) {
-            if (this.x == loc.x) {
+        } else if (this.y == loc.getY() + 1 || this.y == loc.getY() - 1) {
+            if (this.x == loc.getX()) {
                 return true;
             }
         }
         return false;
     }
 
-    public Direction getDirectionOfAdjacentLocation(Location loc) {
+    public Direction getDirectionOfAdjacentLocation(ILocation loc) {
         if (!isNextTo(loc)) {
             return null;
         } else {
-            if (this.x < loc.x) {
+            if (this.x < loc.getX()) {
                 return Direction.EAST;
-            } else if (this.x > loc.x) {
+            } else if (this.x > loc.getX()) {
                 return Direction.WEST;
-            } else if (this.y < loc.y) {
+            } else if (this.y < loc.getY()) {
                 return Direction.NORTH;
-            } else if (this.y > loc.y) {
+            } else if (this.y > loc.getY()) {
                 return Direction.SOUTH;
             } else {
                 return null;

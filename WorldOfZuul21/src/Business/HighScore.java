@@ -1,6 +1,8 @@
 package Business;
 
-public class HighScore implements Comparable<HighScore> {
+import Acq.IHighScore;
+
+public class HighScore implements IHighScore {
     private String name;
     private int score;
 
@@ -15,7 +17,12 @@ public class HighScore implements Comparable<HighScore> {
     }
 
     @Override
-    public int compareTo(HighScore other) {
-        return this.score - other.score;
+    public int compareTo(IHighScore other) {
+        return this.score - other.getScore();
+    }
+
+    @Override
+    public int getScore() {
+        return score;
     }
 }

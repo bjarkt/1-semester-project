@@ -1,5 +1,6 @@
 package Business;
 
+import Acq.*;
 import Data.LoadableSavable;
 import Data.XMLUtilities;
 
@@ -14,17 +15,16 @@ import java.util.Map;
 public class Game {
 
     private Parser parser; // the parser is used to get the players command inputs
-    private Room currentRoom; // the room that the player is currently in
-    private HashMap<Integer, Room> rooms; // a map storing all the rooms
-    private PowerSwitch powerSwitch; // a powerswitch
-    private PowerRelay[] powerRelays;
-    private Room powerSwitchRoom; // the room with the powerswitch
+    private IRoom currentRoom; // the room that the player is currently in
+    private HashMap<Integer, IRoom> rooms; // a map storing all the rooms
+    private IPowerRelay[] powerRelays;
+    private IRoom powerSwitchRoom; // the room with the powerswitch
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
-    private HashSet<Room> powerRelayLocations;
-    private HashSet<Room> lockedRooms;
-    private Item key;
-    private Room keyLocation;
-    private Guard[] guards; // the guards
+    private HashSet<IRoom> powerRelayLocations;
+    private HashSet<IRoom> lockedRooms;
+    private IItem key;
+    private IRoom keyLocation;
+    private IGuard[] guards; // the guards
     private String itemName; // the name of the last spawned item
     private Inventory inventory; // the players inventory
     private int timer; // the amount of turns taken
@@ -51,10 +51,10 @@ public class Game {
     private Item dummyItem;
 
     // List of rooms, in which Spawnable objects spawn
-    private List<Room> guardSpawnPointRooms;
-    private List<Room> switchSpawnPointRooms;
-    private List<Room> relaySpawnPointRooms;
-    private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
+    private List<IRoom> guardSpawnPointRooms;
+    private List<IRoom> switchSpawnPointRooms;
+    private List<IRoom> relaySpawnPointRooms;
+    private List<IRoom> itemSpawnPointRooms; // the rooms that items can spawn in
 
 
     /* zero argument constructor. */
@@ -127,7 +127,7 @@ public class Game {
 
         // lock the appropriate doors
         lockedRooms.add(room19);
-        for (Room room : lockedRooms) {
+        for (IRoom room : lockedRooms) {
             room.lock();
         }
 
@@ -141,7 +141,7 @@ public class Game {
         Collections.addAll(relaySpawnPointRooms, room03, room05, room09, room11, room14, room18);
 
         // spawn the guards
-        List<Room> guardRooms = dummyGuard.Spawn(guardSpawnPointRooms);
+        List<IRoom> guardRooms = dummyGuard.Spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
 
@@ -152,7 +152,7 @@ public class Game {
         // spawn powerRelays in three out of 6 random rooms
         powerRelayLocations = new HashSet<>(dummyRelay.Spawn(relaySpawnPointRooms));
         int i = 0;
-        for (Room relayRoom : powerRelayLocations) {
+        for (IRoom relayRoom : powerRelayLocations) {
             powerRelays[i] = relayRoom.getPowerRelay();
             i++;
         }
@@ -188,7 +188,7 @@ public class Game {
         currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
 
         // Set the exits for each room
-        HashSet<Room> specialRooms = new HashSet<>();
+        HashSet<IRoom> specialRooms = new HashSet<>();
         specialRooms.add(room14);
         specialRooms.add(room19);
         Room.setExits(rooms, specialRooms);
@@ -254,7 +254,7 @@ public class Game {
         } else if (commandWord == CommandWord.HIDE) {
             wantToQuit = hide();
         } else if (commandWord == CommandWord.CALL) {
-            call();
+            System.out.println(call());
         } else if (commandWord == CommandWord.SAVE) {
             save();
             wantToQuit = true;
@@ -294,7 +294,7 @@ public class Game {
                 gameSaverLoader.deleteFile();
                 play();
             } else if (commandWord == CommandWord.HIGHSCORE) {
-                System.out.println(getHighScores());
+                //System.out.println(getHighScores());
             }
             else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
@@ -312,7 +312,7 @@ public class Game {
     }
 
     /* Updates the currentRoom variable, and prints description of the room. */
-    private boolean goRoom(Command command) {
+    public boolean goRoom(Command command) {
         boolean forcedToQuit = false;
 
         // Stop the method if a second word isn't supplied.
@@ -331,14 +331,14 @@ public class Game {
 
         // check if the player has a key
         boolean gotKey = false;
-        for (Item item : inventory.getInventory()) {
+        for (IItem item : inventory.getInventory()) {
             if (item.isKey()) {
                 gotKey = true;
             }
         }
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
-        Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
+        IRoom nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
         //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
@@ -500,8 +500,8 @@ public class Game {
 
     public void moveGuards() {
         // move the guards
-        for (Guard guard : guards) {
-            Room nextRoom = null;
+        for (IGuard guard : guards) {
+            IRoom nextRoom = null;
             while (nextRoom == null) {
                 Direction direction = generateRandomDirection();
                 nextRoom = rooms.get(guard.getRoom().getExit(direction));
@@ -522,7 +522,7 @@ public class Game {
     public void printGuardLocations() {
         // print the guard's locations
         System.out.println("The guards are located in the following rooms");
-        for (Guard guard : guards) {
+        for (IGuard guard : guards) {
             System.out.print(guard.getRoom().getName() + "\t");
         }
         System.out.println();
@@ -569,25 +569,27 @@ public class Game {
         return forcedToQuit;
     }
 
-    public void call() {
+    public String call() {
         // call your friend
         // your friend tells you, what your current objective is
-        System.out.println("\"Mastermind Daniel here\"");
+        String s = "";
+        s += "\"Mastermind Daniel here\"";
         if (policeAlerted && inventory.getInventory().isEmpty()) {
-            System.out.println("\"The police has been alerted. You need to get out quickly. You can always go back inside later\"");
+            s += "\"The police has been alerted. You need to get out quickly. You can always go back inside later\"";
         } else if (policeAlerted) {
-            System.out.println("\"You got the " + itemName + ", but the police are on their way. Get out quickly\"");
+            s += "\"You got the " + itemName + ", but the police are on their way. Get out quickly\"";
         } else if (inventory.getInventory().isEmpty()) {
-            System.out.println("\"You need to steal a " + itemName + "\"");
-            System.out.println("\"Remember to turn off the power first, or the alarm will trigger\"");
+            s += "\"You need to steal a " + itemName + "\"";
+            s += "\"Remember to turn off the power first, or the alarm will trigger\"";
         } else {
-            System.out.println("\"You got the item. Get out of here quickly\"");
+            s += "\"You got the item. Get out of here quickly\"";
         }
+        return s;
     }
 
     public boolean checkForBusted() {
         // return true if there is a guard in the same room as the player
-        for (Guard guard : guards) {
+        for (IGuard guard : guards) {
             if (currentRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
                 gotBusted = true;
                 return true;
@@ -617,7 +619,7 @@ public class Game {
                 System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
             } else {
                 int points = inventory.calculatePoints();
-                updateHighScore();
+                //updateHighScore();
                 if (points > 0) {
                     // won the game
                     System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");
@@ -639,11 +641,11 @@ public class Game {
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
         powerOffTime = startPowerOffTime;
-        for (PowerRelay powerRelay : this.powerRelays) {
+        for (IPowerRelay powerRelay : this.powerRelays) {
             powerRelay.restore();
         }
         // lock the appropriate doors
-        for (Room room : lockedRooms) {
+        for (IRoom room : lockedRooms) {
             room.lock();
         }
         // place the key
@@ -653,11 +655,11 @@ public class Game {
         // spawn a new item, if you stole the last one
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
-            itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getName();
+            itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
         }
     }
 
-    private void save() {
+    public void save() {
         LinkedHashMap<String, String> mapToSave = new LinkedHashMap<>();
         mapToSave.put("currentRoom", currentRoom.getName());
         mapToSave.put("powerSwitchStatus", String.valueOf(powerStatus));
@@ -669,7 +671,7 @@ public class Game {
         mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
         int ii = 0;
-        for (Room powerRelayLocation : powerRelayLocations) {
+        for (IRoom powerRelayLocation : powerRelayLocations) {
             mapToSave.put("powerRelayLocation_" + ii, powerRelayLocation.getName());
             ii++;
         }
@@ -688,7 +690,7 @@ public class Game {
         mapToSave.put("policeAlerted", String.valueOf(policeAlerted));
         mapToSave.put("alertPoint", String.valueOf(alertPoint));
 
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             if (room.getGuards()[0] != null) {
                 mapToSave.put("guard0", room.getName());
             }
@@ -701,7 +703,7 @@ public class Game {
             }
         }
         int i = 0;
-        for (Room lockedRoom : lockedRooms) {
+        for (IRoom lockedRoom : lockedRooms) {
             mapToSave.put("lockedRoomName_" + i, lockedRoom.getName());
             mapToSave.put("lockedRoomStatus_" + i, String.valueOf(lockedRoom.isLocked()));
         }
@@ -717,13 +719,13 @@ public class Game {
         saved = true;
     }
 
-    private void load() {
+    public void load() {
         Map<String, String> map = new LinkedHashMap<>();
         map = gameSaverLoader.load();
 
         powerRelayLocations.clear();
         lockedRooms.clear();
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             room.removeItem();
             room.removeGuard();
             room.setPowerSwitch(null);
@@ -731,7 +733,7 @@ public class Game {
             powerRelayLocations = new HashSet<>();
         }
 
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             if (room.getName().equals(map.get("currentRoom"))) {
                 currentRoom = room;
             }
@@ -740,7 +742,7 @@ public class Game {
         powerStatus = Boolean.parseBoolean(map.get("powerSwitchStatus"));
 
         int i = 0;
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             for (String s : map.keySet()) {
                 if (s.startsWith("powerRelayLocation_")) {
                     if (room.getName().equals(map.get(s))) {
@@ -768,7 +770,7 @@ public class Game {
             }
         }
 
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
                 powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
@@ -799,7 +801,7 @@ public class Game {
         policeAlerted = Boolean.parseBoolean(map.get("policeAlerted"));
         alertPoint = Integer.parseInt(map.get("alertPoint"));
 
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             if (room.getName().equals(map.get("guard0"))) {
                 room.addGuard(guards[0]);
             } else if (room.getName().equals(map.get("guard1"))) {
@@ -815,7 +817,7 @@ public class Game {
         i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("lockedRoomName_")) {
-                for (Room room : rooms.values()) {
+                for (IRoom room : rooms.values()) {
                     if (room.getName().equals(map.get(s))) {
                         lockedRooms.add(room);
                         boolean status = Boolean.parseBoolean(map.get("lockedRoomStatus_" + i));
@@ -826,7 +828,7 @@ public class Game {
             }
         }
 
-        for (Room room : rooms.values()) {
+        for (IRoom room : rooms.values()) {
             if (room.getName().equals(map.get("keyLocationRoom"))) {
                 keyLocation = room;
                 Item key = null;
@@ -841,43 +843,23 @@ public class Game {
 
     }
 
-    public List<HighScore> getHighScores() {
-        Map<String, String> loadedHighScoreMap = new HashMap<>();
-        List<HighScore> highScoreList = new ArrayList<>();
-
-        if (highScoreSaverLoader.doesFileExist()) {
-            loadedHighScoreMap = highScoreSaverLoader.load();
-        }
-
-        for (Map.Entry<String, String> entry : loadedHighScoreMap.entrySet()) {
-            highScoreList.add(new HighScore(entry.getKey(), Integer.parseInt(entry.getValue())));
-        }
-
-        Collections.sort(highScoreList);
-        Collections.reverse(highScoreList);
-        if (highScoreList.size() > 5) {
-            return highScoreList.subList(0, 5);
-        } else {
-            return highScoreList;
-        }
+    public List<IRoom> getItemSpawnPointRooms() {
+        return itemSpawnPointRooms;
     }
 
-    public void updateHighScore() {
-        Map<String, String> loadedHighScoreMap = new HashMap<>();
-
-        if (highScoreSaverLoader.doesFileExist()) {
-            loadedHighScoreMap = highScoreSaverLoader.load();
-        }
-        int currentHighScore = inventory.calculatePoints();
-        System.out.println("Whats your name?");
-        Scanner input = new Scanner(System.in);
-        String name = input.next();
-
-        loadedHighScoreMap.put(name, String.valueOf(currentHighScore));
-
-        highScoreSaverLoader.save(loadedHighScoreMap);
-
-        System.out.println(getHighScores());
+    public Inventory getInventory() {
+        return inventory;
     }
 
+    public IRoom getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public IGuard[] getGuards() {
+        return guards;
+    }
+
+    public HashMap<Integer, IRoom> getRooms() {
+        return rooms;
+    }
 }
