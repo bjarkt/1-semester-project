@@ -431,7 +431,7 @@ public class Game {
         }
     }
 
-    private boolean stealItem() {
+    public boolean stealItem() {
         // used to steal an item
         boolean forcedToQuit = false;
 
@@ -573,13 +573,13 @@ public class Game {
         // call your friend
         // your friend tells you, what your current objective is
         String s = "";
-        s += "\"Mastermind Daniel here\"";
+        s += "\"Mastermind Daniel here\"\n";
         if (policeAlerted && inventory.getInventory().isEmpty()) {
             s += "\"The police has been alerted. You need to get out quickly. You can always go back inside later\"";
         } else if (policeAlerted) {
             s += "\"You got the " + itemName + ", but the police are on their way. Get out quickly\"";
         } else if (inventory.getInventory().isEmpty()) {
-            s += "\"You need to steal a " + itemName + "\"";
+            s += "\"You need to steal a " + itemName + "\"\n";
             s += "\"Remember to turn off the power first, or the alarm will trigger\"";
         } else {
             s += "\"You got the item. Get out of here quickly\"";

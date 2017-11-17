@@ -31,7 +31,7 @@
                      <tooltip>
                         <Tooltip text="Interact with a powerswitch or powerrelay" />
                      </tooltip></Button>
-                  <Button mnemonicParsing="false" text="Steal">
+                  <Button mnemonicParsing="false" onAction="#handleStealButtonAction" text="Steal">
                      <tooltip>
                         <Tooltip text="Steal an item" />
                      </tooltip>

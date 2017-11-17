@@ -16,6 +16,7 @@ public interface IBusiness {
     HashMap<String, String> load();
 
     void goDirection(Direction direction);
+    void steal();
     HashMap<Integer, IRoom> getRooms();
 
     String callFriendlyNpc();

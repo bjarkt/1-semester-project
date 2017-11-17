@@ -1,5 +1,10 @@
 package Presentation;
 
+import Acq.IBusiness;
+import Acq.IData;
+import Acq.IUI;
+import Business.BusinessFacade;
+import Data.XMLUtilities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,8 +15,17 @@ public class StartGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        VBox root = FXMLLoader.load(getClass().getResource("FXML/startWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/startWindow.fxml"));
+        VBox root = loader.load();
         Scene startWindowScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
+
+        IData data = new XMLUtilities("savegame.xml");
+
+        IBusiness businessFacade = new BusinessFacade();
+        businessFacade.injectData(data);
+
+        IUI controller = (IUI)loader.getController();
+        controller.injectBusiness(businessFacade);
 
         primaryStage.setTitle("Night at the Museum - GUI test");
         primaryStage.setScene(startWindowScene);

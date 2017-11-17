@@ -14,7 +14,6 @@ public class BusinessFacade implements IBusiness {
         game = new Game();
         highScoreManager = new HighScoreManager();
 
-
     }
 
     @Override
@@ -65,6 +64,11 @@ public class BusinessFacade implements IBusiness {
     public void goDirection(Direction direction) {
         Command command = new Command(CommandWord.GO, direction.toString());
         game.goRoom(command);
+    }
+
+    @Override
+    public void steal() {
+        game.stealItem();
     }
 
     @Override

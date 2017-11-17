@@ -1,5 +1,7 @@
 package Presentation;
 
+import Acq.IBusiness;
+import Acq.IUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,11 +13,12 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class StartWindowController {
+public class StartWindowController implements IUI {
     @FXML private Button loadButton;
     @FXML private Button newGameButton;
     @FXML private ImageView imageView;
 
+    private IBusiness business;
 
     @FXML
     private void handleLoadButtonAction(ActionEvent e) {
@@ -31,7 +34,11 @@ public class StartWindowController {
     private void changeScene() {
         Scene scene = loadButton.getScene();
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("FXML/primaryWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/primaryWindow.fxml"));
+            Parent root = loader.load();
+            IUI controller = (IUI)loader.getController();
+            controller.injectBusiness(this.business);
+
             scene.setRoot(root);
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -47,5 +54,8 @@ public class StartWindowController {
     }
 
 
-
+    @Override
+    public void injectBusiness(IBusiness business) {
+        this.business = business;
+    }
 }

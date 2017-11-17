@@ -1,5 +1,9 @@
 package Presentation;
 
+import Acq.Direction;
+import Acq.IBusiness;
+import Acq.ILocation;
+import Acq.IUI;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,13 +17,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.*;
 
 
-public class PrimaryWindowController {
+public class PrimaryWindowController implements IUI{
 
     @FXML private GridPane minimapGrid;
     @FXML private Button northButton;
@@ -30,6 +35,8 @@ public class PrimaryWindowController {
     @FXML private TextArea textArea;
     @FXML private ListView inventoryListView;
     @FXML private ListView lootListView;
+
+    private IBusiness business;
 
 
     private HashMap<Point2D, Pane> paneMap;
@@ -156,8 +163,6 @@ public class PrimaryWindowController {
                 }
             }
         }
-
-        update();
     }
 
     private void setBackgroundImageForNode(Node node, String s) {
@@ -179,11 +184,26 @@ public class PrimaryWindowController {
             }
         }
 
-        /*groundImageView.setImage(boardBackgroundMap.get(player.getPos()));
 
-        enemy.randomWalk();
-        paneMap.get(player.getPos()).getChildren().add(player.getMapDisplay());
-        paneMap.get(enemy.getPos()).getChildren().add(enemy.getMapDisplay());*/
+        // TODO
+        // flyt Rectangle r ... kode over i en anden klasse, f.x. guard og player
+        Rectangle r = new Rectangle(0, 25, 10, 10);
+        r.setFill(Color.GREEN);
+        paneMap.get(locationToPoint(business.getCurrentLocation())).getChildren().add(r);
+
+
+        Rectangle r1 = new Rectangle(15, 25, 10, 10);
+        r1.setFill(Color.RED);
+        paneMap.get(locationToPoint(business.getGuardLocations()[0])).getChildren().add(r1);
+        Rectangle r2 = new Rectangle(30, 25, 10, 10);
+        r2.setFill(Color.RED);
+        paneMap.get(locationToPoint(business.getGuardLocations()[1])).getChildren().add(r2);
+
+        //groundImageView.setImage(boardBackgroundMap.get(player.getPos()));
+
+        //enemy.randomWalk();
+        //paneMap.get(player.getPos()).getChildren().add(player.getMapDisplay());
+        //paneMap.get(enemy.getPos()).getChildren().add(enemy.getMapDisplay());*/
     }
 
     public void handleNorthButton(ActionEvent e) {
@@ -203,8 +223,11 @@ public class PrimaryWindowController {
     }
 
     public void handleCallButtonAction(ActionEvent e) {
-        println("Hey hello, Mastermind Daniel here.");
-        println("Please do some stuff.");
+        println(business.callFriendlyNpc());
+    }
+
+    public void handleStealButtonAction(ActionEvent e) {
+        business.steal();
     }
 
     public void handleKeyPress(KeyEvent e) {
@@ -247,19 +270,19 @@ public class PrimaryWindowController {
     }
 
     private void goNorth() {
-        //player.goNorth();
+        business.goDirection(Direction.NORTH);
         update();
     }
     private void goSouth() {
-        //player.goSouth();
+        business.goDirection(Direction.SOUTH);
         update();
     }
     private void goEast() {
-        //player.goEast();
+        business.goDirection(Direction.EAST);
         update();
     }
     private void goWest() {
-        //player.goWest();
+        business.goDirection(Direction.WEST);
         update();
     }
 
@@ -305,5 +328,14 @@ public class PrimaryWindowController {
     }
     private void clear() {
         textArea.clear();
+    }
+
+    @Override
+    public void injectBusiness(IBusiness business) {
+        this.business = business;
+    }
+
+    public Point2D locationToPoint(ILocation loc) {
+        return new Point2D(loc.getX(), loc.getY());
     }
 }
