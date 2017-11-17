@@ -1,7 +1,6 @@
-package worldofzuul21;
+package Business;
 
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 /**
  * @author Michael Kolling and David J. Barnes

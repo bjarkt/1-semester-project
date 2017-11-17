@@ -1,6 +1,5 @@
-package worldofzuul21.Data;
+package Data;
 
-import java.io.IOException;
 import java.util.Map;
 
 public interface LoadableSavable {

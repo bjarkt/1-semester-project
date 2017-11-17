@@ -1,4 +1,4 @@
-package worldofzuul21;
+package Business;
 
 public class HighScore implements Comparable<HighScore> {
     private String name;

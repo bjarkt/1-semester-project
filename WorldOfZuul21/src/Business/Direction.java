@@ -1,4 +1,4 @@
-package worldofzuul21;
+package Business;
 
 /**
  * @author Michael Kolling and David J. Barnes
