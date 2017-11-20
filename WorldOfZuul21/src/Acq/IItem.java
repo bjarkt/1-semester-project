@@ -1,8 +1,6 @@
 package Acq;
 
-import Business.Spawnable;
-
-public interface IItem extends Spawnable {
+public interface IItem {
     String getName();
     boolean isKey();
 }

@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Nikolaj
  */
-public class PowerRelay implements Spawnable, IPowerRelay{
+public class PowerRelay implements IPowerRelay{
     
     private int ID;
     private boolean status; // false when sabotaged
@@ -59,7 +59,6 @@ public class PowerRelay implements Spawnable, IPowerRelay{
         this.ID = ID;
     }
 
-    @Override
     public List<IRoom> Spawn(List<IRoom> rooms) {
         List<IRoom> rooms_ = new ArrayList<>();
         while (rooms_.size() < 3) {

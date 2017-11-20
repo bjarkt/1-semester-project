@@ -1,9 +1,10 @@
 package Acq;
 
-import Business.Spawnable;
-
 public interface IRoom {
-    void setSpawn(Spawnable obj);
+    void setSpawn(IItem obj);
+    void setSpawn(IGuard obj);
+    void setSpawn(IPowerRelay obj);
+    void setSpawn(IPowerSwitch obj);
     void setItem(IItem item);
     IItem getItems();
     IPowerRelay getPowerRelay();

@@ -56,6 +56,7 @@ public class PrimaryWindowController implements IUI, Initializable{
         initMinimapGrid();
         initGroundImageView();
         initButtons();
+        update();
     }
 
     public void initLists() {
@@ -194,6 +195,7 @@ public class PrimaryWindowController implements IUI, Initializable{
     }
     public void handleHideButtonAction(ActionEvent e) {
         business.hide();
+        update();
     }
     public void handleEscapeButtonAction(ActionEvent e) {
         business.escape();

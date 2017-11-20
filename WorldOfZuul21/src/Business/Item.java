@@ -5,7 +5,7 @@ import Acq.IRoom;
 
 import java.util.*;
 
-public class Item implements Spawnable, IItem {
+public class Item implements IItem {
 
     private String name;
     //Naming the possible items which can be spawned
@@ -49,7 +49,6 @@ public class Item implements Spawnable, IItem {
     /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
     it is added to usedItems, so it cannot be spawned agian  
      */
-    @Override
     public List<IRoom> Spawn(List<IRoom> rooms) {
         List<IRoom> rooms_ = new ArrayList<>();
         for (IRoom room : rooms) {
@@ -59,7 +58,7 @@ public class Item implements Spawnable, IItem {
         int spawnID = (int) (Math.random() * itemNames.length);
         String newName = itemNames[spawnID];
 
-        Spawnable obj = new Item(newName);
+        Item obj = new Item(newName);
 
         int index = (int) (Math.random() * rooms.size());
 

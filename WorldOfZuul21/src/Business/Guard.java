@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Nikolaj
  */
-public class Guard implements Spawnable, IGuard {
+public class Guard implements IGuard {
 
     private final int ID;
     private IRoom currentRoom;
@@ -40,7 +40,6 @@ public class Guard implements Spawnable, IGuard {
         currentRoom = room;
     }
 
-    @Override
     public List<IRoom> Spawn(List<IRoom> rooms) {
         Guard[] guards = new Guard[2];
         List<IRoom> rooms_ = new ArrayList<>();

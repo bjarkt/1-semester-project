@@ -7,7 +7,7 @@ import Acq.IRoom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowerSwitch implements Spawnable, IPowerSwitch {
+public class PowerSwitch implements IPowerSwitch {
 
     private boolean isOn;
 /* No arg constructer */
@@ -28,7 +28,6 @@ public class PowerSwitch implements Spawnable, IPowerSwitch {
         return isOn;
     }
 
-    @Override
     public List<IRoom> Spawn(List<IRoom> rooms) {
         int number = (int) (Math.random() * 3);
         List<IRoom> rooms_ = new ArrayList<>();

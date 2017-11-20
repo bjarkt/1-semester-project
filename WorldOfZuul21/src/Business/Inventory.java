@@ -70,9 +70,9 @@ public class Inventory {
     }
 
     private void removeKeys() {
-        for (IItem item : inventory) {
-            if (item.isKey()) {
-                inventory.remove(item);
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).isKey()) {
+                inventory.remove(i);
             }
         }
     }

@@ -242,19 +242,17 @@ public class Room implements IRoom {
         }
     }
 
-    public void setSpawn(Spawnable obj) {
-        if (obj instanceof IItem) {
-            this.setItem((IItem) obj);
-        }
-        if (obj instanceof Guard) {
-            this.addGuard((Guard) obj);
-        }
-        if (obj instanceof IPowerRelay) {
-            this.setPowerRelay((IPowerRelay) obj);
-        }
-        if (obj instanceof IPowerSwitch) {
-            this.setPowerSwitch((IPowerSwitch) obj);
-        }
+    public void setSpawn(IItem item) {
+        this.setItem(item);
+    }
+    public void setSpawn(IGuard guard) {
+        this.addGuard(guard);
+    }
+    public void setSpawn(IPowerRelay pr) {
+        this.setPowerRelay(pr);
+    }
+    public void setSpawn(IPowerSwitch pw) {
+        this.setPowerSwitch(pw);
     }
 
     public static void setExits(HashMap<Integer, IRoom> rooms, HashSet<IRoom> specialRooms) {
