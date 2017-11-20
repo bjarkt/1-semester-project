@@ -59,12 +59,15 @@ public class PrimaryWindowController implements IUI, Initializable {
         initButtons();
         update();
 
-        TextInputDialog t = new TextInputDialog();
+        TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
         t.setTitle("Enter name");
         t.setHeaderText("Enter your name");
         Optional<String> s = t.showAndWait();
         if (s.isPresent()) {
             playerName = s.get();
+            if (playerName.contains(" ")) {
+                playerName = playerName.replace(" ", "-");
+            }
         }
     }
 
