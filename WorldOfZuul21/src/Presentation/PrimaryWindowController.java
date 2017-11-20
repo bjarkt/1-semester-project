@@ -42,7 +42,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     private ListView<IItem> inventoryListView;
     @FXML
     private ListView<IItem> lootListView;
-
+    
     private IBusiness business;
     private String playerName;
 
@@ -213,7 +213,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         business.hide();
         update();
     }
-
+    
     public void handleEscapeButtonAction(ActionEvent e) {
         if (business.isAtEntrance()) {
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
@@ -235,7 +235,10 @@ public class PrimaryWindowController implements IUI, Initializable {
             }
         }
     }
-
+    public void handleHighScoreButtonAction(ActionEvent e) {
+        HelpAlertBox.display("Highscore", business.getHighScores());
+        
+    }
     public void handleKeyPress(KeyEvent e) {
         switch (e.getCode()) {
             case W:
@@ -261,6 +264,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
             System.out.println("saved the game");
+            business.save();
             Platform.exit();
         }
     }
