@@ -36,6 +36,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     @FXML private ListView<IItem> lootListView;
 
     private IBusiness business;
+    private String playerName;
 
 
     private HashMap<Point2D, Pane> paneMap;
@@ -57,15 +58,14 @@ public class PrimaryWindowController implements IUI, Initializable {
         initGroundImageView();
         initButtons();
         update();
-    }
 
-    public void initLists() {
-        /*ObservableList<Item> inventoryObservList = inventoryListView.getItems();
-        inventoryObservList.add(new Item("Key"));
-        inventoryObservList.add(new Item("Diamond"));
-
-        ObservableList<Item> lootObservList = lootListView.getItems();
-        lootObservList.add(new Item("Painting"));*/
+        TextInputDialog t = new TextInputDialog();
+        t.setTitle("Enter name");
+        t.setHeaderText("Enter your name");
+        Optional<String> s = t.showAndWait();
+        if (s.isPresent()) {
+            playerName = s.get();
+        }
     }
 
     private void initButtons() {
@@ -92,8 +92,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     private void initMinimapGrid() {
         int maxCol = getColCount(minimapGrid);
         int maxRow = getRowCount(minimapGrid);
-        //player = new Player(maxCol, maxRow);
-        //enemy = new Enemy(maxCol, maxRow);
         List<Integer> stupidList = new ArrayList<>();
         Collections.addAll(stupidList, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4);
 
@@ -207,7 +205,25 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleEscapeButtonAction(ActionEvent e) {
-        business.escape();
+        if (business.isAtEntrance()) {
+            ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
+            if (choice == ButtonType.OK) {
+                business.escape(true);
+            } else {
+                business.escape(false);
+                business.updateHighScore(playerName);
+                // TODO
+                // vis highscores på en bedre måde?
+                println("-- HIGHSCORES --");
+                for (IHighScore iHighScore : business.getHighScores()) {
+                    println(iHighScore.getName() + " - " + iHighScore.getScore());
+                }
+                ButtonType exitGame = createAlert(Alert.AlertType.WARNING, "Quit the game now", "", "The game will now exit!");
+                if (exitGame == ButtonType.OK) {
+                    Platform.exit();
+                }
+            }
+        }
     }
 
     public void handleKeyPress(KeyEvent e) {

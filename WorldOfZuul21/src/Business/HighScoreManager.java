@@ -35,20 +35,20 @@ public class HighScoreManager {
         }
     }
 
-    public void updateHighScore(int points) {
+    public void updateHighScore(int points, String playerName) {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
 
         if (highScoreSaverLoader.doesFileExist()) {
             loadedHighScoreMap = highScoreSaverLoader.load();
         }
-        System.out.println("Whats your name?");
-        Scanner input = new Scanner(System.in);
-        String name = input.next();
+        //System.out.println("Whats your name?");
+        //Scanner input = new Scanner(System.in);
+        //String name = input.next();
 
-        loadedHighScoreMap.put(name, String.valueOf(points));
+        loadedHighScoreMap.put(playerName, String.valueOf(points));
 
         highScoreSaverLoader.save(loadedHighScoreMap);
 
-        System.out.println(getHighScores());
+        //System.out.println(getHighScores());
     }
 }

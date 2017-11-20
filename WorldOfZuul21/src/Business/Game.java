@@ -109,17 +109,17 @@ public class Game {
         room03 = new Room("room03", "in room 3", "bottomMiddle",3, 0);
         room04 = new Room("room04", "in room 4", "bottomRight",4, 0);
 
-        room05 = new Room("room05", "in room 5", "middleLeft",0, 1);
+        room05 = new Room("room05", "in room 5", "middleRight",0, 1);
         room06 = new Room("room06", "in room 6", "middleMiddle",1, 1);
         room07 = new Room("room07", "in room 7", "middleMiddle",2, 1);
         room08 = new Room("room08", "in room 8", "middleMiddle",3, 1);
-        room09 = new Room("room09", "in room 9", "middleRight",4, 1);
+        room09 = new Room("room09", "in room 9", "middleLeft",4, 1);
 
-        room10 = new Room("room10", "in room 10", "middleLeft",0, 2);
+        room10 = new Room("room10", "in room 10", "middleRight",0, 2);
         room11 = new Room("room11", "in room 11", "middleMiddle",1, 2);
         room12 = new Room("room12", "in room 12", "middleMiddle",2, 2);
         room13 = new Room("room13", "in room 13", "middleMiddle",3, 2);
-        room14 = new Room("room14", "in room 14", "middleRight",4, 2);
+        room14 = new Room("room14", "in room 14", "topRight",4, 2);
 
         room15 = new Room("room15", "in room 15", "topLeft",0, 3);
         room16 = new Room("room16", "in room 16", "topMiddle",1, 3);
@@ -253,7 +253,9 @@ public class Game {
         } else if (commandWord == CommandWord.STEAL) {
             wantToQuit = stealItem();
         } else if (commandWord == CommandWord.ESCAPE) {
-            wantToQuit = escape();
+            System.out.println("Do you want to go back inside?");
+            Command escapeCommand = parser.getCommand();
+            wantToQuit = escape(escapeCommand);
         } else if (commandWord == CommandWord.HIDE) {
             wantToQuit = hide();
         } else if (commandWord == CommandWord.CALL) {
@@ -464,18 +466,18 @@ public class Game {
         return forcedToQuit;
     }
 
-    public boolean escape() {
+    public boolean escape(Command command) {
         // used to escape the museum through the entrance
         boolean wantToQuit = false;
         if (currentRoom.getLocation().getXY() == 0) {
-            wantToQuit = escaped();
+            wantToQuit = escaped(command);
         } else {
             System.out.println("There is no door to escape through");
         }
         return wantToQuit;
     }
 
-    public boolean escaped() {
+    public boolean escaped(Command command) {
         // reset the game
         reset();
         boolean lootAdded = inventory.addToLoot();
@@ -484,10 +486,9 @@ public class Game {
             System.out.println("You hide the item you stole, in the bush");
         }
         // either quit the game, or continue
-        System.out.println("Do you want to go back inside?");
         boolean choiceMade = false;
         while (!choiceMade) {
-            Command command = parser.getCommand();
+            //Command command = parser.getCommand();
             CommandWord commandWord = command.getCommandWord();
             if (commandWord == CommandWord.YES) {
                 System.out.println(currentRoom.getLongDescription());
@@ -864,5 +865,9 @@ public class Game {
 
     public HashMap<Integer, IRoom> getRooms() {
         return rooms;
+    }
+
+    public boolean isAtEntrace() {
+        return currentRoom.getLocation().getXY() == 0;
     }
 }

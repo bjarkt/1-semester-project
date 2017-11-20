@@ -25,4 +25,9 @@ public class HighScore implements IHighScore {
     public int getScore() {
         return score;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

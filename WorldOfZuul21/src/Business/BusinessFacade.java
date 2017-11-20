@@ -22,6 +22,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public boolean isAtEntrance() {
+        return game.isAtEntrace();
+    }
+
+    @Override
     public ILocation[] getGuardLocations() {
         ILocation g1Location = game.getGuards()[0].getRoom().getLocation();
         ILocation g2Location = game.getGuards()[1].getRoom().getLocation();
@@ -30,8 +35,8 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public void updateHighScore() {
-        highScoreManager.updateHighScore(game.getInventory().calculatePoints());
+    public void updateHighScore(String playerName) {
+        highScoreManager.updateHighScore(game.getInventory().calculatePoints(), playerName);
     }
 
     @Override
@@ -85,8 +90,14 @@ public class BusinessFacade implements IBusiness {
         game.hide();
     }
 
-    public void escape() {
-        game.escape();
+    public void escape(boolean wantToGoBackInside) {
+        Command command;
+        if (wantToGoBackInside) {
+            command = new Command(CommandWord.YES, "");
+        } else {
+            command = new Command(CommandWord.NO, "");
+        }
+        game.escape(command);
     }
 
     @Override
