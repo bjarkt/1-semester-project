@@ -68,4 +68,9 @@ public class Item implements Spawnable, IItem {
 
         return rooms_;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

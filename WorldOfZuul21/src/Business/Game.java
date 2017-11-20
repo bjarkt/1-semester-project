@@ -103,27 +103,30 @@ public class Game {
                 room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
 
 // Instantiate the rooms, and write their descriptions.
-        room00 = new Room("room00", "at the entrance of the museum", 0, 0);
-        room01 = new Room("room01", "in room 1", 1, 0);
-        room02 = new Room("room02", "in room 2", 2, 0);
-        room03 = new Room("room03", "in room 3", 3, 0);
-        room04 = new Room("room04", "in room 4", 4, 0);
-        room05 = new Room("room05", "in room 5", 0, 1);
-        room06 = new Room("room06", "in room 6", 1, 1);
-        room07 = new Room("room07", "in room 7", 2, 1);
-        room08 = new Room("room08", "in room 8", 3, 1);
-        room09 = new Room("room09", "in room 9", 4, 1);
-        room10 = new Room("room10", "in room 10", 0, 2);
-        room11 = new Room("room11", "in room 11", 1, 2);
-        room12 = new Room("room12", "in room 12", 2, 2);
-        room13 = new Room("room13", "in room 13", 3, 2);
-        room14 = new Room("room14", "in room 14", 4, 2);
-        room15 = new Room("room15", "in room 15", 0, 3);
-        room16 = new Room("room16", "in room 16", 1, 3);
-        room17 = new Room("room17", "in room 17", 2, 3);
-        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", 3, 3);
-        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", 4, 3);
-        noRoom = new Room("nowhere", "nowhere", 9, 9);
+        room00 = new Room("room00", "at the entrance of the museum", "bottomLeft", 0, 0);
+        room01 = new Room("room01", "in room 1", "bottomMiddle",1, 0);
+        room02 = new Room("room02", "in room 2", "bottomMiddle",2, 0);
+        room03 = new Room("room03", "in room 3", "bottomMiddle",3, 0);
+        room04 = new Room("room04", "in room 4", "bottomRight",4, 0);
+
+        room05 = new Room("room05", "in room 5", "middleLeft",0, 1);
+        room06 = new Room("room06", "in room 6", "middleMiddle",1, 1);
+        room07 = new Room("room07", "in room 7", "middleMiddle",2, 1);
+        room08 = new Room("room08", "in room 8", "middleMiddle",3, 1);
+        room09 = new Room("room09", "in room 9", "middleRight",4, 1);
+
+        room10 = new Room("room10", "in room 10", "middleLeft",0, 2);
+        room11 = new Room("room11", "in room 11", "middleMiddle",1, 2);
+        room12 = new Room("room12", "in room 12", "middleMiddle",2, 2);
+        room13 = new Room("room13", "in room 13", "middleMiddle",3, 2);
+        room14 = new Room("room14", "in room 14", "middleRight",4, 2);
+
+        room15 = new Room("room15", "in room 15", "topLeft",0, 3);
+        room16 = new Room("room16", "in room 16", "topMiddle",1, 3);
+        room17 = new Room("room17", "in room 17", "topMiddle",2, 3);
+        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "topMiddle",3, 3);
+        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "topRight",4, 3);
+        noRoom = new Room("nowhere", "nowhere", "nowhere",9, 9);
 
         // lock the appropriate doors
         lockedRooms.add(room19);
@@ -404,7 +407,7 @@ public class Game {
         }
     }
 
-    private void interact() {
+    void interact() {
         // used to turn off the powerswitch and sabotage powerRelays
         if (currentRoom.getPowerRelay() != null) {
             if (!powerStatus) {

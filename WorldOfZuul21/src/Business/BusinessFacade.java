@@ -50,6 +50,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public List<IItem> getInventoryList() {
+        return game.getInventory().getInventory();
+    }
+
+    @Override
     public void save() {
         game.save(); // TODO fix det
     }
@@ -69,6 +74,19 @@ public class BusinessFacade implements IBusiness {
     @Override
     public void steal() {
         game.stealItem();
+    }
+
+    @Override
+    public void interact() {
+        game.interact();
+    }
+
+    public void hide() {
+        game.hide();
+    }
+
+    public void escape() {
+        game.escape();
     }
 
     @Override

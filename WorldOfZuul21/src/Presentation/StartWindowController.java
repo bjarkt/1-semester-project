@@ -5,6 +5,7 @@ import Acq.IUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,8 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class StartWindowController implements IUI {
+public class StartWindowController implements IUI, Initializable {
     @FXML private Button loadButton;
     @FXML private Button newGameButton;
     @FXML private ImageView imageView;
@@ -35,9 +38,11 @@ public class StartWindowController implements IUI {
         Scene scene = loadButton.getScene();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/primaryWindow.fxml"));
-            Parent root = loader.load();
-            IUI controller = (IUI)loader.getController();
+            //IUI controller = (IUI)loader.getController();
+            PrimaryWindowController controller = new PrimaryWindowController();
             controller.injectBusiness(this.business);
+            loader.setController(controller);
+            Parent root = loader.load();
 
             scene.setRoot(root);
         } catch (IOException e1) {
@@ -57,5 +62,10 @@ public class StartWindowController implements IUI {
     @Override
     public void injectBusiness(IBusiness business) {
         this.business = business;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 }

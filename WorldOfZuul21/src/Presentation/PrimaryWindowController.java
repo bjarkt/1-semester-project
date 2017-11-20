@@ -1,13 +1,11 @@
 package Presentation;
 
-import Acq.Direction;
-import Acq.IBusiness;
-import Acq.ILocation;
-import Acq.IUI;
+import Acq.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -21,10 +19,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.net.URL;
 import java.util.*;
 
 
-public class PrimaryWindowController implements IUI{
+public class PrimaryWindowController implements IUI, Initializable{
 
     @FXML private GridPane minimapGrid;
     @FXML private Button northButton;
@@ -33,8 +32,8 @@ public class PrimaryWindowController implements IUI{
     @FXML private Button southButton;
     @FXML private ImageView groundImageView;
     @FXML private TextArea textArea;
-    @FXML private ListView inventoryListView;
-    @FXML private ListView lootListView;
+    @FXML private ListView<IItem> inventoryListView;
+    @FXML private ListView<IItem> lootListView;
 
     private IBusiness business;
 
@@ -52,12 +51,11 @@ public class PrimaryWindowController implements IUI{
         this.boardBackgroundMap = new HashMap<>();
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         initMinimapGrid();
         initGroundImageView();
         initButtons();
-        initLists();
-
     }
 
     public void initLists() {
@@ -114,54 +112,9 @@ public class PrimaryWindowController implements IUI{
             }
         }
 
-
-        for (Map.Entry<Point2D, Pane> entry : paneMap.entrySet()) {
-            String s;
-            if (entry.getKey().getX() == 4) {
-                if (entry.getKey().getY() == 0) {
-                    s = "Pictures/bottomRight.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                } else if (entry.getKey().getY() == 1 || entry.getKey().getY() == 2) {
-                    s = "Pictures/middleLeft.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                }else if (entry.getKey().getY() == 3) {
-                    s = "Pictures/topRight.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                }
-            }
-            else if (entry.getKey().getX() == 3 || entry.getKey().getX() == 2 || entry.getKey().getX() == 1) {
-                if (entry.getKey().getY() == 0) {
-                    s = "Pictures/bottomMiddle.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                } else if (entry.getKey().getY() == 1 || entry.getKey().getY() == 2) {
-                    s = "Pictures/middle.jpg";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                } else if (entry.getKey().getY() == 3) {
-                    s = "Pictures/topMiddle.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                }
-            }
-            if (entry.getKey().getX() == 0) {
-                if (entry.getKey().getY() == 0) {
-                    s = "Pictures/bottomLeft.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                } else if (entry.getKey().getY() == 1 || entry.getKey().getY() == 2) {
-                    s = "Pictures/middleRight.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                }else if (entry.getKey().getY() == 3) {
-                    s = "Pictures/topLeft.png";
-                    boardBackgroundMap.put(entry.getKey(), new Image(getClass().getResourceAsStream(s)));
-                    setBackgroundImageForNode(paneMap.get(entry.getKey()), s);
-                }
-            }
+        for (Map.Entry<Integer,IRoom> entry : business.getRooms().entrySet()) {
+            String filename = "Pictures/" + entry.getValue().getVisualDescription() + ".png";
+            boardBackgroundMap.put(locationToPoint(entry.getValue().getLocation()), new Image(getClass().getResourceAsStream(filename)));
         }
     }
 
@@ -191,7 +144,8 @@ public class PrimaryWindowController implements IUI{
         r.setFill(Color.GREEN);
         paneMap.get(locationToPoint(business.getCurrentLocation())).getChildren().add(r);
 
-
+        // TODO
+        // gør det samme hers
         Rectangle r1 = new Rectangle(15, 25, 10, 10);
         r1.setFill(Color.RED);
         paneMap.get(locationToPoint(business.getGuardLocations()[0])).getChildren().add(r1);
@@ -199,11 +153,15 @@ public class PrimaryWindowController implements IUI{
         r2.setFill(Color.RED);
         paneMap.get(locationToPoint(business.getGuardLocations()[1])).getChildren().add(r2);
 
-        //groundImageView.setImage(boardBackgroundMap.get(player.getPos()));
+        groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
 
-        //enemy.randomWalk();
         //paneMap.get(player.getPos()).getChildren().add(player.getMapDisplay());
         //paneMap.get(enemy.getPos()).getChildren().add(enemy.getMapDisplay());*/
+    }
+
+    private void updateInventoryList() {
+        ObservableList<IItem> inventoryObservList = inventoryListView.getItems();
+        inventoryObservList.addAll(business.getInventoryList());
     }
 
     public void handleNorthButton(ActionEvent e) {
@@ -228,6 +186,17 @@ public class PrimaryWindowController implements IUI{
 
     public void handleStealButtonAction(ActionEvent e) {
         business.steal();
+        updateInventoryList();
+    }
+
+    public void handleInteractButtonAction(ActionEvent e) {
+        business.interact();
+    }
+    public void handleHideButtonAction(ActionEvent e) {
+        business.hide();
+    }
+    public void handleEscapeButtonAction(ActionEvent e) {
+        business.escape();
     }
 
     public void handleKeyPress(KeyEvent e) {
@@ -335,7 +304,9 @@ public class PrimaryWindowController implements IUI{
         this.business = business;
     }
 
-    public Point2D locationToPoint(ILocation loc) {
+    private Point2D locationToPoint(ILocation loc) {
         return new Point2D(loc.getX(), loc.getY());
     }
+
+
 }

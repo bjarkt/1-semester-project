@@ -20,6 +20,7 @@ public interface IRoom {
 
     String getShortDescription();
     String getLongDescription();
+    String getVisualDescription();
 
     Integer getExit(Direction direction);
     void setExit(Direction direction, Integer neighbor);

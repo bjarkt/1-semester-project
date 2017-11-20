@@ -16,6 +16,7 @@ public class Room implements IRoom {
     private String name;
     private Location location;
     private String description;
+    private String visualDescription;
     private HashMap<Direction, Integer> exits;
     private IPowerSwitch powerSwitch;
     private IPowerRelay powerRelay;
@@ -32,9 +33,10 @@ public class Room implements IRoom {
      * @param x
      * @param y
      */
-    public Room(String name, String description, int x, int y) {
+    public Room(String name, String description, String visualDescription, int x, int y) {
         this.name = name;
         this.description = description;
+        this.visualDescription = visualDescription;
         location = new Location(x, y);
         exits = new HashMap<Direction, Integer>();
         locked = false;
@@ -379,5 +381,9 @@ public class Room implements IRoom {
                 }
             }
         }
+    }
+
+    public String getVisualDescription() {
+        return visualDescription;
     }
 }

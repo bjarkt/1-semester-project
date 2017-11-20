@@ -21,13 +21,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Presentation.PrimaryWindowController">
    <children>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="2000.0" prefWidth="2000.0">
          <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="BOTTOM_CENTER">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#handleInteractButtonAction" text="Interact">
+                <Button mnemonicParsing="false" text="Interact">
                      <tooltip>
                         <Tooltip text="Interact with a powerswitch or powerrelay" />
                      </tooltip></Button>
@@ -36,12 +36,12 @@
                         <Tooltip text="Steal an item" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#handleHideButtonAction" text="Hide">
+                  <Button mnemonicParsing="false" text="Hide">
                      <tooltip>
                         <Tooltip text="Attempt to hide" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#handleEscapeButtonAction" text="Escape">
+                  <Button mnemonicParsing="false" text="Escape">
                      <tooltip>
                         <Tooltip text="Escape through the entrance of the museum" />
                      </tooltip>
@@ -78,7 +78,7 @@
                      <children>
                         <ImageView fx:id="groundImageView" fitHeight="178.0" fitWidth="200.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../Pictures/middleMiddle.jpg" />
+                              <Image url="@../Pictures/middle.jpg" />
                            </image>
                         </ImageView>
                      </children>
