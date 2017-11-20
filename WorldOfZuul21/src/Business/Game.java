@@ -44,11 +44,6 @@ public class Game {
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
 
-    // Dummy objects are only used to spawn themselves
-    private Guard dummyGuard;
-    private PowerSwitch dummySwitch;
-    private PowerRelay dummyRelay;
-    private Item dummyItem;
 
     // List of rooms, in which Spawnable objects spawn
     private List<IRoom> guardSpawnPointRooms;
@@ -79,12 +74,6 @@ public class Game {
         saved = false;
         cheatMode = true;
         forceQuitCheatMode = false;
-
-        // dummys
-        dummyGuard = new Guard(-1);
-        dummySwitch = new PowerSwitch();
-        dummyRelay = new PowerRelay(-1, -1);
-        dummyItem = new Item();
 
         // spawnpoint rooms
         guardSpawnPointRooms = new ArrayList<>();
@@ -659,7 +648,7 @@ public class Game {
         // spawn a new item, if you stole the last one
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
-            itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
+            itemName = Item.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
         }
     }
 
