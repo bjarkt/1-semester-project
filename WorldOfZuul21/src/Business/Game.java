@@ -41,6 +41,7 @@ public class Game {
     private FriendlyNpc friendlyNpc;
     private LoadableSavable gameSaverLoader;
     private LoadableSavable highScoreSaverLoader;
+    private IData data;
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
 
@@ -708,13 +709,16 @@ public class Game {
             mapToSave.put("doesKeyLocationRoomContainItem", "false");
         }
 
-        gameSaverLoader.save(mapToSave);
+        data.save(mapToSave);
         saved = true;
     }
 
     public void load() {
         Map<String, String> map = new LinkedHashMap<>();
-        map = gameSaverLoader.load();
+        map = data.load();
+        if (map == null) {
+            return;
+        }
 
         powerRelayLocations.clear();
         lockedRooms.clear();
@@ -858,5 +862,9 @@ public class Game {
 
     public boolean isAtEntrace() {
         return currentRoom.getLocation().getXY() == 0;
+    }
+
+    public void injectData(IData data) {
+        this.data = data;
     }
 }

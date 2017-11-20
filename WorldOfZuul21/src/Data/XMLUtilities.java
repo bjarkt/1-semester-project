@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class XMLUtilities implements LoadableSavable, IData{
+public class XMLUtilities implements LoadableSavable{
     private String filename;
 
     public XMLUtilities(String filename) {

@@ -26,6 +26,8 @@ public class StartWindowController implements IUI, Initializable {
     @FXML
     private void handleLoadButtonAction(ActionEvent e) {
         System.out.println("handle load stuff");
+
+        business.load();
         changeScene();
     }
 

@@ -15,7 +15,8 @@ public interface IBusiness {
     List<IItem> getInventoryList();
 
     void save();
-    HashMap<String, String> load();
+    //HashMap<String, String> load();
+    void load();
 
     void goDirection(Direction direction);
     void steal();

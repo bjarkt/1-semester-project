@@ -4,6 +4,7 @@ import Acq.IBusiness;
 import Acq.IData;
 import Acq.IUI;
 import Business.BusinessFacade;
+import Data.DataFacade;
 import Data.XMLUtilities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ public class StartGUI extends Application {
         VBox root = loader.load();
         Scene startWindowScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 
-        IData data = new XMLUtilities("savegame.xml");
+        IData data = new DataFacade();
 
         IBusiness businessFacade = new BusinessFacade();
         businessFacade.injectData(data);

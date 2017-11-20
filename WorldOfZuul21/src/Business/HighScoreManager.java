@@ -8,18 +8,20 @@ import Data.XMLUtilities;
 import java.util.*;
 
 public class HighScoreManager {
-    LoadableSavable highScoreSaverLoader; // TODO fix her
+    //LoadableSavable highScoreSaverLoader; // TODO fix her
+
+    IData data;
 
     public HighScoreManager() {
-        highScoreSaverLoader = new XMLUtilities("highscore.xml"); // TODO fix det her
+        //highScoreSaverLoader = new XMLUtilities("highscore.xml"); // TODO fix det her
     }
 
     public List<IHighScore> getHighScores() {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
         List<IHighScore> highScoreList = new ArrayList<>();
 
-        if (highScoreSaverLoader.doesFileExist()) {
-            loadedHighScoreMap = highScoreSaverLoader.load();
+        if (data.doesFileExist()) {
+            loadedHighScoreMap = data.load();
         }
 
         for (Map.Entry<String, String> entry : loadedHighScoreMap.entrySet()) {
@@ -38,8 +40,8 @@ public class HighScoreManager {
     public void updateHighScore(int points, String playerName) {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
 
-        if (highScoreSaverLoader.doesFileExist()) {
-            loadedHighScoreMap = highScoreSaverLoader.load();
+        if (data.doesFileExist()) {
+            loadedHighScoreMap = data.load();
         }
         //System.out.println("Whats your name?");
         //Scanner input = new Scanner(System.in);
@@ -47,8 +49,12 @@ public class HighScoreManager {
 
         loadedHighScoreMap.put(playerName, String.valueOf(points));
 
-        highScoreSaverLoader.save(loadedHighScoreMap);
+        data.save(loadedHighScoreMap);
 
         //System.out.println(getHighScores());
+    }
+
+    public void injectData(IData data) {
+        this.data = data;
     }
 }

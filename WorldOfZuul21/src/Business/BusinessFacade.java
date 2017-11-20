@@ -61,13 +61,12 @@ public class BusinessFacade implements IBusiness {
 
     @Override
     public void save() {
-        game.save(); // TODO fix det
+        game.save();
     }
 
     @Override
-    public HashMap<String, String> load() {
-        game.load(); // TODO fix det
-        return null;
+    public void load() {
+        game.load();
     }
 
     @Override
@@ -113,5 +112,7 @@ public class BusinessFacade implements IBusiness {
     @Override
     public void injectData(IData data) {
         this.data = data;
+        highScoreManager.injectData(data);
+        game.injectData(data);
     }
 }
