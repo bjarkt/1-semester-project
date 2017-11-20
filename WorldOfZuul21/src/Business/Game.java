@@ -144,16 +144,16 @@ public class Game {
         Collections.addAll(relaySpawnPointRooms, room03, room05, room09, room11, room14, room18);
 
         // spawn the guards
-        List<IRoom> guardRooms = dummyGuard.Spawn(guardSpawnPointRooms);
+        List<IRoom> guardRooms = Guard.Spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
 
         // spawn the powerswitch in one of three rooms
-        powerSwitchRoom = dummySwitch.Spawn(switchSpawnPointRooms).get(0);
+        powerSwitchRoom = PowerSwitch.Spawn(switchSpawnPointRooms).get(0);
         powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
 
         // spawn powerRelays in three out of 6 random rooms
-        powerRelayLocations = new HashSet<>(dummyRelay.Spawn(relaySpawnPointRooms));
+        powerRelayLocations = new HashSet<>(PowerRelay.Spawn(relaySpawnPointRooms));
         int i = 0;
         for (IRoom relayRoom : powerRelayLocations) {
             powerRelays[i] = relayRoom.getPowerRelay();
@@ -161,7 +161,7 @@ public class Game {
         }
 
         // Spawn items
-        itemName = dummyItem.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
+        itemName = Item.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
 
         // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();

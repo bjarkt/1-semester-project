@@ -59,7 +59,7 @@ public class PowerRelay implements IPowerRelay{
         this.ID = ID;
     }
 
-    public List<IRoom> Spawn(List<IRoom> rooms) {
+    public static List<IRoom> Spawn(List<IRoom> rooms) {
         List<IRoom> rooms_ = new ArrayList<>();
         while (rooms_.size() < 3) {
             int randomIndex = (int) (Math.random() * rooms.size());

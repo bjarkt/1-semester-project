@@ -40,7 +40,7 @@ public class Guard implements IGuard {
         currentRoom = room;
     }
 
-    public List<IRoom> Spawn(List<IRoom> rooms) {
+    public static List<IRoom> Spawn(List<IRoom> rooms) {
         Guard[] guards = new Guard[2];
         List<IRoom> rooms_ = new ArrayList<>();
         for (int i = 0; i < guards.length; i++) {

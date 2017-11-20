@@ -28,7 +28,7 @@ public class PowerSwitch implements IPowerSwitch {
         return isOn;
     }
 
-    public List<IRoom> Spawn(List<IRoom> rooms) {
+    public static List<IRoom> Spawn(List<IRoom> rooms) {
         int number = (int) (Math.random() * 3);
         List<IRoom> rooms_ = new ArrayList<>();
 
