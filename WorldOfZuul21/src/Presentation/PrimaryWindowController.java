@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.*;
 
 
-public class PrimaryWindowController implements IUI, Initializable{
+public class PrimaryWindowController implements IUI, Initializable {
 
     @FXML private GridPane minimapGrid;
     @FXML private Button northButton;
@@ -101,8 +101,8 @@ public class PrimaryWindowController implements IUI, Initializable{
         for (int r = 0; r < maxRow; r++) {
             for (int c = 0; c < maxCol; c++, i++) {
                 Pane p = new Pane();
-                String s = stupidList.get(i)+"";
-                if (s.length() == 1) s = "0"+stupidList.get(i);
+                String s = stupidList.get(i) + "";
+                if (s.length() == 1) s = "0" + stupidList.get(i);
                 Text text = new Text(4, 20, s);
                 int rowIndex = (maxRow - r) - 1;
 
@@ -113,7 +113,7 @@ public class PrimaryWindowController implements IUI, Initializable{
             }
         }
 
-        for (Map.Entry<Integer,IRoom> entry : business.getRooms().entrySet()) {
+        for (Map.Entry<Integer, IRoom> entry : business.getRooms().entrySet()) {
             String filename = "Pictures/" + entry.getValue().getVisualDescription() + ".png";
             boardBackgroundMap.put(locationToPoint(entry.getValue().getLocation()), new Image(getClass().getResourceAsStream(filename)));
         }
@@ -132,8 +132,14 @@ public class PrimaryWindowController implements IUI, Initializable{
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
             for (int i = 0; i < children.size(); i++) {
+                // Bug i JDK, kan ikke clear alle shapes pålideligt
+                // https://bugs.openjdk.java.net/browse/JDK-8087752
+
+                // Vi ved at texten er på position 0, så hent teksten, før der bliver clearet.
+                Text text = (Text) children.get(0);
                 if (children.get(i) instanceof Rectangle) {
-                    children.remove(children.get(i));
+                    children.clear();
+                    children.add(text);
                 }
             }
         }
@@ -193,25 +199,39 @@ public class PrimaryWindowController implements IUI, Initializable{
     public void handleInteractButtonAction(ActionEvent e) {
         business.interact();
     }
+
     public void handleHideButtonAction(ActionEvent e) {
         business.hide();
         update();
     }
+
     public void handleEscapeButtonAction(ActionEvent e) {
         business.escape();
     }
 
     public void handleKeyPress(KeyEvent e) {
         switch (e.getCode()) {
-            case W: case UP: goNorth(); break;
-            case S: case DOWN: goSouth(); break;
-            case D: case RIGHT: goEast(); break;
-            case A: case LEFT: goWest(); break;
+            case W:
+            case UP:
+                goNorth();
+                break;
+            case S:
+            case DOWN:
+                goSouth();
+                break;
+            case D:
+            case RIGHT:
+                goEast();
+                break;
+            case A:
+            case LEFT:
+                goWest();
+                break;
         }
     }
 
     public void handleMenuItemSaveAction(ActionEvent e) {
-        ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION,"Save and exit?", "","Are you sure you want to save the game and exit?");
+        ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
             System.out.println("saved the game");
             Platform.exit();
@@ -219,7 +239,7 @@ public class PrimaryWindowController implements IUI, Initializable{
     }
 
     public void handleMenuItemCloseAction(ActionEvent e) {
-        ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION,"Exit the game?", "","Are you sure you want to exit the game without\nsaving?");
+        ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Exit the game?", "", "Are you sure you want to exit the game without\nsaving?");
         if (buttonType == ButtonType.OK) {
             Platform.exit();
         }
@@ -244,14 +264,17 @@ public class PrimaryWindowController implements IUI, Initializable{
         business.goDirection(Direction.NORTH);
         update();
     }
+
     private void goSouth() {
         business.goDirection(Direction.SOUTH);
         update();
     }
+
     private void goEast() {
         business.goDirection(Direction.EAST);
         update();
     }
+
     private void goWest() {
         business.goDirection(Direction.WEST);
         update();
@@ -295,8 +318,9 @@ public class PrimaryWindowController implements IUI, Initializable{
     }
 
     private void println(String text) {
-        textArea.appendText(text+"\n");
+        textArea.appendText(text + "\n");
     }
+
     private void clear() {
         textArea.clear();
     }
