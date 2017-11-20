@@ -22,22 +22,29 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.*;
 
-
 public class PrimaryWindowController implements IUI, Initializable {
 
-    @FXML private GridPane minimapGrid;
-    @FXML private Button northButton;
-    @FXML private Button westButton;
-    @FXML private Button eastButton;
-    @FXML private Button southButton;
-    @FXML private ImageView groundImageView;
-    @FXML private TextArea textArea;
-    @FXML private ListView<IItem> inventoryListView;
-    @FXML private ListView<IItem> lootListView;
+    @FXML
+    private GridPane minimapGrid;
+    @FXML
+    private Button northButton;
+    @FXML
+    private Button westButton;
+    @FXML
+    private Button eastButton;
+    @FXML
+    private Button southButton;
+    @FXML
+    private ImageView groundImageView;
+    @FXML
+    private TextArea textArea;
+    @FXML
+    private ListView<IItem> inventoryListView;
+    @FXML
+    private ListView<IItem> lootListView;
 
     private IBusiness business;
     private String playerName;
-
 
     private HashMap<Point2D, Pane> paneMap;
     private HashMap<Point2D, Image> boardBackgroundMap;
@@ -45,7 +52,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     //private Enemy enemy;
 
     final private boolean DRAW_MINIMAP_IMAGES = true;
-
 
     public PrimaryWindowController() {
         this.paneMap = new HashMap<>();
@@ -103,7 +109,9 @@ public class PrimaryWindowController implements IUI, Initializable {
             for (int c = 0; c < maxCol; c++, i++) {
                 Pane p = new Pane();
                 String s = stupidList.get(i) + "";
-                if (s.length() == 1) s = "0" + stupidList.get(i);
+                if (s.length() == 1) {
+                    s = "0" + stupidList.get(i);
+                }
                 Text text = new Text(4, 20, s);
                 int rowIndex = (maxRow - r) - 1;
 
@@ -122,10 +130,10 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     private void setBackgroundImageForNode(Node node, String s) {
         if (DRAW_MINIMAP_IMAGES) {
-            node.setStyle("-fx-background-image: url('/sample/" + s + "');" +
-                    "-fx-background-size: cover;" +
-                    "-fx-background-repeat: no-repeat;" +
-                    "-fx-background-position: center center;");
+            node.setStyle("-fx-background-image: url('/sample/" + s + "');"
+                    + "-fx-background-size: cover;"
+                    + "-fx-background-repeat: no-repeat;"
+                    + "-fx-background-position: center center;");
         }
     }
 
@@ -144,7 +152,6 @@ public class PrimaryWindowController implements IUI, Initializable {
                 }
             }
         }
-
 
         // TODO
         // flyt Rectangle r ... kode over i en anden klasse, f.x. guard og player
@@ -266,14 +273,15 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleMenuItemHelpAction(ActionEvent e) {
-        createAlert(Alert.AlertType.INFORMATION, "Information about Night at the Museum",
-                "This is some help text.",
-                "Her kunne man f.eks. skrive hvad spillet går ud på,\nda kommandoerne allerede står på knapperne.");
+        HelpAlertBox.display("Historie", "textTilSpillet.txt");
+
     }
 
     private ButtonType createAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
-        if (header.length() > 0) alert.setHeaderText(header);
+        if (header.length() > 0) {
+            alert.setHeaderText(header);
+        }
         alert.setTitle(title);
         alert.setContentText(content);
         Optional<ButtonType> result = alert.showAndWait();
@@ -353,6 +361,5 @@ public class PrimaryWindowController implements IUI, Initializable {
     private Point2D locationToPoint(ILocation loc) {
         return new Point2D(loc.getX(), loc.getY());
     }
-
 
 }
