@@ -140,15 +140,12 @@ public class PrimaryWindowController implements IUI, Initializable {
     private void update() {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                // Bug i JDK, kan ikke clear alle shapes pålideligt
-                // https://bugs.openjdk.java.net/browse/JDK-8087752
-
+            for (int i = children.size()-1; i > 0; i--) {
                 // Vi ved at texten er på position 0, så hent teksten, før der bliver clearet.
-                Text text = (Text) children.get(0);
+                //Text text = (Text) children.get(0);
                 if (children.get(i) instanceof Rectangle) {
-                    children.clear();
-                    children.add(text);
+                    children.remove(children.get(i));
+                    //children.add(text);
                 }
             }
         }
