@@ -21,7 +21,7 @@ public class HighScoreManager {
         List<IHighScore> highScoreList = new ArrayList<>();
 
         if (data.doesFileExist()) {
-            loadedHighScoreMap = data.load();
+            loadedHighScoreMap = data.loadHighScore();
         }
 
         for (Map.Entry<String, String> entry : loadedHighScoreMap.entrySet()) {
@@ -41,7 +41,7 @@ public class HighScoreManager {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
 
         if (data.doesFileExist()) {
-            loadedHighScoreMap = data.load();
+            loadedHighScoreMap = data.loadHighScore();
         }
         //System.out.println("Whats your name?");
         //Scanner input = new Scanner(System.in);
@@ -49,7 +49,7 @@ public class HighScoreManager {
 
         loadedHighScoreMap.put(playerName, String.valueOf(points));
 
-        data.save(loadedHighScoreMap);
+        data.saveHighScore(loadedHighScoreMap);
 
         //System.out.println(getHighScores());
     }

@@ -236,7 +236,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
     public void handleHighScoreButtonAction(ActionEvent e) {
-        HelpAlertBox.display("Highscore", business.getHighScores());
+        AlertBox.display("Highscore", business.getHighScores());
         
     }
     public void handleKeyPress(KeyEvent e) {
@@ -277,7 +277,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleMenuItemHelpAction(ActionEvent e) {
-        HelpAlertBox.display("Historie", "textTilSpillet.txt");
+        AlertBox.display("Historie", "textTilSpillet.txt");
 
     }
 
