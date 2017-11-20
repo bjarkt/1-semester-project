@@ -168,6 +168,7 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     private void updateInventoryList() {
         ObservableList<IItem> inventoryObservList = inventoryListView.getItems();
+        inventoryObservList.clear();
         inventoryObservList.addAll(business.getInventoryList());
     }
 
