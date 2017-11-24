@@ -144,19 +144,13 @@ public class PrimaryWindowController implements IUI, Initializable {
             }
         }
 
-        for (IRoom room : business.getRooms()) {
-            String filename = "Pictures/" + room.getVisualDescription() + ".png";
-            System.out.println(filename);
-            boardBackgroundMap.put(locationToPoint(room.getLocation()), new Image(getClass().getResourceAsStream(filename)));
-        }
+        initImages();
     }
 
-    private void setBackgroundImageForNode(Node node, String s) {
-        if (DRAW_MINIMAP_IMAGES) {
-            node.setStyle("-fx-background-image: url('/sample/" + s + "');"
-                    + "-fx-background-size: cover;"
-                    + "-fx-background-repeat: no-repeat;"
-                    + "-fx-background-position: center center;");
+    private void initImages() {
+        for (IRoom room : business.getRooms()) {
+            String filename = "Pictures/" + room.getVisualDescription() + ".png";
+            boardBackgroundMap.put(locationToPoint(room.getLocation()), new Image(getClass().getResourceAsStream(filename)));
         }
     }
 
@@ -253,6 +247,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         business.steal();
         updateInventoryList();
         item.setSeen(false);
+        initImages();
         update();
     }
 
@@ -270,6 +265,7 @@ public class PrimaryWindowController implements IUI, Initializable {
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
             if (choice == ButtonType.OK) {
                 business.escape(true);
+                initImages();
             } else {
                 business.escape(false);
                 business.updateHighScore(playerName);

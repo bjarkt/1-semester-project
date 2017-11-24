@@ -17,6 +17,7 @@ public class Room implements IRoom {
     private Location location;
     private String description;
     private String visualDescription;
+    private String baseVisualDescription;
     private HashMap<Direction, Integer> exits;
     private PowerSwitch powerSwitch;
     private PowerRelay powerRelay;
@@ -37,6 +38,7 @@ public class Room implements IRoom {
         this.name = name;
         this.description = description;
         this.visualDescription = visualDescription;
+        this.baseVisualDescription = this.visualDescription;
         location = new Location(x, y);
         exits = new HashMap<Direction, Integer>();
         locked = false;
@@ -185,6 +187,9 @@ public class Room implements IRoom {
      * @param item
      */
     public void setItem(Item item) {
+        if (item == null) {
+            this.visualDescription = this.baseVisualDescription;
+        }
         items[0] = item;
     }
 
@@ -192,6 +197,7 @@ public class Room implements IRoom {
      * removes the first item of the items array.
      */
     public void removeItem() {
+        this.visualDescription = baseVisualDescription;
         items[0] = null;
     }
 
@@ -244,18 +250,18 @@ public class Room implements IRoom {
 
     public void setSpawn(Item item) {
         this.setItem(item);
-        this.visualDescription += "-" + item.getName();
+        this.visualDescription = this.baseVisualDescription + "-" + item.getName();
     }
     public void setSpawn(Guard guard) {
         this.addGuard(guard);
     }
     public void setSpawn(PowerRelay pr) {
         this.setPowerRelay(pr);
-        this.visualDescription += "-PowerRelay";
+        this.visualDescription = this.baseVisualDescription + "-" + "PowerRelay";
     }
     public void setSpawn(PowerSwitch pw) {
         this.setPowerSwitch(pw);
-        this.visualDescription += "-PowerSwitch";
+        this.visualDescription = this.baseVisualDescription + "-" + "PowerSwitch";
     }
 
     public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
