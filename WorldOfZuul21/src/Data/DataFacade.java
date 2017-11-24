@@ -27,8 +27,13 @@ public class DataFacade implements IData {
     }
 
     @Override
-    public boolean doesFileExist() {
-        return highScoreSaverLoader.doesFileExist() && gameSaverLoader.doesFileExist();
+    public boolean doesHighScoreFileExist() {
+        return highScoreSaverLoader.doesFileExist();
+    }
+
+    @Override
+    public boolean doesGameSaveFileExist() {
+        return gameSaverLoader.doesFileExist();
     }
 
     public Map<String, String> load() {
