@@ -23,9 +23,11 @@ public interface IBusiness {
     int getCurrentHighScore();
 
     boolean getCheatMode();
+    void toggleCheatMode();
 
     IItem getItem();
     List<IItem> getInventoryList();
+    List<IItem> getLootList();
 
     void save();
     void load();

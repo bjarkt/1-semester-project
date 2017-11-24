@@ -105,6 +105,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public void toggleCheatMode() {
+        game.toggleCheatMode();
+    }
+
+    @Override
     public IItem getItem() {
         for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {
@@ -117,6 +122,10 @@ public class BusinessFacade implements IBusiness {
     @Override
     public List<IItem> getInventoryList() {
         return new ArrayList<>(game.getInventory().getInventory());
+    }
+
+    public List<IItem> getLootList() {
+        return new ArrayList<>(game.getInventory().getLoot());
     }
 
     @Override

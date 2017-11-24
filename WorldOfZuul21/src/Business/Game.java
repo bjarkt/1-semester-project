@@ -889,6 +889,10 @@ public class Game {
         return cheatMode;
     }
 
+    public void toggleCheatMode() {
+        this.cheatMode = !this.cheatMode;
+    }
+
     void injectData(IData data) {
         this.data = data;
     }

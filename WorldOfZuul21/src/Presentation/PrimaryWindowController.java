@@ -180,9 +180,10 @@ public class PrimaryWindowController implements IUI, Initializable {
             quitPopup.setTitle("You got busted!");
             quitPopup.setHeaderText("You got busted!");
             Optional<ButtonType> result = quitPopup.showAndWait();
-
             if (result.isPresent() && result.get() == highscore) {
                 AlertBox.display("Highscores", business.getHighScores());
+                Platform.exit();
+            } else {
                 Platform.exit();
             }
         }
@@ -222,6 +223,12 @@ public class PrimaryWindowController implements IUI, Initializable {
         inventoryObservList.addAll(business.getInventoryList());
     }
 
+    private void updateLootList() {
+        ObservableList<IItem> lootObservList = lootListView.getItems();
+        lootObservList.clear();
+        lootObservList.addAll(business.getLootList());
+    }
+
     public void handleNorthButton(ActionEvent e) {
         goNorth();
     }
@@ -240,6 +247,8 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callFriendlyNpc());
+        println("TOGGLED CHEAT MODE - FJERN DETTE I RIGTIG VERSION");
+        business.toggleCheatMode();
     }
 
     public void handleStealButtonAction(ActionEvent e) {
@@ -264,6 +273,7 @@ public class PrimaryWindowController implements IUI, Initializable {
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
             if (choice == ButtonType.OK) {
                 business.escape(true);
+                updateLootList();
                 initImages();
             } else {
                 business.escape(false);
