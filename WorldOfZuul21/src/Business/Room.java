@@ -189,6 +189,8 @@ public class Room implements IRoom {
     public void setItem(Item item) {
         if (item == null) {
             this.visualDescription = this.baseVisualDescription;
+        } else if (item.isKey()) {
+            this.visualDescription = this.baseVisualDescription + "-Key";
         }
         items[0] = item;
     }
