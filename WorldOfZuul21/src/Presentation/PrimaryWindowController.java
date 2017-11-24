@@ -302,10 +302,15 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
 
-    public void handleMenuItemHelpAction(ActionEvent e) {
-        AlertBox.display("Historie", "textTilSpillet.txt");
+        public void handleMenuItemHistoryAction(ActionEvent e) {
+        AlertBox.display("Historie", "History.txt");
 
     }
+    
+    public void handleMenuItemHelpAction(ActionEvent e) {
+        AlertBox.display("Help", "HelpFile.txt");
+    }
+
 
     private ButtonType createAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
