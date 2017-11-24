@@ -47,6 +47,8 @@ public class PrimaryWindowController implements IUI, Initializable {
     private IBusiness business;
     private String playerName;
 
+    private boolean forcedToQuit;
+
     private HashMap<Point2D, Pane> paneMap;
     private HashMap<Point2D, Image> boardBackgroundMap;
 
@@ -61,7 +63,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     public PrimaryWindowController() {
         this.paneMap = new HashMap<>();
         this.boardBackgroundMap = new HashMap<>();
-
+        forcedToQuit = false;
     }
 
     @Override
@@ -159,6 +161,20 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     private void update() {
+
+        if (forcedToQuit) {
+            ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
+            ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", highscore, close);
+            quitPopup.setTitle("You got busted!");
+            quitPopup.setHeaderText("You got busted!");
+            Optional<ButtonType> result = quitPopup.showAndWait();
+
+            if (result.isPresent() && result.get() == highscore) {
+                AlertBox.display("Highscores", business.getHighScores());
+                Platform.exit();
+            }
+        }
 
         if (business.currentRoomContainsItem()) {
             item.setSeen(true);
@@ -325,23 +341,31 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     private void goNorth() {
-        business.goDirection(Direction.NORTH);
-        update();
+        if (!forcedToQuit) {
+            forcedToQuit = business.goDirection(Direction.NORTH);
+            update();
+        }
     }
 
     private void goSouth() {
-        business.goDirection(Direction.SOUTH);
-        update();
+        if (!forcedToQuit) {
+            forcedToQuit = business.goDirection(Direction.SOUTH);
+            update();
+        }
     }
 
     private void goEast() {
-        business.goDirection(Direction.EAST);
-        update();
+        if (!forcedToQuit) {
+            forcedToQuit = business.goDirection(Direction.EAST);
+            update();
+        }
     }
 
     private void goWest() {
-        business.goDirection(Direction.WEST);
-        update();
+        if (!forcedToQuit) {
+            forcedToQuit = business.goDirection(Direction.WEST);
+            update();
+        }
     }
 
     public void handleMinimapPaneClick(MouseEvent e) {

@@ -868,6 +868,10 @@ public class Game {
         return currentRoom.getLocation().getXY() == 0;
     }
 
+    public boolean isCheatMode() {
+        return cheatMode;
+    }
+
     void injectData(IData data) {
         this.data = data;
     }

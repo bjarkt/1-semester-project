@@ -20,6 +20,9 @@ public interface IBusiness {
 
     void updateHighScore(String playerName);
     List<IHighScore> getHighScores();
+    int getCurrentHighScore();
+
+    boolean getCheatMode();
 
     IItem getItem();
     List<IItem> getInventoryList();
@@ -27,7 +30,7 @@ public interface IBusiness {
     void save();
     void load();
 
-    void goDirection(Direction direction);
+    boolean goDirection(Direction direction);
     void steal();
     void interact();
     void hide();

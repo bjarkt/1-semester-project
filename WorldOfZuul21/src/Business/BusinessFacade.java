@@ -95,6 +95,16 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public int getCurrentHighScore() {
+        return game.getInventory().calculatePoints();
+    }
+
+    @Override
+    public boolean getCheatMode() {
+        return game.isCheatMode();
+    }
+
+    @Override
     public IItem getItem() {
         for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {
@@ -120,9 +130,10 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public void goDirection(Direction direction) {
+    public boolean goDirection(Direction direction) {
         Command command = new Command(CommandWord.GO, direction.toString());
-        game.goRoom(command);
+        boolean forcedToQuit = game.goRoom(command);
+        return forcedToQuit;
     }
 
     @Override
