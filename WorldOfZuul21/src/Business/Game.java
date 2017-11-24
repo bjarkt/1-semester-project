@@ -86,30 +86,30 @@ public class Game {
         Room room00, room01, room02, room03, room04, room05, room06, room07, room08, room09,
                 room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
 
-// Instantiate the rooms, and write their descriptions.
-        room00 = new Room("room00", "at the entrance of the museum", "bottomLeft", 0, 0);
-        room01 = new Room("room01", "in room 1", "bottomMiddle",1, 0);
-        room02 = new Room("room02", "in room 2", "bottomMiddle",2, 0);
-        room03 = new Room("room03", "in room 3", "bottomMiddle",3, 0);
-        room04 = new Room("room04", "in room 4", "bottomRight",4, 0);
+        // Instantiate the rooms, and write their descriptions.
+        room00 = new Room("room00", "at the entrance of the museum", "NE", 0, 0);
+        room01 = new Room("room01", "in room 1", "NEW",1, 0);
+        room02 = new Room("room02", "in room 2", "NEW",2, 0);
+        room03 = new Room("room03", "in room 3", "NEW",3, 0);
+        room04 = new Room("room04", "in room 4", "NW",4, 0);
 
-        room05 = new Room("room05", "in room 5", "middleRight",0, 1);
-        room06 = new Room("room06", "in room 6", "middleMiddle",1, 1);
-        room07 = new Room("room07", "in room 7", "middleMiddle",2, 1);
-        room08 = new Room("room08", "in room 8", "middleMiddle",3, 1);
-        room09 = new Room("room09", "in room 9", "middleLeft",4, 1);
+        room05 = new Room("room05", "in room 5", "NSE",0, 1);
+        room06 = new Room("room06", "in room 6", "NSEW",1, 1);
+        room07 = new Room("room07", "in room 7", "NSEW",2, 1);
+        room08 = new Room("room08", "in room 8", "NSEW",3, 1);
+        room09 = new Room("room09", "in room 9", "NSW",4, 1);
 
-        room10 = new Room("room10", "in room 10", "middleRight",0, 2);
-        room11 = new Room("room11", "in room 11", "middleMiddle",1, 2);
-        room12 = new Room("room12", "in room 12", "middleMiddle",2, 2);
-        room13 = new Room("room13", "in room 13", "middleMiddle",3, 2);
-        room14 = new Room("room14", "in room 14", "topRight",4, 2);
+        room10 = new Room("room10", "in room 10", "NSE",0, 2);
+        room11 = new Room("room11", "in room 11", "NSEW",1, 2);
+        room12 = new Room("room12", "in room 12", "NSEW",2, 2);
+        room13 = new Room("room13", "in room 13", "NSEW",3, 2);
+        room14 = new Room("room14", "in room 14", "SW",4, 2);
 
-        room15 = new Room("room15", "in room 15", "topLeft",0, 3);
-        room16 = new Room("room16", "in room 16", "topMiddle",1, 3);
-        room17 = new Room("room17", "in room 17", "topMiddle",2, 3);
-        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "topMiddle",3, 3);
-        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "topRight",4, 3);
+        room15 = new Room("room15", "in room 15", "SE",0, 3);
+        room16 = new Room("room16", "in room 16", "EW",1, 3);
+        room17 = new Room("room17", "in room 17", "EW",2, 3);
+        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "SEW-Stairs",3, 3);
+        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "W",4, 3);
         noRoom = new Room("nowhere", "nowhere", "nowhere",9, 9);
 
         // lock the appropriate doors
