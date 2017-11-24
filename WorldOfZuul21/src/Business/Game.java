@@ -494,14 +494,21 @@ public class Game {
         // move the guards
         for (Guard guard : guards) {
             Room nextRoom = null;
-            while (nextRoom == null) {
-                Direction direction = generateRandomDirection();
+            List<Direction> validDirections = new ArrayList<>();
+            Collections.addAll(validDirections, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NOWHERE);
+            Direction direction;
+            do {
+                direction = generateRandomDirection();
                 nextRoom = rooms.get(guard.getRoom().getExit(direction));
             }
-            guard.setOldRoom(guard.getRoom());
-            guard.getRoom().removeGuard();
-            guard.setRoom(nextRoom);
-            nextRoom.addGuard(guard);
+            while (!validDirections.contains(direction));
+
+            if (nextRoom != null) {
+                guard.setOldRoom(guard.getRoom());
+                guard.getRoom().removeGuard();
+                guard.setRoom(nextRoom);
+                nextRoom.addGuard(guard);
+            }
         }
     }
 

@@ -155,22 +155,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     private void update() {
-
-        if (forcedToQuit) {
-            business.updateHighScore(playerName);
-            ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
-            ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
-            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", highscore, close);
-            quitPopup.setTitle("You got busted!");
-            quitPopup.setHeaderText("You got busted!");
-            Optional<ButtonType> result = quitPopup.showAndWait();
-
-            if (result.isPresent() && result.get() == highscore) {
-                AlertBox.display("Highscores", business.getHighScores());
-                Platform.exit();
-            }
-        }
-
         if (business.currentRoomContainsItem()) {
             item.setSeen(true);
         }
@@ -187,6 +171,21 @@ public class PrimaryWindowController implements IUI, Initializable {
 
         draw();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
+
+        if (forcedToQuit) {
+            business.updateHighScore(playerName);
+            ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
+            ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", highscore, close);
+            quitPopup.setTitle("You got busted!");
+            quitPopup.setHeaderText("You got busted!");
+            Optional<ButtonType> result = quitPopup.showAndWait();
+
+            if (result.isPresent() && result.get() == highscore) {
+                AlertBox.display("Highscores", business.getHighScores());
+                Platform.exit();
+            }
+        }
     }
 
     private void draw() {
