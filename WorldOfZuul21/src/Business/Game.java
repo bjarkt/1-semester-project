@@ -87,7 +87,7 @@ public class Game {
                 room10, room11, room12, room13, room14, room15, room16, room17, room18, room19, noRoom;
 
         // Instantiate the rooms, and write their descriptions.
-        room00 = new Room("room00", "at the entrance of the museum", "NE", 0, 0);
+        room00 = new Room("room00", "at the entrance of the museum", "NSE", 0, 0);
         room01 = new Room("room01", "in room 1", "NEW",1, 0);
         room02 = new Room("room02", "in room 2", "NEW",2, 0);
         room03 = new Room("room03", "in room 3", "NEW",3, 0);
@@ -106,10 +106,10 @@ public class Game {
         room14 = new Room("room14", "in room 14", "SW",4, 2);
 
         room15 = new Room("room15", "in room 15", "SE",0, 3);
-        room16 = new Room("room16", "in room 16", "EW",1, 3);
-        room17 = new Room("room17", "in room 17", "EW",2, 3);
+        room16 = new Room("room16", "in room 16", "SEW",1, 3);
+        room17 = new Room("room17", "in room 17", "SEW",2, 3);
         room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "SEW-Stairs",3, 3);
-        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "W",4, 3);
+        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "W-Stairs",4, 3);
         noRoom = new Room("nowhere", "nowhere", "nowhere",9, 9);
 
         // lock the appropriate doors

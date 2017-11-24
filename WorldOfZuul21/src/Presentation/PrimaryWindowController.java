@@ -143,7 +143,8 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
 
         for (IRoom room : business.getRooms()) {
-            String filename = "Pictures/" + room.getVisualDescription().split("-")[0] + ".png"; // TODO FJERN SPLIT[0] FOR RIGTIGE BILLEDER
+            String filename = "Pictures/" + room.getVisualDescription() + ".png";
+            System.out.println(filename);
             boardBackgroundMap.put(locationToPoint(room.getLocation()), new Image(getClass().getResourceAsStream(filename)));
         }
     }
