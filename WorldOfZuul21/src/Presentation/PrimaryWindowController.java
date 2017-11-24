@@ -163,6 +163,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     private void update() {
 
         if (forcedToQuit) {
+            business.updateHighScore(playerName);
             ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
             ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", highscore, close);
@@ -342,28 +343,28 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     private void goNorth() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.NORTH);
+            forcedToQuit = business.goDirection(Direction.NORTH) && !business.getCheatMode();
             update();
         }
     }
 
     private void goSouth() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.SOUTH);
+            forcedToQuit = business.goDirection(Direction.SOUTH) && !business.getCheatMode();
             update();
         }
     }
 
     private void goEast() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.EAST);
+            forcedToQuit = business.goDirection(Direction.EAST) && !business.getCheatMode();
             update();
         }
     }
 
     private void goWest() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.WEST);
+            forcedToQuit = business.goDirection(Direction.WEST) && !business.getCheatMode();
             update();
         }
     }
