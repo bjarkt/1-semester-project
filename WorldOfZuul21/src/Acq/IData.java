@@ -8,5 +8,6 @@ public interface IData {
     Map<String, String> loadHighScore();
     void saveHighScore(Map<String, String> map);
     boolean deleteFile();
-    boolean doesFileExist();
+    boolean doesHighScoreFileExist();
+    boolean doesGameSaveFileExist();
 }

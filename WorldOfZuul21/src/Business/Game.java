@@ -274,7 +274,7 @@ public class Game {
             commandWord = command.getCommandWord();
 
             if (commandWord == CommandWord.LOAD) {
-                if (data.doesFileExist()) {
+                if (data.doesGameSaveFileExist()) {
                     load();
                     data.deleteFile();
                     play();
