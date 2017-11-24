@@ -19,6 +19,7 @@ public class Guard implements IGuard {
 
     private final int ID;
     private Room currentRoom;
+    private Room oldRoom;
     
     public Guard(int ID) {
         // ID for Guard objekt
@@ -52,4 +53,13 @@ public class Guard implements IGuard {
 
         return rooms_;
     }
+
+    public void setOldRoom(Room oldRoom) {
+        this.oldRoom = oldRoom;
+    }
+
+    public Room getOldRoom() {
+        return oldRoom;
+    }
+    
 }

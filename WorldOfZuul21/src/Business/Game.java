@@ -40,7 +40,7 @@ public class Game {
     private IData data;
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
-
+    private Room oldRoom;
 
     // List of rooms, in which Spawnable objects spawn
     private List<Room> guardSpawnPointRooms;
@@ -67,7 +67,7 @@ public class Game {
         policeArrived = false; // the police has not arrived yet
         friendlyNpc = new FriendlyNpc();
         saved = false;
-        cheatMode = true;
+        cheatMode = false;
         forceQuitCheatMode = false;
 
         // spawnpoint rooms
@@ -131,7 +131,10 @@ public class Game {
         List<Room> guardRooms = Guard.Spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
-
+        
+        guards[0].setOldRoom(guardSpawnPointRooms.get(0));
+        guards[1].setOldRoom(guardSpawnPointRooms.get(1));
+        
         // spawn the powerswitch in one of three rooms
         powerSwitchRoom = PowerSwitch.Spawn(switchSpawnPointRooms).get(0);
         powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
@@ -173,7 +176,7 @@ public class Game {
 
         // Set the room, in which the player starts.
         currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
-
+        oldRoom = rooms.get(room00.getLocation().getXY());
         // Set the exits for each room
         HashSet<Room> specialRooms = new HashSet<>();
         specialRooms.add(room14);
@@ -341,6 +344,7 @@ public class Game {
                 System.out.println("You use your key to open it.");
                 nextRoom.unlock();
             }
+            oldRoom = currentRoom;
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
             timer += 1;
@@ -494,6 +498,7 @@ public class Game {
                 Direction direction = generateRandomDirection();
                 nextRoom = rooms.get(guard.getRoom().getExit(direction));
             }
+            guard.setOldRoom(guard.getRoom());
             guard.getRoom().removeGuard();
             guard.setRoom(nextRoom);
             nextRoom.addGuard(guard);
@@ -502,7 +507,7 @@ public class Game {
 
     private Direction generateRandomDirection() {
         // generate a random direction
-        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
+        Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NOWHERE};
         int number = (int) (Math.random() * directions.length);
         return directions[number];
     }
@@ -582,6 +587,11 @@ public class Game {
                 gotBusted = true;
                 return true;
             }
+            if(currentRoom.getLocation().getXY() == guard.getOldRoom().getLocation().getXY() && oldRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
+                gotBusted = true;
+                return true;
+            }
+            
         }
         return false;
     }
