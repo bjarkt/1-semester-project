@@ -82,6 +82,8 @@ public class PrimaryWindowController implements IUI, Initializable {
         if (s.isPresent()) {
             if (s.get().contains(" ")) {
                 playerName = s.get().replace(" ", "-");
+            } else {
+                playerName = s.get();
             }
         }
     }
