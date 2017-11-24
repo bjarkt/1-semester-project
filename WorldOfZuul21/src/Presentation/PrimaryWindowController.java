@@ -174,7 +174,6 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
 
         draw();
-        println("Time before power turns on: " + business.getRoundsLeftBeforePowerTurnsOn());
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
     }
 
