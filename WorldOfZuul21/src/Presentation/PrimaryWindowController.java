@@ -58,8 +58,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     private PowerRelay[] powerRelays;
     private Item item;
 
-    final private boolean DRAW_MINIMAP_IMAGES = true;
-
     public PrimaryWindowController() {
         this.paneMap = new HashMap<>();
         this.boardBackgroundMap = new HashMap<>();
@@ -277,6 +275,7 @@ public class PrimaryWindowController implements IUI, Initializable {
                 business.escape(true);
                 updateLootList();
                 initImages();
+                update();
             } else {
                 business.escape(false);
                 business.updateHighScore(playerName);
@@ -376,7 +375,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
 
-    public void handleMinimapPaneClick(MouseEvent e) {
+    private void handleMinimapPaneClick(MouseEvent e) {
         Pane clicked = ((Pane) e.getSource());
         for (Map.Entry<Point2D, Pane> entry : paneMap.entrySet()) {
             if (entry.getValue() == clicked) {
