@@ -18,7 +18,7 @@ import java.util.List;
 public class Guard implements IGuard {
 
     private final int ID;
-    private IRoom currentRoom;
+    private Room currentRoom;
     
     public Guard(int ID) {
         // ID for Guard objekt
@@ -30,19 +30,19 @@ public class Guard implements IGuard {
         return ID;
     }
     
-    public IRoom getRoom() {
+    public Room getRoom() {
         //metodhod for getting currentRoom
         return currentRoom;
     }
     
-    public void setRoom(IRoom room) {
+    public void setRoom(Room room) {
         // set metodhod for room
         currentRoom = room;
     }
 
-    public static List<IRoom> Spawn(List<IRoom> rooms) {
+    public static List<Room> Spawn(List<Room> rooms) {
         Guard[] guards = new Guard[2];
-        List<IRoom> rooms_ = new ArrayList<>();
+        List<Room> rooms_ = new ArrayList<>();
         for (int i = 0; i < guards.length; i++) {
             guards[i] = new Guard(i+1);
             guards[i].setRoom(rooms.get(i));

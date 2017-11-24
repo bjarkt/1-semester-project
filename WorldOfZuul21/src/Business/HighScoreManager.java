@@ -7,16 +7,14 @@ import Data.XMLUtilities;
 
 import java.util.*;
 
-public class HighScoreManager {
-    //LoadableSavable highScoreSaverLoader; // TODO fix her
+class HighScoreManager {
 
-    IData data;
+    private IData data;
 
-    public HighScoreManager() {
-        //highScoreSaverLoader = new XMLUtilities("highscore.xml"); // TODO fix det her
+    HighScoreManager() {
     }
 
-    public List<IHighScore> getHighScores() {
+    List<IHighScore> getHighScores() {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
         List<IHighScore> highScoreList = new ArrayList<>();
 
@@ -37,7 +35,7 @@ public class HighScoreManager {
         }
     }
 
-    public void updateHighScore(int points, String playerName) {
+    void updateHighScore(int points, String playerName) {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
 
         if (data.doesFileExist()) {
@@ -54,7 +52,7 @@ public class HighScoreManager {
         //System.out.println(getHighScores());
     }
 
-    public void injectData(IData data) {
+    void injectData(IData data) {
         this.data = data;
     }
 }

@@ -18,11 +18,11 @@ public class Room implements IRoom {
     private String description;
     private String visualDescription;
     private HashMap<Direction, Integer> exits;
-    private IPowerSwitch powerSwitch;
-    private IPowerRelay powerRelay;
+    private PowerSwitch powerSwitch;
+    private PowerRelay powerRelay;
     private boolean locked;
-    private IItem[] items;
-    private IGuard[] guards;
+    private Item[] items;
+    private Guard[] guards;
 
     /**
      * creates a new room, with a name, description and location via x y
@@ -40,7 +40,7 @@ public class Room implements IRoom {
         location = new Location(x, y);
         exits = new HashMap<Direction, Integer>();
         locked = false;
-        items = new IItem[1]; // only one item per room
+        items = new Item[1]; // only one item per room
         guards = new Guard[2]; // two guards per room
     }
 
@@ -119,15 +119,15 @@ public class Room implements IRoom {
      * @return the powerswitch placed in this room. Returns null if there is no
      * powerswitch.
      */
-    public IPowerSwitch getPowerSwitch() {
+    public PowerSwitch getPowerSwitch() {
         return powerSwitch;
     }
 
-    public IPowerRelay getPowerRelay() {
+    public PowerRelay getPowerRelay() {
         return this.powerRelay;
     }
 
-    public void setPowerRelay(IPowerRelay powerRelay) {
+    public void setPowerRelay(PowerRelay powerRelay) {
         this.powerRelay = powerRelay;
     }
 
@@ -155,7 +155,7 @@ public class Room implements IRoom {
      *
      * @param powerSwitch
      */
-    public void setPowerSwitch(IPowerSwitch powerSwitch) {
+    public void setPowerSwitch(PowerSwitch powerSwitch) {
         this.powerSwitch = powerSwitch;
     }
 
@@ -175,7 +175,7 @@ public class Room implements IRoom {
      *
      * @return the first item of the items array.
      */
-    public IItem getItems() {
+    public Item getItems() {
         return items[0];
     }
 
@@ -184,7 +184,7 @@ public class Room implements IRoom {
      *
      * @param item
      */
-    public void setItem(IItem item) {
+    public void setItem(Item item) {
         items[0] = item;
     }
 
@@ -199,7 +199,7 @@ public class Room implements IRoom {
      *
      * @return an array containing the guards in this room
      */
-    public IGuard[] getGuards() {
+    public Guard[] getGuards() {
         return guards;
     }
 
@@ -209,7 +209,7 @@ public class Room implements IRoom {
      *
      * @param guard
      */
-    public void addGuard(IGuard guard) {
+    public void addGuard(Guard guard) {
         if (guards[0] != null) {
             guards[1] = guard;
         } else {
@@ -242,20 +242,23 @@ public class Room implements IRoom {
         }
     }
 
-    public void setSpawn(IItem item) {
+    public void setSpawn(Item item) {
         this.setItem(item);
+        this.visualDescription += "-" + item.getName();
     }
-    public void setSpawn(IGuard guard) {
+    public void setSpawn(Guard guard) {
         this.addGuard(guard);
     }
-    public void setSpawn(IPowerRelay pr) {
+    public void setSpawn(PowerRelay pr) {
         this.setPowerRelay(pr);
+        this.visualDescription += "-PowerRelay";
     }
-    public void setSpawn(IPowerSwitch pw) {
+    public void setSpawn(PowerSwitch pw) {
         this.setPowerSwitch(pw);
+        this.visualDescription += "-PowerSwitch";
     }
 
-    public static void setExits(HashMap<Integer, IRoom> rooms, HashSet<IRoom> specialRooms) {
+    public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
         // set the rooms' exits
         // The HashMap rooms is expected to contain a series of rooms shaped as a square
         // the HashSet specialRooms contains rooms, which are not allowed to have exits to each other
@@ -265,7 +268,7 @@ public class Room implements IRoom {
         Integer maxY = null;
         Integer minX = null;
         Integer minY = null;
-        for (Map.Entry<Integer, IRoom> room : rooms.entrySet()) {
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
             if (room.getValue().getLocation().getX() != 9 && room.getValue().getLocation().getX() != 9) {
                 if (maxX == null) {
                     maxX = room.getValue().getLocation().getX();
@@ -299,11 +302,11 @@ public class Room implements IRoom {
         exitsAllowed.put(Direction.SOUTH, Boolean.TRUE);
         exitsAllowed.put(Direction.EAST, Boolean.TRUE);
         exitsAllowed.put(Direction.WEST, Boolean.TRUE);
-        for (Map.Entry<Integer, IRoom> room : rooms.entrySet()) {
+        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
             /* if the current room can be found in specialRooms,
             it will not be allowed to have exits to the other rooms in specialRooms */
             if (specialRooms.contains(room.getValue())) {
-                for (IRoom r : specialRooms) {
+                for (Room r : specialRooms) {
                     if (room.getValue().getLocation().isNextTo(r.getLocation())) {
                         Direction directionNotAllowed = room.getValue().getLocation().getDirectionOfAdjacentLocation(r.getLocation());
                         if (exitsAllowed.containsKey(directionNotAllowed)) {

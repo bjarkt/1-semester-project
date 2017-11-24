@@ -49,9 +49,9 @@ public class Item implements IItem {
     /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
     it is added to usedItems, so it cannot be spawned agian  
      */
-    public static List<IRoom> Spawn(List<IRoom> rooms) {
-        List<IRoom> rooms_ = new ArrayList<>();
-        for (IRoom room : rooms) {
+    public static List<Room> Spawn(List<Room> rooms) {
+        List<Room> rooms_ = new ArrayList<>();
+        for (Room room : rooms) {
             room.setItem(null);
         }
         

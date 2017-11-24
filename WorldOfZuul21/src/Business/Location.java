@@ -51,7 +51,7 @@ public class Location implements ILocation {
         return (Integer.toString(x) + "," + Integer.toString(y)).hashCode();
     }
 
-    public boolean isNextTo(ILocation loc) {
+    public boolean isNextTo(Location loc) {
         if (this.x == loc.getX() + 1 || this.x == loc.getX() - 1) {
             if (this.y == loc.getY()) {
                 return true;
@@ -64,7 +64,7 @@ public class Location implements ILocation {
         return false;
     }
 
-    public Direction getDirectionOfAdjacentLocation(ILocation loc) {
+    public Direction getDirectionOfAdjacentLocation(Location loc) {
         if (!isNextTo(loc)) {
             return null;
         } else {

@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class FriendlyNpc {
 
-    public boolean checkForGuard(ILocation currentLocation, IGuard[] guards) {
-        for (IGuard guard : guards) {
+    public boolean checkForGuard(ILocation currentLocation, Guard[] guards) {
+        for (Guard guard : guards) {
             if (currentLocation.getX() <= guard.getRoom().getLocation().getX() + 1
                     && currentLocation.getX() <= guard.getRoom().getLocation().getX() - 1
                     && currentLocation.getY() <= guard.getRoom().getLocation().getY() + 1
@@ -30,10 +30,10 @@ public class FriendlyNpc {
         return false;
     }
 
-    public List<Direction> getDirectionOfGuards(ILocation currentLocation, IGuard[] guards) {
+    public List<Direction> getDirectionOfGuards(ILocation currentLocation, Guard[] guards) {
         if (checkForGuard(currentLocation, guards)) {
             List<Direction> directions = new ArrayList<>();
-            for (IGuard guard : guards) {
+            for (Guard guard : guards) {
                 if (currentLocation.getX() == guard.getRoom().getLocation().getX()) {
                     if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
                         directions.add(Direction.NORTH);

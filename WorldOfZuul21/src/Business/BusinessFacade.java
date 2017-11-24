@@ -2,7 +2,7 @@ package Business;
 
 import Acq.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessFacade implements IBusiness {
@@ -35,6 +35,56 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public ILocation[] getPowerRelayLocations() {
+        List<Room> relayRooms = new ArrayList<>(game.getPowerRelayLocations());
+        ILocation[] relayLocations = new ILocation[relayRooms.size()];
+        for (int i = 0; i < relayRooms.size(); i++) {
+            relayLocations[i] = relayRooms.get(i).getLocation();
+        }
+        return relayLocations;
+    }
+
+    @Override
+    public ILocation getPowerSwitchLocation() {
+        for (Room room : game.getSwitchSpawnPointRooms()) {
+            if (room.getPowerSwitch() != null) {
+                return room.getLocation();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ILocation getItemLocation() {
+        for (Room room : game.getItemSpawnPointRooms()) {
+            if (room.getItems() != null && !room.getItems().isKey()) {
+                return room.getLocation();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getRoundsLeftBeforePowerTurnsOn() {
+        return game.getPowerOffTime()/2;
+    }
+
+    @Override
+    public boolean currentRoomContainsItem() {
+        return game.getCurrentRoom().getItems() != null && !game.getCurrentRoom().getItems().isKey();
+    }
+
+    @Override
+    public boolean currentRoomContainsPowerSwitch() {
+        return game.getCurrentRoom().getPowerSwitch() != null;
+    }
+
+    @Override
+    public boolean currentRoomContainsPowerRelay() {
+        return game.getCurrentRoom().getPowerRelay() != null;
+    }
+
+    @Override
     public void updateHighScore(String playerName) {
         highScoreManager.updateHighScore(game.getInventory().calculatePoints(), playerName);
     }
@@ -46,7 +96,7 @@ public class BusinessFacade implements IBusiness {
 
     @Override
     public IItem getItem() {
-        for (IRoom room : game.getItemSpawnPointRooms()) {
+        for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {
                 return room.getItems();
             }
@@ -56,7 +106,7 @@ public class BusinessFacade implements IBusiness {
 
     @Override
     public List<IItem> getInventoryList() {
-        return game.getInventory().getInventory();
+        return new ArrayList<>(game.getInventory().getInventory());
     }
 
     @Override
@@ -100,8 +150,8 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public HashMap<Integer, IRoom> getRooms() {
-        return game.getRooms();
+    public List<IRoom> getRooms() {
+        return new ArrayList<>(game.getRooms());
     }
 
     @Override

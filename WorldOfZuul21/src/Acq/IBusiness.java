@@ -6,7 +6,17 @@ import java.util.List;
 public interface IBusiness {
     ILocation getCurrentLocation();
     boolean isAtEntrance();
+
     ILocation[] getGuardLocations();
+    ILocation[] getPowerRelayLocations();
+    ILocation getPowerSwitchLocation();
+    ILocation getItemLocation();
+
+    int getRoundsLeftBeforePowerTurnsOn();
+
+    boolean currentRoomContainsItem();
+    boolean currentRoomContainsPowerSwitch();
+    boolean currentRoomContainsPowerRelay();
 
     void updateHighScore(String playerName);
     List<IHighScore> getHighScores();
@@ -15,7 +25,6 @@ public interface IBusiness {
     List<IItem> getInventoryList();
 
     void save();
-    //HashMap<String, String> load();
     void load();
 
     void goDirection(Direction direction);
@@ -23,7 +32,7 @@ public interface IBusiness {
     void interact();
     void hide();
     void escape(boolean wantToGoBackInside);
-    HashMap<Integer, IRoom> getRooms();
+    List<IRoom> getRooms();
 
     String callFriendlyNpc();
 

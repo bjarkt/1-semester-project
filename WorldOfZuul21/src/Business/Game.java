@@ -1,8 +1,6 @@
 package Business;
 
 import Acq.*;
-import Data.LoadableSavable;
-import Data.XMLUtilities;
 
 import java.util.*;
 import java.util.HashMap;
@@ -15,16 +13,16 @@ import java.util.Map;
 public class Game {
 
     private Parser parser; // the parser is used to get the players command inputs
-    private IRoom currentRoom; // the room that the player is currently in
-    private HashMap<Integer, IRoom> rooms; // a map storing all the rooms
-    private IPowerRelay[] powerRelays;
-    private IRoom powerSwitchRoom; // the room with the powerswitch
+    private Room currentRoom; // the room that the player is currently in
+    private HashMap<Integer, Room> rooms; // a map storing all the rooms
+    private PowerRelay[] powerRelays;
+    private Room powerSwitchRoom; // the room with the powerswitch
     private int powerSwitchLocation; // the coordinates of the room with the powerswitch
-    private HashSet<IRoom> powerRelayLocations;
-    private HashSet<IRoom> lockedRooms;
-    private IItem key;
-    private IRoom keyLocation;
-    private IGuard[] guards; // the guards
+    private HashSet<Room> powerRelayLocations;
+    private HashSet<Room> lockedRooms;
+    private Item key;
+    private Room keyLocation;
+    private Guard[] guards; // the guards
     private String itemName; // the name of the last spawned item
     private Inventory inventory; // the players inventory
     private int timer; // the amount of turns taken
@@ -39,18 +37,16 @@ public class Game {
     private boolean policeArrived; // true if the police has arrived
     private boolean saved;
     private FriendlyNpc friendlyNpc;
-    private LoadableSavable gameSaverLoader;
-    private LoadableSavable highScoreSaverLoader;
     private IData data;
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
 
 
     // List of rooms, in which Spawnable objects spawn
-    private List<IRoom> guardSpawnPointRooms;
-    private List<IRoom> switchSpawnPointRooms;
-    private List<IRoom> relaySpawnPointRooms;
-    private List<IRoom> itemSpawnPointRooms; // the rooms that items can spawn in
+    private List<Room> guardSpawnPointRooms;
+    private List<Room> switchSpawnPointRooms;
+    private List<Room> relaySpawnPointRooms;
+    private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
 
 
     /* zero argument constructor. */
@@ -70,8 +66,6 @@ public class Game {
         gotBusted = false; // the player has not been busted yet
         policeArrived = false; // the police has not arrived yet
         friendlyNpc = new FriendlyNpc();
-        gameSaverLoader = new XMLUtilities("savegame.xml");
-        highScoreSaverLoader = new XMLUtilities("highscore.xml");
         saved = false;
         cheatMode = true;
         forceQuitCheatMode = false;
@@ -120,7 +114,7 @@ public class Game {
 
         // lock the appropriate doors
         lockedRooms.add(room19);
-        for (IRoom room : lockedRooms) {
+        for (Room room : lockedRooms) {
             room.lock();
         }
 
@@ -134,7 +128,7 @@ public class Game {
         Collections.addAll(relaySpawnPointRooms, room03, room05, room09, room11, room14, room18);
 
         // spawn the guards
-        List<IRoom> guardRooms = Guard.Spawn(guardSpawnPointRooms);
+        List<Room> guardRooms = Guard.Spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
 
@@ -145,7 +139,7 @@ public class Game {
         // spawn powerRelays in three out of 6 random rooms
         powerRelayLocations = new HashSet<>(PowerRelay.Spawn(relaySpawnPointRooms));
         int i = 0;
-        for (IRoom relayRoom : powerRelayLocations) {
+        for (Room relayRoom : powerRelayLocations) {
             powerRelays[i] = relayRoom.getPowerRelay();
             i++;
         }
@@ -181,14 +175,14 @@ public class Game {
         currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
 
         // Set the exits for each room
-        HashSet<IRoom> specialRooms = new HashSet<>();
+        HashSet<Room> specialRooms = new HashSet<>();
         specialRooms.add(room14);
         specialRooms.add(room19);
         Room.setExits(rooms, specialRooms);
     }
 
     // The method in which the main game loop happens.
-    public void play() {
+    private void play() {
         printWelcome();
         // Finished is assigned to false at the start, so the while loop will execute at least once.
         boolean finished = false;
@@ -277,16 +271,16 @@ public class Game {
             commandWord = command.getCommandWord();
 
             if (commandWord == CommandWord.LOAD) {
-                if (gameSaverLoader.doesFileExist()) {
+                if (data.doesFileExist()) {
                     load();
-                    gameSaverLoader.deleteFile();
+                    data.deleteFile();
                     play();
                 } else {
                     System.out.println("File does not exist");
                     commandWord = null;
                 }
             } else if (commandWord == CommandWord.NEW) {
-                gameSaverLoader.deleteFile();
+                data.deleteFile();
                 play();
             } else if (commandWord == CommandWord.HIGHSCORE) {
                 //System.out.println(getHighScores());
@@ -307,7 +301,7 @@ public class Game {
     }
 
     /* Updates the currentRoom variable, and prints description of the room. */
-    public boolean goRoom(Command command) {
+    boolean goRoom(Command command) {
         boolean forcedToQuit = false;
 
         // Stop the method if a second word isn't supplied.
@@ -326,14 +320,14 @@ public class Game {
 
         // check if the player has a key
         boolean gotKey = false;
-        for (IItem item : inventory.getInventory()) {
+        for (Item item : inventory.getInventory()) {
             if (item.isKey()) {
                 gotKey = true;
             }
         }
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
-        IRoom nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
+        Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
         //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
@@ -360,7 +354,7 @@ public class Game {
         return forcedToQuit;
     }
 
-    public boolean checkTimer() {
+    private boolean checkTimer() {
         // return true, if the player has lost the game
         // check how many turns there are left before power turns back on
         if (timer == timerPoint + powerOffTime / 2 && !powerStatus) {
@@ -426,7 +420,7 @@ public class Game {
         }
     }
 
-    public boolean stealItem() {
+    boolean stealItem() {
         // used to steal an item
         boolean forcedToQuit = false;
 
@@ -456,7 +450,7 @@ public class Game {
         return forcedToQuit;
     }
 
-    public boolean escape(Command command) {
+    boolean escape(Command command) {
         // used to escape the museum through the entrance
         boolean wantToQuit = false;
         if (currentRoom.getLocation().getXY() == 0) {
@@ -467,7 +461,7 @@ public class Game {
         return wantToQuit;
     }
 
-    public boolean escaped(Command command) {
+    private boolean escaped(Command command) {
         // reset the game
         reset();
         boolean lootAdded = inventory.addToLoot();
@@ -492,10 +486,10 @@ public class Game {
         return false;
     }
 
-    public void moveGuards() {
+    private void moveGuards() {
         // move the guards
-        for (IGuard guard : guards) {
-            IRoom nextRoom = null;
+        for (Guard guard : guards) {
+            Room nextRoom = null;
             while (nextRoom == null) {
                 Direction direction = generateRandomDirection();
                 nextRoom = rooms.get(guard.getRoom().getExit(direction));
@@ -506,17 +500,17 @@ public class Game {
         }
     }
 
-    public Direction generateRandomDirection() {
+    private Direction generateRandomDirection() {
         // generate a random direction
         Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
         int number = (int) (Math.random() * directions.length);
         return directions[number];
     }
 
-    public void printGuardLocations() {
+    private void printGuardLocations() {
         // print the guard's locations
         System.out.println("The guards are located in the following rooms");
-        for (IGuard guard : guards) {
+        for (Guard guard : guards) {
             System.out.print(guard.getRoom().getName() + "\t");
         }
         System.out.println();
@@ -524,7 +518,7 @@ public class Game {
         System.out.println(friendlyNpc.getDirectionOfGuards(currentRoom.getLocation(), guards));
     }
 
-    public boolean hide() {
+    boolean hide() {
         // used to hide from the guards
         // return true, if the players has lost the game
         boolean forcedToQuit = false;
@@ -563,7 +557,7 @@ public class Game {
         return forcedToQuit;
     }
 
-    public String call() {
+    String call() {
         // call your friend
         // your friend tells you, what your current objective is
         String s = "";
@@ -581,9 +575,9 @@ public class Game {
         return s;
     }
 
-    public boolean checkForBusted() {
+    private boolean checkForBusted() {
         // return true if there is a guard in the same room as the player
-        for (IGuard guard : guards) {
+        for (Guard guard : guards) {
             if (currentRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
                 gotBusted = true;
                 return true;
@@ -592,12 +586,12 @@ public class Game {
         return false;
     }
 
-    public void printBusted() {
+    private void printBusted() {
         // message that are printed, when the player gets busted by the guards
         System.out.println("Before you are able to scratch your ass, the guards jump you, and beat the shit out of you");
     }
 
-    public void quit() {
+    private void quit() {
         // the game is over
         // the players points and other information are printed
         if (saved) {
@@ -627,7 +621,7 @@ public class Game {
         }
     }
 
-    public void reset() {
+    private void reset() {
         // reset the guards
         guards[0].setRoom(rooms.get(40));
         guards[1].setRoom(rooms.get(3));
@@ -635,11 +629,11 @@ public class Game {
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
         powerOffTime = startPowerOffTime;
-        for (IPowerRelay powerRelay : this.powerRelays) {
+        for (PowerRelay powerRelay : this.powerRelays) {
             powerRelay.restore();
         }
         // lock the appropriate doors
-        for (IRoom room : lockedRooms) {
+        for (Room room : lockedRooms) {
             room.lock();
         }
         // place the key
@@ -665,7 +659,7 @@ public class Game {
         mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
         int ii = 0;
-        for (IRoom powerRelayLocation : powerRelayLocations) {
+        for (Room powerRelayLocation : powerRelayLocations) {
             mapToSave.put("powerRelayLocation_" + ii, powerRelayLocation.getName());
             ii++;
         }
@@ -684,7 +678,7 @@ public class Game {
         mapToSave.put("policeAlerted", String.valueOf(policeAlerted));
         mapToSave.put("alertPoint", String.valueOf(alertPoint));
 
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             if (room.getGuards()[0] != null) {
                 mapToSave.put("guard0", room.getName());
             }
@@ -697,7 +691,7 @@ public class Game {
             }
         }
         int i = 0;
-        for (IRoom lockedRoom : lockedRooms) {
+        for (Room lockedRoom : lockedRooms) {
             mapToSave.put("lockedRoomName_" + i, lockedRoom.getName());
             mapToSave.put("lockedRoomStatus_" + i, String.valueOf(lockedRoom.isLocked()));
         }
@@ -714,7 +708,7 @@ public class Game {
     }
 
     public void load() {
-        Map<String, String> map = new LinkedHashMap<>();
+        Map<String, String> map;
         map = data.load();
         if (map == null) {
             return;
@@ -722,7 +716,7 @@ public class Game {
 
         powerRelayLocations.clear();
         lockedRooms.clear();
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             room.removeItem();
             room.removeGuard();
             room.setPowerSwitch(null);
@@ -730,7 +724,7 @@ public class Game {
             powerRelayLocations = new HashSet<>();
         }
 
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("currentRoom"))) {
                 currentRoom = room;
             }
@@ -739,7 +733,7 @@ public class Game {
         powerStatus = Boolean.parseBoolean(map.get("powerSwitchStatus"));
 
         int i = 0;
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             for (String s : map.keySet()) {
                 if (s.startsWith("powerRelayLocation_")) {
                     if (room.getName().equals(map.get(s))) {
@@ -767,7 +761,7 @@ public class Game {
             }
         }
 
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
                 powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
@@ -798,7 +792,7 @@ public class Game {
         policeAlerted = Boolean.parseBoolean(map.get("policeAlerted"));
         alertPoint = Integer.parseInt(map.get("alertPoint"));
 
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("guard0"))) {
                 room.addGuard(guards[0]);
             } else if (room.getName().equals(map.get("guard1"))) {
@@ -814,7 +808,7 @@ public class Game {
         i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("lockedRoomName_")) {
-                for (IRoom room : rooms.values()) {
+                for (Room room : rooms.values()) {
                     if (room.getName().equals(map.get(s))) {
                         lockedRooms.add(room);
                         boolean status = Boolean.parseBoolean(map.get("lockedRoomStatus_" + i));
@@ -825,14 +819,12 @@ public class Game {
             }
         }
 
-        for (IRoom room : rooms.values()) {
+        for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("keyLocationRoom"))) {
                 keyLocation = room;
                 Item key = null;
                 if (Boolean.parseBoolean(map.get("doesKeyLocationRoomContainItem"))) {
                     key = new Item(true);
-                } else {
-                    //key = new Item(false);
                 }
                 keyLocation.setItem(key);
             }
@@ -840,31 +832,43 @@ public class Game {
 
     }
 
-    public List<IRoom> getItemSpawnPointRooms() {
+    List<Room> getItemSpawnPointRooms() {
         return itemSpawnPointRooms;
     }
 
-    public Inventory getInventory() {
+    public List<Room> getSwitchSpawnPointRooms() {
+        return switchSpawnPointRooms;
+    }
+
+    public HashSet<Room> getPowerRelayLocations() {
+        return powerRelayLocations;
+    }
+
+    Inventory getInventory() {
         return inventory;
     }
 
-    public IRoom getCurrentRoom() {
+    Room getCurrentRoom() {
         return currentRoom;
     }
 
-    public IGuard[] getGuards() {
+    IGuard[] getGuards() {
         return guards;
     }
 
-    public HashMap<Integer, IRoom> getRooms() {
-        return rooms;
+    List<Room> getRooms() {
+        return new ArrayList<>(rooms.values());
     }
 
-    public boolean isAtEntrace() {
+    int getPowerOffTime() {
+        return powerOffTime;
+    }
+
+    boolean isAtEntrace() {
         return currentRoom.getLocation().getXY() == 0;
     }
 
-    public void injectData(IData data) {
+    void injectData(IData data) {
         this.data = data;
     }
 }

@@ -28,9 +28,9 @@ public class PowerSwitch implements IPowerSwitch {
         return isOn;
     }
 
-    public static List<IRoom> Spawn(List<IRoom> rooms) {
+    public static List<Room> Spawn(List<Room> rooms) {
         int number = (int) (Math.random() * 3);
-        List<IRoom> rooms_ = new ArrayList<>();
+        List<Room> rooms_ = new ArrayList<>();
 
         rooms.get(number).setSpawn(new PowerSwitch());
         rooms.get(number).getPowerSwitch().turnPowerOn();

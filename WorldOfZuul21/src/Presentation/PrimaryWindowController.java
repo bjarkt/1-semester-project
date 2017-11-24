@@ -1,6 +1,7 @@
 package Presentation;
 
 import Acq.*;
+import Presentation.Drawables.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,14 +49,19 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     private HashMap<Point2D, Pane> paneMap;
     private HashMap<Point2D, Image> boardBackgroundMap;
-    //private Player player;
-    //private Enemy enemy;
+
+    private Player player;
+    private Guard[] guards;
+    private PowerSwitch powerSwitch;
+    private PowerRelay[] powerRelays;
+    private Item item;
 
     final private boolean DRAW_MINIMAP_IMAGES = true;
 
     public PrimaryWindowController() {
         this.paneMap = new HashMap<>();
         this.boardBackgroundMap = new HashMap<>();
+
     }
 
     @Override
@@ -63,6 +69,8 @@ public class PrimaryWindowController implements IUI, Initializable {
         initMinimapGrid();
         initGroundImageView();
         initButtons();
+        initDrawables();
+
         update();
 
         TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
@@ -70,11 +78,23 @@ public class PrimaryWindowController implements IUI, Initializable {
         t.setHeaderText("Enter your name");
         Optional<String> s = t.showAndWait();
         if (s.isPresent()) {
-            playerName = s.get();
-            if (playerName.contains(" ")) {
-                playerName = playerName.replace(" ", "-");
+            if (s.get().contains(" ")) {
+                playerName = s.get().replace(" ", "-");
             }
         }
+    }
+
+    private void initDrawables() {
+        this.player = new Player();
+        this.guards = new Guard[]{new Guard(Color.RED), new Guard(Color.RED)};
+        this.powerSwitch = new PowerSwitch();
+
+        ILocation[] powerRelayLocations = business.getPowerRelayLocations();
+        this.powerRelays = new PowerRelay[powerRelayLocations.length];
+        for (int i = 0; i < powerRelays.length; i++) {
+            this.powerRelays[i] = new PowerRelay(locationToPoint(powerRelayLocations[i]));
+        }
+        this.item = new Item();
     }
 
     private void initButtons() {
@@ -122,9 +142,9 @@ public class PrimaryWindowController implements IUI, Initializable {
             }
         }
 
-        for (Map.Entry<Integer, IRoom> entry : business.getRooms().entrySet()) {
-            String filename = "Pictures/" + entry.getValue().getVisualDescription() + ".png";
-            boardBackgroundMap.put(locationToPoint(entry.getValue().getLocation()), new Image(getClass().getResourceAsStream(filename)));
+        for (IRoom room : business.getRooms()) {
+            String filename = "Pictures/" + room.getVisualDescription().split("-")[0] + ".png"; // TODO FJERN SPLIT[0] FOR RIGTIGE BILLEDER
+            boardBackgroundMap.put(locationToPoint(room.getLocation()), new Image(getClass().getResourceAsStream(filename)));
         }
     }
 
@@ -138,6 +158,27 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     private void update() {
+
+        if (business.currentRoomContainsItem()) {
+            item.setSeen(true);
+        }
+        else if (business.currentRoomContainsPowerRelay()) {
+            for (PowerRelay relay : powerRelays) {
+                if (relay.getLocation().equals(locationToPoint(business.getCurrentLocation()))) {
+                    relay.setSeen(true);
+                }
+            }
+        }
+        else if(business.currentRoomContainsPowerSwitch()) {
+            powerSwitch.setSeen(true);
+        }
+
+        draw();
+        println("Time before power turns on: " + business.getRoundsLeftBeforePowerTurnsOn());
+        groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
+    }
+
+    private void draw() {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
             for (int i = children.size()-1; i > 0; i--) {
@@ -150,25 +191,19 @@ public class PrimaryWindowController implements IUI, Initializable {
             }
         }
 
-        // TODO
-        // flyt Rectangle r ... kode over i en anden klasse, f.x. guard og player
-        Rectangle r = new Rectangle(0, 25, 10, 10);
-        r.setFill(Color.GREEN);
-        paneMap.get(locationToPoint(business.getCurrentLocation())).getChildren().add(r);
+        player.draw(paneMap.get(locationToPoint(business.getCurrentLocation())));
+        powerSwitch.draw(paneMap.get(locationToPoint(business.getPowerSwitchLocation())));
 
-        // TODO
-        // gør det samme hers
-        Rectangle r1 = new Rectangle(15, 25, 10, 10);
-        r1.setFill(Color.RED);
-        paneMap.get(locationToPoint(business.getGuardLocations()[0])).getChildren().add(r1);
-        Rectangle r2 = new Rectangle(30, 25, 10, 10);
-        r2.setFill(Color.RED);
-        paneMap.get(locationToPoint(business.getGuardLocations()[1])).getChildren().add(r2);
+        if (business.getItemLocation() != null) {
+            item.draw(paneMap.get(locationToPoint(business.getItemLocation())));
+        }
 
-        groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
-
-        //paneMap.get(player.getPos()).getChildren().add(player.getMapDisplay());
-        //paneMap.get(enemy.getPos()).getChildren().add(enemy.getMapDisplay());*/
+        for (int i = 0; i < powerRelays.length; i++) {
+            powerRelays[i].draw(paneMap.get(locationToPoint(business.getPowerRelayLocations()[i])));
+        }
+        for (int i = 0; i < guards.length; i++) {
+            guards[i].draw(paneMap.get(locationToPoint(business.getGuardLocations()[i])));
+        }
     }
 
     private void updateInventoryList() {
@@ -200,6 +235,8 @@ public class PrimaryWindowController implements IUI, Initializable {
     public void handleStealButtonAction(ActionEvent e) {
         business.steal();
         updateInventoryList();
+        item.setSeen(false);
+        update();
     }
 
     public void handleInteractButtonAction(ActionEvent e) {
@@ -219,16 +256,9 @@ public class PrimaryWindowController implements IUI, Initializable {
             } else {
                 business.escape(false);
                 business.updateHighScore(playerName);
-                // TODO
-                // vis highscores på en bedre måde?
-                println("-- HIGHSCORES --");
-                for (IHighScore iHighScore : business.getHighScores()) {
-                    println(iHighScore.getName() + " - " + iHighScore.getScore());
-                }
-                ButtonType exitGame = createAlert(Alert.AlertType.WARNING, "Quit the game now", "", "The game will now exit!");
-                if (exitGame == ButtonType.OK) {
-                    Platform.exit();
-                }
+
+                AlertBox.display("Highscore", business.getHighScores());
+                Platform.exit();
             }
         }
     }
@@ -314,6 +344,11 @@ public class PrimaryWindowController implements IUI, Initializable {
         for (Map.Entry<Point2D, Pane> entry : paneMap.entrySet()) {
             if (entry.getValue() == clicked) {
                 System.out.println(entry.getKey());
+                for (IRoom room : business.getRooms()) {
+                    if (room.getLocation().getX() == entry.getKey().getX() && room.getLocation().getY() == entry.getKey().getY()) {
+                        System.out.println(room.getVisualDescription());
+                    }
+                }
             }
         }
     }
