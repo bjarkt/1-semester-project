@@ -506,7 +506,7 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     public void handleKeyPress(KeyEvent e) {
         String code = e.getCode().toString();
-        if (!inputs.contains(code) && !forcedToQuit)
+        if (!inputs.contains(code) && !forcedToQuit && isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight()))
             inputs.add(code);
     }
 

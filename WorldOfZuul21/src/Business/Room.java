@@ -130,6 +130,11 @@ public class Room implements IRoom {
     }
 
     public void setPowerRelay(PowerRelay powerRelay) {
+        if (powerRelay == null) {
+            this.visualDescription = this.baseVisualDescription;
+        } else {
+            this.visualDescription = this.baseVisualDescription + "-" + "PowerRelay";
+        }
         this.powerRelay = powerRelay;
     }
 
@@ -158,6 +163,11 @@ public class Room implements IRoom {
      * @param powerSwitch
      */
     public void setPowerSwitch(PowerSwitch powerSwitch) {
+        if (powerSwitch == null) {
+            this.visualDescription = this.baseVisualDescription;
+        } else {
+            this.visualDescription = this.baseVisualDescription + "-" + "PowerSwitch";
+        }
         this.powerSwitch = powerSwitch;
     }
 
@@ -189,8 +199,8 @@ public class Room implements IRoom {
     public void setItem(Item item) {
         if (item == null) {
             this.visualDescription = this.baseVisualDescription;
-        } else if (item.isKey()) {
-            this.visualDescription = this.baseVisualDescription + "-Key";
+        } else {
+            this.visualDescription = this.baseVisualDescription + "-" + item.getName();
         }
         items[0] = item;
     }
@@ -252,18 +262,15 @@ public class Room implements IRoom {
 
     public void setSpawn(Item item) {
         this.setItem(item);
-        this.visualDescription = this.baseVisualDescription + "-" + item.getName();
     }
     public void setSpawn(Guard guard) {
         this.addGuard(guard);
     }
     public void setSpawn(PowerRelay pr) {
         this.setPowerRelay(pr);
-        this.visualDescription = this.baseVisualDescription + "-" + "PowerRelay";
     }
     public void setSpawn(PowerSwitch pw) {
         this.setPowerSwitch(pw);
-        this.visualDescription = this.baseVisualDescription + "-" + "PowerSwitch";
     }
 
     public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
