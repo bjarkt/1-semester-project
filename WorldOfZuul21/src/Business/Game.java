@@ -236,7 +236,7 @@ public class Game {
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
-            interact();
+            System.out.println(interact());
         } else if (commandWord == CommandWord.STEAL) {
             wantToQuit = stealItem();
         } else if (commandWord == CommandWord.ESCAPE) {
@@ -283,7 +283,7 @@ public class Game {
                     commandWord = null;
                 }
             } else if (commandWord == CommandWord.NEW) {
-                data.deleteFile();
+                //data.deleteFile();
                 play();
             } else if (commandWord == CommandWord.HIGHSCORE) {
                 //System.out.println(getHighScores());
@@ -397,31 +397,33 @@ public class Game {
         }
     }
 
-    void interact() {
+    String interact() {
         // used to turn off the powerswitch and sabotage powerRelays
+        String s = "";
         if (currentRoom.getPowerRelay() != null) {
             if (!powerStatus) {
                 currentRoom.getPowerRelay().sabotage();
                 this.powerOffTime += currentRoom.getPowerRelay().getTimeBoost();
-                System.out.println("You sabotaged the relay");
-                System.out.println("You have got " + currentRoom.getPowerRelay().getTimeBoost() + " more rounds before the power comes back");
+                s += "You sabotaged the relay\n";
+                s += "You have got " + currentRoom.getPowerRelay().getTimeBoost() + " more rounds before the power comes back\n";
             } else {
-                System.out.println("When you try to sabotage the relay, you trigger the alarm");
+                s += "When you try to sabotage the relay, you trigger the alarm\n";
                 this.gotBusted = true;
             }
         } else if (currentRoom.getPowerSwitch() != null) {
             if (!currentRoom.getPowerSwitch().getIsOn()) {
-                System.out.println("The power is already turned off");
-                return;
+                s += "The power is already turned off\n";
+                return s;
             } else if (currentRoom.getPowerSwitch().getIsOn()) {
                 currentRoom.getPowerSwitch().turnPowerOff();
-                System.out.println("The power will be turned off, for " + powerOffTime + " turns");
+                s += "The power will be turned off, for " + powerOffTime + " turns\n";
                 timerPoint = timer;
                 powerStatus = false;
             }
         } else {
-            System.out.println("There is nothing to interact with");
+            s += "There is nothing to interact with\n";
         }
+        return s;
     }
 
     boolean stealItem() {

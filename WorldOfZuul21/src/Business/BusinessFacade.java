@@ -183,17 +183,17 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public void steal() {
-        game.stealItem();
+    public boolean steal() {
+        return game.stealItem();
     }
 
     @Override
-    public void interact() {
-        game.interact();
+    public String interact() {
+        return game.interact();
     }
 
-    public void hide() {
-        game.hide();
+    public boolean hide() {
+        return game.hide();
     }
 
     public void escape(boolean wantToGoBackInside) {

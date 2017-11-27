@@ -471,7 +471,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleStealButtonAction(ActionEvent e) {
-        business.steal();
+        forcedToQuit = business.steal();
         updateInventoryList();
         item.setSeen(false);
         initImages();
@@ -479,11 +479,11 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleInteractButtonAction(ActionEvent e) {
-        business.interact();
+        println(business.interact());
     }
 
     public void handleHideButtonAction(ActionEvent e) {
-        business.hide();
+        forcedToQuit = business.hide();
         update();
     }
 
