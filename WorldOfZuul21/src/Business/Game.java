@@ -695,14 +695,16 @@ public class Game {
         mapToSave.put("policeAlerted", String.valueOf(policeAlerted));
         mapToSave.put("alertPoint", String.valueOf(alertPoint));
 
+        mapToSave.put("guard0", guards[0].getRoom().getName());
+        mapToSave.put("guard1", guards[1].getRoom().getName());
+
         for (Room room : rooms.values()) {
-            if (room.getGuards()[0] != null) {
+            /*if (room.getGuards()[0] != null) {
                 mapToSave.put("guard0", room.getName());
             }
             if (room.getGuards()[1] != null) {
                 mapToSave.put("guard1", room.getName());
-            }
-
+            }*/
             if (room.getItems() != null) {
                 mapToSave.put("itemRoom", room.getName());
             }
@@ -812,8 +814,10 @@ public class Game {
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("guard0"))) {
                 room.addGuard(guards[0]);
-            } else if (room.getName().equals(map.get("guard1"))) {
-                room.addGuard((guards[1]));
+                guards[0].setRoom(room);
+            } if (room.getName().equals(map.get("guard1"))) {
+                room.addGuard(guards[1]);
+                guards[1].setRoom(room);
             }
 
             if (room.getName().equals(map.get("itemRoom"))) {
