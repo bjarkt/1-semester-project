@@ -28,6 +28,8 @@ public class StartGUI extends Application {
         IUI controller = (IUI)loader.getController();
         controller.injectBusiness(businessFacade);
 
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(450);
         primaryStage.setTitle("Night at the Museum - GUI test");
         primaryStage.setScene(startWindowScene);
         primaryStage.show();

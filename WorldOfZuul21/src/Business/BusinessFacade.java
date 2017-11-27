@@ -3,7 +3,9 @@ package Business;
 import Acq.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class BusinessFacade implements IBusiness {
 
@@ -82,6 +84,11 @@ public class BusinessFacade implements IBusiness {
     @Override
     public boolean currentRoomContainsPowerRelay() {
         return game.getCurrentRoom().getPowerRelay() != null;
+    }
+
+    @Override
+    public Set<Direction> getExitsForCurrentRoom() {
+        return game.getCurrentRoom().getExits().keySet();
     }
 
     @Override

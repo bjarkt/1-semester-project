@@ -1,7 +1,11 @@
 package Presentation;
 
 import Acq.*;
+import Presentation.Animation.LongValue;
+import Presentation.Animation.ResizableCanvas;
+import Presentation.Animation.Sprite;
 import Presentation.Drawables.*;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,19 +13,28 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class PrimaryWindowController implements IUI, Initializable {
 
@@ -43,7 +56,29 @@ public class PrimaryWindowController implements IUI, Initializable {
     private ListView<IItem> inventoryListView;
     @FXML
     private ListView<IItem> lootListView;
-    
+    @FXML
+    private StackPane stackPane;
+    @FXML
+    private VBox rootVBox;
+
+
+    private Sprite sPlayer;
+    private Point2D playerStartPos;
+
+    private List<Sprite> doors;
+    private Sprite northDoor;
+    private Point2D northDoorPos;
+    private Sprite southDoor;
+    private Point2D southDoorPos;
+    private Sprite eastDoor;
+    private Point2D eastDoorPos;
+    private Sprite westDoor;
+    private Point2D westDoorPos;
+
+
+    private ResizableCanvas canvas;
+    private List<String> inputs;
+
     private IBusiness business;
     private String playerName;
 
@@ -57,6 +92,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     private PowerSwitch powerSwitch;
     private PowerRelay[] powerRelays;
     private Item item;
+    private List<VisibleDrawable> visibleDrawables;
 
     public PrimaryWindowController() {
         this.paneMap = new HashMap<>();
@@ -70,6 +106,13 @@ public class PrimaryWindowController implements IUI, Initializable {
         initGroundImageView();
         initButtons();
         initDrawables();
+        initCanvas();
+        initSprites();
+
+        inputs = new ArrayList<>();
+
+
+        animateSprite();
 
         update();
 
@@ -86,7 +129,133 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
 
+    private void initSprites() {
+        sPlayer = new Sprite();
+        playerStartPos = new Point2D(220, 170);
+        sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64);
+        setPlayerStartPos();
+
+        doors = new ArrayList<>();
+        northDoor = new Sprite();
+        northDoor.setImage("/Presentation/Pictures/door2.png");
+        northDoorPos = new Point2D(220, 0);
+        northDoor.setPosition(northDoorPos.getX(), northDoorPos.getY());
+
+        southDoor = new Sprite();
+        southDoor.setImage("/Presentation/Pictures/door2.png");
+        southDoorPos = new Point2D(220, 440);
+        southDoor.setPosition(southDoorPos.getX(), southDoorPos.getY());
+
+        eastDoor = new Sprite();
+        eastDoor.setImage("/Presentation/Pictures/door.png");
+        eastDoorPos = new Point2D(500, 180);
+        eastDoor.setPosition(eastDoorPos.getX(), eastDoorPos.getY());
+
+        westDoor = new Sprite();
+        westDoor.setImage("/Presentation/Pictures/door.png");
+        westDoorPos = new Point2D(0, 180);
+        westDoor.setPosition(westDoorPos.getX(), westDoorPos.getY());
+
+        Collections.addAll(doors, northDoor, southDoor, eastDoor, westDoor);
+    }
+
+    private void setPlayerStartPos() {
+        sPlayer.setPosition(playerStartPos.getX(), playerStartPos.getY());
+    }
+
+    private void animateSprite() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        LongValue lastNanoTime = new LongValue(System.nanoTime());
+        // taget fra https://github.com/tutsplus/Introduction-to-JavaFX-for-Game-Development/blob/master/Example5.java
+        new AnimationTimer() {
+            public void handle(long currentNanoTime) {
+                // calculate time since last update.
+                double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
+                lastNanoTime.value = currentNanoTime;
+
+                // logic
+                int speed = 150;
+                sPlayer.setVelocity(0, 0);
+                if (inputs.contains("A") || inputs.contains("LEFT")) {
+                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
+                        sPlayer.addVelocity(-speed, 0);
+                        sPlayer.getWestTimeline().play();
+                    } else {
+                        sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
+                    }
+                }
+                if (inputs.contains("D") || inputs.contains("RIGHT")) {
+                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
+                        sPlayer.addVelocity(speed, 0);
+                        sPlayer.getEastTimeline().play();
+                    } else {
+                        sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
+                    }
+                }
+                if (inputs.contains("W") || inputs.contains("UP")) {
+                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
+                        sPlayer.addVelocity(0, -speed);
+                        sPlayer.getNorthTimeline().play();
+                    } else {
+                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
+                    }
+                }
+                if (inputs.contains("S") || inputs.contains("DOWN")) {
+                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
+                        sPlayer.addVelocity(0, speed);
+                        sPlayer.getSouthTimeline().play();
+                    } else {
+                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
+                    }
+                }
+                sPlayer.update(elapsedTime);
+
+                // collision
+                for (Sprite door : doors) {
+                    if (sPlayer.intersects(door)) {
+                        if (door == northDoor) {
+                            goNorth();
+                            setPlayerStartPos();
+                        } else if (door == southDoor) {
+                            goSouth();
+                            setPlayerStartPos();
+                        } else if (door == eastDoor) {
+                            goEast();
+                            setPlayerStartPos();
+                        } else if (door == westDoor) {
+                            goWest();
+                            setPlayerStartPos();
+                        }
+                    }
+                }
+
+                // render
+                gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
+
+                //for (Sprite door : doors) { door.render(gc); }
+                sPlayer.render(gc);
+            }
+        }.start();
+    }
+
+    private boolean isSpriteInsideRectangle(Sprite sprite, double x1, double y1, double x2, double y2) {
+        return sprite.getPositionX() - 1 >= x1 && sprite.getPositionX() - 1 + sprite.getWidth() <= x2
+                && sprite.getPositionY() - 1 >= y1 && sprite.getPositionY() - 1 + sprite.getHeight() <= y2;
+    }
+
+    private void initCanvas() {
+        canvas = new ResizableCanvas();
+        canvas.widthProperty().bind(((Pane) groundImageView.getParent()).widthProperty());
+        canvas.heightProperty().bind(((Pane) groundImageView.getParent()).heightProperty());
+        canvas.prefWidth(((Pane) groundImageView.getParent()).getPrefWidth());
+        canvas.prefHeight(((Pane) groundImageView.getParent()).getPrefHeight());
+
+        stackPane.getChildren().add(canvas);
+    }
+
     private void initDrawables() {
+        visibleDrawables = new ArrayList<>();
         this.player = new Player();
         this.guards = new Guard[]{new Guard(Color.RED), new Guard(Color.RED)};
         this.powerSwitch = new PowerSwitch();
@@ -97,6 +266,10 @@ public class PrimaryWindowController implements IUI, Initializable {
             this.powerRelays[i] = new PowerRelay(locationToPoint(powerRelayLocations[i]));
         }
         this.item = new Item();
+
+        visibleDrawables.add(powerSwitch);
+        visibleDrawables.add(item);
+        visibleDrawables.addAll(Arrays.asList(powerRelays));
     }
 
     private void initButtons() {
@@ -117,7 +290,6 @@ public class PrimaryWindowController implements IUI, Initializable {
         groundImageView.setPreserveRatio(false);
         groundImageView.fitWidthProperty().bind(parentOfImageView.widthProperty());
         groundImageView.fitHeightProperty().bind(parentOfImageView.heightProperty());
-
     }
 
     private void initMinimapGrid() {
@@ -154,45 +326,79 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
 
+    private void positionExits() {
+        Set<Direction> exits = business.getExitsForCurrentRoom();
+        for (Sprite door : doors) {
+            door.setPosition(-1000, -1000);
+        }
+        if (exits.contains(Direction.NORTH)) {
+            northDoor.setPosition(northDoorPos.getX(), northDoorPos.getY());
+        }
+        if (exits.contains(Direction.SOUTH)) {
+            southDoor.setPosition(southDoorPos.getX(), southDoorPos.getY());
+        }
+        if (exits.contains(Direction.EAST)) {
+            eastDoor.setPosition(eastDoorPos.getX(), eastDoorPos.getY());
+        }
+        if (exits.contains(Direction.WEST)) {
+            westDoor.setPosition(westDoorPos.getX(), westDoorPos.getY());
+        }
+
+    }
+
     private void update() {
         if (business.currentRoomContainsItem()) {
             item.setSeen(true);
-        }
-        else if (business.currentRoomContainsPowerRelay()) {
+        } else if (business.currentRoomContainsPowerRelay()) {
             for (PowerRelay relay : powerRelays) {
                 if (relay.getLocation().equals(locationToPoint(business.getCurrentLocation()))) {
                     relay.setSeen(true);
                 }
             }
-        }
-        else if(business.currentRoomContainsPowerSwitch()) {
+        } else if (business.currentRoomContainsPowerSwitch()) {
             powerSwitch.setSeen(true);
         }
 
-        draw();
+        positionExits();
+
+        drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
 
         if (forcedToQuit) {
+            inputs.clear();
             business.updateHighScore(playerName);
             ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
             ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
-            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", highscore, close);
+            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close, highscore);
             quitPopup.setTitle("You got busted!");
             quitPopup.setHeaderText("You got busted!");
-            Optional<ButtonType> result = quitPopup.showAndWait();
+            Platform.runLater(quitPopup::showAndWait);
+            quitPopup.initModality(Modality.WINDOW_MODAL);
+            quitPopup.showingProperty().addListener((observable, oldValue, newValue) -> {
+                //AlertBox.display("Highscore", business.getHighScores());
+                if (!newValue) {
+                    AlertBox.display("Highscore", business.getHighScores());
+                    Platform.exit();
+                }
+            });
+
+            // TODO hvordan gør man det?
+            // skal bruge return value fra showAndWait()
+
+            /*Optional<ButtonType> result = quitPopup.showAndWait();
             if (result.isPresent() && result.get() == highscore) {
                 AlertBox.display("Highscores", business.getHighScores());
                 Platform.exit();
             } else {
                 Platform.exit();
-            }
+            }*/
         }
     }
 
-    private void draw() {
+    private void drawMinimap() {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
-            for (int i = children.size()-1; i > 0; i--) {
+            for (int i = children.size() - 1; i > 0; i--) {
                 // Vi ved at texten er på position 0, så hent teksten, før der bliver clearet.
                 //Text text = (Text) children.get(0);
                 if (children.get(i) instanceof Rectangle) {
@@ -267,14 +473,17 @@ public class PrimaryWindowController implements IUI, Initializable {
         business.hide();
         update();
     }
-    
+
     public void handleEscapeButtonAction(ActionEvent e) {
         if (business.isAtEntrance()) {
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
             if (choice == ButtonType.OK) {
                 business.escape(true);
                 updateLootList();
+                business.getInventoryList().clear();
+                updateInventoryList();
                 initImages();
+                setAllDrawablesSeen(false);
                 update();
             } else {
                 business.escape(false);
@@ -285,29 +494,21 @@ public class PrimaryWindowController implements IUI, Initializable {
             }
         }
     }
+
     public void handleHighScoreButtonAction(ActionEvent e) {
         AlertBox.display("Highscore", business.getHighScores());
-        
+
     }
+
     public void handleKeyPress(KeyEvent e) {
-        switch (e.getCode()) {
-            case W:
-            case UP:
-                goNorth();
-                break;
-            case S:
-            case DOWN:
-                goSouth();
-                break;
-            case D:
-            case RIGHT:
-                goEast();
-                break;
-            case A:
-            case LEFT:
-                goWest();
-                break;
-        }
+        String code = e.getCode().toString();
+        if (!inputs.contains(code) && !forcedToQuit)
+            inputs.add(code);
+    }
+
+    public void handleKeyReleased(KeyEvent e) {
+        String code = e.getCode().toString();
+        inputs.remove(code);
     }
 
     public void handleMenuItemSaveAction(ActionEvent e) {
@@ -326,11 +527,10 @@ public class PrimaryWindowController implements IUI, Initializable {
         }
     }
 
-        public void handleMenuItemHistoryAction(ActionEvent e) {
+    public void handleMenuItemHistoryAction(ActionEvent e) {
         AlertBox.display("Historie", "History.txt");
-
     }
-    
+
     public void handleMenuItemHelpAction(ActionEvent e) {
         AlertBox.display("Help", "HelpFile.txt");
     }
@@ -372,6 +572,12 @@ public class PrimaryWindowController implements IUI, Initializable {
         if (!forcedToQuit) {
             forcedToQuit = business.goDirection(Direction.WEST) && !business.getCheatMode();
             update();
+        }
+    }
+
+    private void setAllDrawablesSeen(boolean seen) {
+        for (VisibleDrawable visibleDrawable : visibleDrawables) {
+            visibleDrawable.setSeen(seen);
         }
     }
 

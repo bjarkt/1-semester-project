@@ -395,4 +395,8 @@ public class Room implements IRoom {
     public String getVisualDescription() {
         return visualDescription;
     }
+
+    public HashMap<Direction, Integer> getExits() {
+        return exits;
+    }
 }

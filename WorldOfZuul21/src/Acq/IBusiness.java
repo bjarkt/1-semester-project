@@ -2,6 +2,7 @@ package Acq;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface IBusiness {
     ILocation getCurrentLocation();
@@ -17,6 +18,8 @@ public interface IBusiness {
     boolean currentRoomContainsItem();
     boolean currentRoomContainsPowerSwitch();
     boolean currentRoomContainsPowerRelay();
+
+    Set<Direction> getExitsForCurrentRoom();
 
     void updateHighScore(String playerName);
     List<IHighScore> getHighScores();
