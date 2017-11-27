@@ -33,6 +33,7 @@ import javafx.stage.Modality;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import javafx.geometry.Insets;
 
 public class PrimaryWindowController implements IUI, Initializable {
 
@@ -59,7 +60,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     @FXML
     private VBox rootVBox;
 
-
     private Sprite sPlayer;
     private Point2D playerStartPos;
 
@@ -72,7 +72,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     private Point2D eastDoorPos;
     private Sprite westDoor;
     private Point2D westDoorPos;
-
 
     private ResizableCanvas canvas;
     private List<String> inputs;
@@ -108,7 +107,6 @@ public class PrimaryWindowController implements IUI, Initializable {
         initSprites();
 
         inputs = new ArrayList<>();
-
 
         animateSprite();
 
@@ -173,47 +171,45 @@ public class PrimaryWindowController implements IUI, Initializable {
                 lastNanoTime.value = currentNanoTime;
 
                 // logic
-
                 int speed = 150;
                 sPlayer.setVelocity(0, 0);
                 if (inputs.contains("A") || inputs.contains("LEFT")) {
-                        sPlayer.addVelocity(-speed, 0);
-                        sPlayer.getWestTimeline().play();
-                        //sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
+                    sPlayer.addVelocity(-speed, 0);
+                    sPlayer.getWestTimeline().play();
+                    //sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("D") || inputs.contains("RIGHT")) {
-                        sPlayer.addVelocity(speed, 0);
-                        sPlayer.getEastTimeline().play();
-                        //sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
+                    sPlayer.addVelocity(speed, 0);
+                    sPlayer.getEastTimeline().play();
+                    //sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("W") || inputs.contains("UP")) {
-                        sPlayer.addVelocity(0, -speed);
-                        sPlayer.getNorthTimeline().play();
-                        //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
+                    sPlayer.addVelocity(0, -speed);
+                    sPlayer.getNorthTimeline().play();
+                    //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
                 }
                 if (inputs.contains("S") || inputs.contains("DOWN")) {
-                        sPlayer.addVelocity(0, speed);
-                        sPlayer.getSouthTimeline().play();
-                        //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
+                    sPlayer.addVelocity(0, speed);
+                    sPlayer.getSouthTimeline().play();
+                    //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
                 }
                 if (!isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                     inputs.clear();
                     sPlayer.setVelocity(0, 0);
-                    if (sPlayer.getPositionY() < stackPane.getHeight()/2) {
+                    if (sPlayer.getPositionY() < stackPane.getHeight() / 2) {
                         sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY() + 1);
                     }
-                    if (sPlayer.getPositionY() > stackPane.getHeight()/2) {
+                    if (sPlayer.getPositionY() > stackPane.getHeight() / 2) {
                         sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY() - 1);
                     }
-                    if (sPlayer.getPositionX() < stackPane.getWidth()/2) {
-                        sPlayer.setPosition(sPlayer.getPositionX()+1, sPlayer.getPositionY());
+                    if (sPlayer.getPositionX() < stackPane.getWidth() / 2) {
+                        sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
                     }
-                    if (sPlayer.getPositionX() > stackPane.getWidth()/2) {
-                        sPlayer.setPosition(sPlayer.getPositionX()-1, sPlayer.getPositionY());
+                    if (sPlayer.getPositionX() > stackPane.getWidth() / 2) {
+                        sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
                     }
                 }
                 sPlayer.update(elapsedTime);
-
 
                 // collision
                 for (Sprite door : doors) {
@@ -378,6 +374,15 @@ public class PrimaryWindowController implements IUI, Initializable {
             ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
             ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close, highscore);
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(10, 10, 10, 10));
+            ImageView customImage = new ImageView(new Image(getClass().getResourceAsStream("Pictures/BUSTED.png"), 500, 400, false, true));
+            grid.add(customImage, 0, 0);
+            quitPopup.getDialogPane().setExpandableContent(grid);
+            quitPopup.getDialogPane().setExpanded(true);
+
             quitPopup.setTitle("You got busted!");
             quitPopup.setHeaderText("You got busted!");
             Platform.runLater(quitPopup::showAndWait);
@@ -510,8 +515,9 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     public void handleKeyPress(KeyEvent e) {
         String code = e.getCode().toString();
-        if (!inputs.contains(code) && !forcedToQuit && isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight()))
+        if (!inputs.contains(code) && !forcedToQuit && isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
             inputs.add(code);
+        }
     }
 
     public void handleKeyReleased(KeyEvent e) {
@@ -542,7 +548,6 @@ public class PrimaryWindowController implements IUI, Initializable {
     public void handleMenuItemHelpAction(ActionEvent e) {
         AlertBox.display("Help", "HelpFile.txt");
     }
-
 
     private ButtonType createAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
