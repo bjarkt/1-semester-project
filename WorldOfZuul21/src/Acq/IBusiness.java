@@ -28,6 +28,11 @@ public interface IBusiness {
     boolean getCheatMode();
     void toggleCheatMode();
 
+    boolean getPowerStatus();
+    boolean getPoliceAlerted();
+    boolean isGotBusted();
+    boolean getPolicedArrived();
+
     IItem getItem();
     List<IItem> getInventoryList();
     List<IItem> getLootList();

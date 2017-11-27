@@ -893,6 +893,22 @@ public class Game {
         this.cheatMode = !this.cheatMode;
     }
 
+    public boolean isPowerStatus() {
+        return powerStatus;
+    }
+
+    public boolean isPoliceAlerted() {
+        return policeAlerted;
+    }
+
+    public boolean isGotBusted() {
+        return gotBusted;
+    }
+
+    public boolean isPoliceArrived() {
+        return policeArrived;
+    }
+
     void injectData(IData data) {
         this.data = data;
     }

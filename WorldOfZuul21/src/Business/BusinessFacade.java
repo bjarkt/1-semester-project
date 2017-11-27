@@ -117,6 +117,26 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public boolean getPowerStatus() {
+        return game.isPowerStatus();
+    }
+
+    @Override
+    public boolean getPoliceAlerted() {
+        return game.isPoliceAlerted();
+    }
+
+    @Override
+    public boolean isGotBusted() {
+        return game.isGotBusted();
+    }
+
+    @Override
+    public boolean getPolicedArrived() {
+        return game.isPoliceArrived();
+    }
+
+    @Override
     public IItem getItem() {
         for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {

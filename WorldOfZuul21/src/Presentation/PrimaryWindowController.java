@@ -13,8 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -175,41 +173,47 @@ public class PrimaryWindowController implements IUI, Initializable {
                 lastNanoTime.value = currentNanoTime;
 
                 // logic
+
                 int speed = 150;
                 sPlayer.setVelocity(0, 0);
                 if (inputs.contains("A") || inputs.contains("LEFT")) {
-                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                         sPlayer.addVelocity(-speed, 0);
                         sPlayer.getWestTimeline().play();
-                    } else {
-                        sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
-                    }
+                        //sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("D") || inputs.contains("RIGHT")) {
-                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                         sPlayer.addVelocity(speed, 0);
                         sPlayer.getEastTimeline().play();
-                    } else {
-                        sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
-                    }
+                        //sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("W") || inputs.contains("UP")) {
-                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                         sPlayer.addVelocity(0, -speed);
                         sPlayer.getNorthTimeline().play();
-                    } else {
-                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
-                    }
+                        //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
                 }
                 if (inputs.contains("S") || inputs.contains("DOWN")) {
-                    if (isSpriteInsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                         sPlayer.addVelocity(0, speed);
                         sPlayer.getSouthTimeline().play();
-                    } else {
-                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
+                        //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
+                }
+                if (!isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
+                    inputs.clear();
+                    sPlayer.setVelocity(0, 0);
+                    if (sPlayer.getPositionY() < stackPane.getHeight()/2) {
+                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY() + 1);
+                    }
+                    if (sPlayer.getPositionY() > stackPane.getHeight()/2) {
+                        sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY() - 1);
+                    }
+                    if (sPlayer.getPositionX() < stackPane.getWidth()/2) {
+                        sPlayer.setPosition(sPlayer.getPositionX()+1, sPlayer.getPositionY());
+                    }
+                    if (sPlayer.getPositionX() > stackPane.getWidth()/2) {
+                        sPlayer.setPosition(sPlayer.getPositionX()-1, sPlayer.getPositionY());
                     }
                 }
                 sPlayer.update(elapsedTime);
+
 
                 // collision
                 for (Sprite door : doors) {
@@ -239,9 +243,9 @@ public class PrimaryWindowController implements IUI, Initializable {
         }.start();
     }
 
-    private boolean isSpriteInsideRectangle(Sprite sprite, double x1, double y1, double x2, double y2) {
-        return sprite.getPositionX() - 1 >= x1 && sprite.getPositionX() - 1 + sprite.getWidth() <= x2
-                && sprite.getPositionY() - 1 >= y1 && sprite.getPositionY() - 1 + sprite.getHeight() <= y2;
+    private boolean isSpriteOutsideRectangle(Sprite sprite, double x1, double y1, double x2, double y2) {
+        return sprite.getPositionX() > x1 && sprite.getPositionX() + sprite.getWidth() < x2
+                && sprite.getPositionY() > y1 && sprite.getPositionY() + sprite.getHeight() < y2;
     }
 
     private void initCanvas() {
@@ -364,7 +368,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
 
-        if (forcedToQuit) {
+        if (forcedToQuit || business.getPolicedArrived()) {
             inputs.clear();
             business.updateHighScore(playerName);
             ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);

@@ -77,10 +77,10 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" percentHeight="7.0" prefHeight="50.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="northButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleNorthButton" prefHeight="25.0" prefWidth="25.0" text="North" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                  <Button fx:id="westButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleWestButton" prefHeight="25.0" prefWidth="25.0" text="West" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Button fx:id="eastButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleEastButton" prefHeight="25.0" prefWidth="25.0" text="East" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Button fx:id="southButton" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleSouthButton" prefHeight="25.0" prefWidth="25.0" text="South" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Button fx:id="northButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleNorthButton" prefHeight="25.0" prefWidth="25.0" text="North" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Button fx:id="westButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleWestButton" prefHeight="25.0" prefWidth="25.0" text="West" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Button fx:id="eastButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleEastButton" prefHeight="25.0" prefWidth="25.0" text="East" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Button fx:id="southButton" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleSouthButton" prefHeight="25.0" prefWidth="25.0" text="South" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                   <StackPane fx:id="stackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -119,7 +119,7 @@
          <right>
             <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                <items>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane focusTraversable="false" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab text="Minimap">
                            <content>
