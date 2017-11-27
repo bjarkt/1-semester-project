@@ -368,7 +368,12 @@ public class PrimaryWindowController implements IUI, Initializable {
             println("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
         }
 
-        if (forcedToQuit || business.getPolicedArrived()) {
+        checkForBusted();
+
+    }
+
+    private void checkForBusted() {
+        if (forcedToQuit || business.getPolicedArrived() || (business.isGotBusted() && !business.getCheatMode())) {
             inputs.clear();
             business.updateHighScore(playerName);
             ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
