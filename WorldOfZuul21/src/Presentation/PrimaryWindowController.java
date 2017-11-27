@@ -368,6 +368,10 @@ public class PrimaryWindowController implements IUI, Initializable {
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
 
+        if (!business.getPowerStatus()) {
+            println("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
+        }
+
         if (forcedToQuit || business.getPolicedArrived()) {
             inputs.clear();
             business.updateHighScore(playerName);

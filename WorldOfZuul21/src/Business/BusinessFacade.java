@@ -137,6 +137,16 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public int getPowerOffTime() {
+        return game.getPowerOffTime();
+    }
+
+    @Override
+    public int getTimeBeforePowerTurnsBackOn() {
+        return game.getTimeBeforePowerTurnsBackOn();
+    }
+
+    @Override
     public IItem getItem() {
         for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {

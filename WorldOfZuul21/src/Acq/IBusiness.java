@@ -32,6 +32,8 @@ public interface IBusiness {
     boolean getPoliceAlerted();
     boolean isGotBusted();
     boolean getPolicedArrived();
+    int getPowerOffTime();
+    int getTimeBeforePowerTurnsBackOn();
 
     IItem getItem();
     List<IItem> getInventoryList();

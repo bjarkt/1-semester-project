@@ -881,7 +881,7 @@ public class Game {
         return new ArrayList<>(rooms.values());
     }
 
-    int getPowerOffTime() {
+    public int getPowerOffTime() {
         return powerOffTime;
     }
 
@@ -911,6 +911,10 @@ public class Game {
 
     public boolean isPoliceArrived() {
         return policeArrived;
+    }
+
+    public int getTimeBeforePowerTurnsBackOn() {
+        return (timerPoint + powerOffTime) - timer;
     }
 
     void injectData(IData data) {
