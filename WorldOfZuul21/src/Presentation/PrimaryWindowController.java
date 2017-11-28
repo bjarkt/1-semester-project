@@ -382,40 +382,46 @@ public class PrimaryWindowController implements IUI, Initializable {
         if (forcedToQuit || business.getPolicedArrived() || (business.isGotBusted() && !business.getCheatMode())) {
             inputs.clear();
             business.updateHighScore(playerName);
-            ButtonType highscore = new ButtonType("Show highscores", ButtonBar.ButtonData.OK_DONE);
-            ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
-            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close, highscore);
+            ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
+            Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close);
+            quitPopup.getDialogPane().lookupButton(close).setVisible(false);
+
             GridPane grid = new GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
             grid.setPadding(new Insets(10, 10, 10, 10));
+
             ImageView customImage = new ImageView(new Image(getClass().getResourceAsStream("Pictures/BUSTED.png"), 500, 400, false, true));
+
+            ButtonBar buttonBar = new ButtonBar();
+
+            Button highscoreBtn = new Button("Show Highscore");
+            highscoreBtn.setOnAction(actionEvent -> {
+                AlertBox.display("Highscore", business.getHighScores());
+                quitPopup.close();
+            });
+            ButtonBar.setButtonData(highscoreBtn, ButtonBar.ButtonData.OK_DONE);
+
+            Button closeBtn = new Button("Close");
+            closeBtn.setOnAction(actionEvent -> {
+                quitPopup.close();
+            });
+            ButtonBar.setButtonData(closeBtn, ButtonBar.ButtonData.CANCEL_CLOSE);
+            buttonBar.getButtons().addAll(highscoreBtn, closeBtn);
+
             grid.add(customImage, 0, 0);
+            grid.add(buttonBar, 0, 1);
             quitPopup.getDialogPane().setExpandableContent(grid);
             quitPopup.getDialogPane().setExpanded(true);
 
             quitPopup.setTitle("You got busted!");
             quitPopup.setHeaderText("You got busted!");
-            Platform.runLater(quitPopup::showAndWait);
             quitPopup.initModality(Modality.WINDOW_MODAL);
-            quitPopup.showingProperty().addListener((observable, oldValue, newValue) -> {
-                //AlertBox.display("Highscore", business.getHighScores());
-                if (!newValue) {
-                    AlertBox.display("Highscore", business.getHighScores());
-                    Platform.exit();
-                }
+            Platform.runLater(quitPopup::showAndWait);
+
+            quitPopup.setOnCloseRequest(dialogEvent -> {
+                Platform.exit();
             });
-
-            // TODO hvordan gør man det?
-            // skal bruge return value fra showAndWait()
-
-            /*Optional<ButtonType> result = quitPopup.showAndWait();
-            if (result.isPresent() && result.get() == highscore) {
-                AlertBox.display("Highscores", business.getHighScores());
-                Platform.exit();
-            } else {
-                Platform.exit();
-            }*/
         }
     }
 
