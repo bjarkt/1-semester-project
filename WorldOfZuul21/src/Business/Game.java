@@ -248,7 +248,7 @@ public class Game {
         } else if (commandWord == CommandWord.CALL) {
             System.out.println(call());
         } else if (commandWord == CommandWord.SAVE) {
-            save();
+            save("playerName not entered in text mode");
             wantToQuit = true;
         }
         if (gotBusted || policeArrived) {
@@ -666,8 +666,10 @@ public class Game {
         }
     }
 
-    public void save() {
+    public void save(String playerName) {
         LinkedHashMap<String, String> mapToSave = new LinkedHashMap<>();
+        mapToSave.put("playerName", playerName);
+
         mapToSave.put("currentRoom", currentRoom.getName());
         mapToSave.put("powerSwitchStatus", String.valueOf(powerStatus));
 

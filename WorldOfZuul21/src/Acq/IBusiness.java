@@ -39,8 +39,9 @@ public interface IBusiness {
     List<IItem> getInventoryList();
     List<IItem> getLootList();
 
-    void save();
+    void save(String playerName);
     void load();
+    String getLoadedPlayerName();
 
     boolean goDirection(Direction direction);
     boolean steal();

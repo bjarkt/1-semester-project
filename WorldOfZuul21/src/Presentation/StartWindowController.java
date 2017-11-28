@@ -22,17 +22,19 @@ public class StartWindowController implements IUI, Initializable {
     @FXML private ImageView imageView;
 
     private IBusiness business;
+    private boolean nameLoaded;
 
     @FXML
     private void handleLoadButtonAction(ActionEvent e) {
         System.out.println("handle load stuff");
-
+        nameLoaded = true;
         business.load();
         changeScene();
     }
 
     @FXML
     private void handleNewGameButtonAction(ActionEvent e) {
+        nameLoaded = false;
         changeScene();
     }
 
@@ -41,7 +43,7 @@ public class StartWindowController implements IUI, Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/primaryWindow.fxml"));
             //IUI controller = (IUI)loader.getController();
-            PrimaryWindowController controller = new PrimaryWindowController();
+            PrimaryWindowController controller = new PrimaryWindowController(nameLoaded);
             controller.injectBusiness(this.business);
             loader.setController(controller);
             Parent root = loader.load();

@@ -2,10 +2,7 @@ package Business;
 
 import Acq.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BusinessFacade implements IBusiness {
 
@@ -166,13 +163,19 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public void save() {
-        game.save();
+    public void save(String playerName) {
+        game.save(playerName);
     }
 
     @Override
     public void load() {
         game.load();
+    }
+
+    @Override
+    public String getLoadedPlayerName() {
+        Map<String, String> loadedMap = data.load();
+        return loadedMap.get("playerName");
     }
 
     @Override

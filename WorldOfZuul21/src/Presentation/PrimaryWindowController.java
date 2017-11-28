@@ -78,6 +78,7 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     private IBusiness business;
     private String playerName;
+    private boolean nameLoaded;
 
     private boolean forcedToQuit;
 
@@ -91,10 +92,11 @@ public class PrimaryWindowController implements IUI, Initializable {
     private Item item;
     private List<VisibleDrawable> visibleDrawables;
 
-    public PrimaryWindowController() {
+    public PrimaryWindowController(boolean nameLoaded) {
         this.paneMap = new HashMap<>();
         this.boardBackgroundMap = new HashMap<>();
         forcedToQuit = false;
+        this.nameLoaded = nameLoaded;
     }
 
     @Override
@@ -112,16 +114,20 @@ public class PrimaryWindowController implements IUI, Initializable {
 
         update();
 
-        TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
-        t.setTitle("Enter name");
-        t.setHeaderText("Enter your name");
-        Optional<String> s = t.showAndWait();
-        if (s.isPresent()) {
-            if (s.get().contains(" ")) {
-                playerName = s.get().replace(" ", "-");
-            } else {
-                playerName = s.get();
+        if (!nameLoaded) {
+            TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
+            t.setTitle("Enter name");
+            t.setHeaderText("Enter your name");
+            Optional<String> s = t.showAndWait();
+            if (s.isPresent()) {
+                if (s.get().contains(" ")) {
+                    playerName = s.get().replace(" ", "-");
+                } else {
+                    playerName = s.get();
+                }
             }
+        } else {
+            playerName = business.getLoadedPlayerName();
         }
     }
 
@@ -472,6 +478,7 @@ public class PrimaryWindowController implements IUI, Initializable {
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callFriendlyNpc());
         println("TOGGLED CHEAT MODE - FJERN DETTE I RIGTIG VERSION");
+        println(playerName);
         business.toggleCheatMode();
     }
 
@@ -537,7 +544,7 @@ public class PrimaryWindowController implements IUI, Initializable {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
             System.out.println("saved the game");
-            business.save();
+            business.save(playerName);
             Platform.exit();
         }
     }
