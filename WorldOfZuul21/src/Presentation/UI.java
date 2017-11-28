@@ -1,32 +1,25 @@
 package Presentation;
 
 import Acq.IBusiness;
-import Acq.IData;
 import Acq.IUI;
-import Business.BusinessFacade;
-import Data.DataFacade;
-import Data.XMLUtilities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class StartGUI extends Application {
+public class UI extends Application implements IUI{
+
+    private static IBusiness business;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/startWindow.fxml"));
         VBox root = loader.load();
         Scene startWindowScene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 
-        IData data = new DataFacade();
-
-        IBusiness businessFacade = new BusinessFacade();
-        businessFacade.injectData(data);
-
-        IUI controller = (IUI)loader.getController();
-        controller.injectBusiness(businessFacade);
+        StartWindowController startWindowController = loader.getController();
+        startWindowController.injectBusiness(business);
 
         primaryStage.setMinWidth(600);
         primaryStage.setMinHeight(450);
@@ -35,8 +28,15 @@ public class StartGUI extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void injectBusiness(IBusiness businessFacade) {
+        business = businessFacade;
+    }
 
-    public static void main(String[] args) {
+    @Override
+    public void startApplication(String[] args) {
         launch(args);
     }
+
+
 }

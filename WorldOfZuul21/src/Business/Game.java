@@ -13,34 +13,44 @@ import java.util.Map;
 public class Game {
 
     private Parser parser; // the parser is used to get the players command inputs
+    private IData data;
+    private HighScoreManager highScoreManager;
+    private boolean saved;
+    private String playerName;
+
     private Room currentRoom; // the room that the player is currently in
+    private Room oldRoom;
     private HashMap<Integer, Room> rooms; // a map storing all the rooms
+
     private PowerRelay[] powerRelays;
-    private Room powerSwitchRoom; // the room with the powerswitch
-    private int powerSwitchLocation; // the coordinates of the room with the powerswitch
     private HashSet<Room> powerRelayLocations;
     private HashSet<Room> lockedRooms;
+    private Room powerSwitchRoom; // the room with the powerswitch
+    private int powerSwitchLocation; // the coordinates of the room with the powerswitch
+    private boolean powerStatus; // true when the power is on
+
     private Item key;
     private Room keyLocation;
-    private Guard[] guards; // the guards
     private String itemName; // the name of the last spawned item
-    private Inventory inventory; // the players inventory
-    private int timer; // the amount of turns taken
-    private boolean powerStatus; // true when the power is on
-    private int timerPoint; // the last the powerswitch was turned off
-    private final int startPowerOffTime;
-    private int powerOffTime; // the amount of turns that the power is turned off
-    private boolean policeAlerted; // true when the police is alerted
-    private int alertPoint; // the last time the police was alerted
-    private int policeArrivalTime; // the amount of turns it takes for the police to arrive
-    private boolean gotBusted; // true if you got busted by a guard
-    private boolean policeArrived; // true if the police has arrived
-    private boolean saved;
+
+    private Guard[] guards; // the guards
     private FriendlyNpc friendlyNpc;
-    private IData data;
+
+    private Inventory inventory; // the players inventory
+
+    private final int startPowerOffTime;
+    private int timer; // the amount of turns taken
+    private int timerPoint; // the last the powerswitch was turned off
+    private int powerOffTime; // the amount of turns that the power is turned off
+
+    private boolean policeAlerted; // true when the police is alerted
+    private boolean policeArrived; // true if the police has arrived
+    private int policeArrivalTime; // the amount of turns it takes for the police to arrive
+    private int alertPoint; // the last time the police was alerted
+    private boolean gotBusted; // true if you got busted by a guard
+
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
-    private Room oldRoom;
 
     // List of rooms, in which Spawnable objects spawn
     private List<Room> guardSpawnPointRooms;
@@ -52,21 +62,29 @@ public class Game {
     /* zero argument constructor. */
     public Game() {
         parser = new Parser(); // Instantiate the parser used to parse commands.
+        highScoreManager = new HighScoreManager();
+        saved = false;
+
         powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
         lockedRooms = new HashSet<>();
-        key = new Item(true);
-        guards = new Guard[2]; // Create the guards
-        inventory = new Inventory(); // Instantiate the inventory
-        timer = 0; // Instantiate the timer
         powerStatus = true; // turn on the power
+
+        key = new Item(true);
+
+        guards = new Guard[2]; // Create the guards
+        friendlyNpc = new FriendlyNpc();
+
+        inventory = new Inventory(); // Instantiate the inventory
+
         startPowerOffTime = 10;// set the time that the power is turned
+        timer = 0; // Instantiate the timer
         powerOffTime = startPowerOffTime;
+
+        policeArrived = false; // the police has not arrived yet
         policeArrivalTime = 5; // set the time that it takes for the police to arrive
         gotBusted = false; // the player has not been busted yet
-        policeArrived = false; // the police has not arrived yet
-        friendlyNpc = new FriendlyNpc();
-        saved = false;
+
         cheatMode = false;
         forceQuitCheatMode = false;
 
@@ -248,7 +266,7 @@ public class Game {
         } else if (commandWord == CommandWord.CALL) {
             System.out.println(call());
         } else if (commandWord == CommandWord.SAVE) {
-            save("playerName not entered in text mode");
+            save(playerName);
             wantToQuit = true;
         }
         if (gotBusted || policeArrived) {
@@ -267,6 +285,7 @@ public class Game {
     public void startGame() {
         Command command;
         CommandWord commandWord;
+        Scanner sc = new Scanner(System.in);
         do {
             System.out.println("Do you want to start a new game, load a saved game, or print the current highscores? " +
                     "(" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW +  "/" + CommandWord.HIGHSCORE +")");
@@ -276,6 +295,7 @@ public class Game {
             if (commandWord == CommandWord.LOAD) {
                 if (data.doesGameSaveFileExist()) {
                     load();
+                    playerName = data.load().get("playerName");
                     data.deleteFile();
                     play();
                 } else {
@@ -283,10 +303,13 @@ public class Game {
                     commandWord = null;
                 }
             } else if (commandWord == CommandWord.NEW) {
-                //data.deleteFile();
+                data.deleteFile();
+                System.out.println("Enter your name: ");
+                System.out.print("> ");
+                playerName = sc.nextLine().replace(" ", "-");
                 play();
             } else if (commandWord == CommandWord.HIGHSCORE) {
-                //System.out.println(getHighScores());
+                System.out.println(highScoreManager.getHighScores());
             }
             else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
@@ -499,7 +522,7 @@ public class Game {
     private void moveGuards() {
         // move the guards
         for (Guard guard : guards) {
-            Room nextRoom = null;
+            Room nextRoom;
             List<Direction> validDirections = new ArrayList<>();
             Collections.addAll(validDirections, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NOWHERE);
             Direction direction;
@@ -539,8 +562,8 @@ public class Game {
     boolean hide() {
         // used to hide from the guards
         // return true, if the players has lost the game
-        boolean forcedToQuit = false;
-        boolean hasCheckedForTime = false;
+        boolean forcedToQuit;
+        boolean hasCheckedForTime;
         timer += 1;
         moveGuards();
         printGuardLocations();
@@ -865,11 +888,11 @@ public class Game {
         return itemSpawnPointRooms;
     }
 
-    public List<Room> getSwitchSpawnPointRooms() {
+    List<Room> getSwitchSpawnPointRooms() {
         return switchSpawnPointRooms;
     }
 
-    public HashSet<Room> getPowerRelayLocations() {
+    HashSet<Room> getPowerRelayLocations() {
         return powerRelayLocations;
     }
 
@@ -889,7 +912,7 @@ public class Game {
         return new ArrayList<>(rooms.values());
     }
 
-    public int getPowerOffTime() {
+    int getPowerOffTime() {
         return powerOffTime;
     }
 
@@ -897,35 +920,36 @@ public class Game {
         return currentRoom.getLocation().getXY() == 0;
     }
 
-    public boolean isCheatMode() {
+    boolean isCheatMode() {
         return cheatMode;
     }
 
-    public void toggleCheatMode() {
+    void toggleCheatMode() {
         this.cheatMode = !this.cheatMode;
     }
 
-    public boolean isPowerStatus() {
+    boolean isPowerStatus() {
         return powerStatus;
     }
 
-    public boolean isPoliceAlerted() {
+    boolean isPoliceAlerted() {
         return policeAlerted;
     }
 
-    public boolean isGotBusted() {
+    boolean isGotBusted() {
         return gotBusted;
     }
 
-    public boolean isPoliceArrived() {
+    boolean isPoliceArrived() {
         return policeArrived;
     }
 
-    public int getTimeBeforePowerTurnsBackOn() {
+    int getTimeBeforePowerTurnsBackOn() {
         return (timerPoint + powerOffTime) - timer;
     }
 
-    void injectData(IData data) {
+    public void injectData(IData data) {
         this.data = data;
+        highScoreManager.injectData(data);
     }
 }

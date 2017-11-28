@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.List;
 import javafx.geometry.Insets;
 
-public class PrimaryWindowController implements IUI, Initializable {
+public class PrimaryWindowController implements Initializable {
 
     @FXML
     private GridPane minimapGrid;
@@ -403,9 +403,7 @@ public class PrimaryWindowController implements IUI, Initializable {
             ButtonBar.setButtonData(highscoreBtn, ButtonBar.ButtonData.OK_DONE);
 
             Button closeBtn = new Button("Close");
-            closeBtn.setOnAction(actionEvent -> {
-                quitPopup.close();
-            });
+            closeBtn.setOnAction(actionEvent -> quitPopup.close());
             ButtonBar.setButtonData(closeBtn, ButtonBar.ButtonData.CANCEL_CLOSE);
             buttonBar.getButtons().addAll(highscoreBtn, closeBtn);
 
@@ -419,9 +417,7 @@ public class PrimaryWindowController implements IUI, Initializable {
             quitPopup.initModality(Modality.WINDOW_MODAL);
             Platform.runLater(quitPopup::showAndWait);
 
-            quitPopup.setOnCloseRequest(dialogEvent -> {
-                Platform.exit();
-            });
+            quitPopup.setOnCloseRequest(dialogEvent -> Platform.exit());
         }
     }
 
@@ -669,7 +665,6 @@ public class PrimaryWindowController implements IUI, Initializable {
         textArea.clear();
     }
 
-    @Override
     public void injectBusiness(IBusiness business) {
         this.business = business;
     }

@@ -1,7 +1,6 @@
 package Presentation;
 
 import Acq.IBusiness;
-import Acq.IUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StartWindowController implements IUI, Initializable {
+public class StartWindowController implements Initializable {
     @FXML private Button loadButton;
     @FXML private Button newGameButton;
     @FXML private ImageView imageView;
@@ -62,9 +61,7 @@ public class StartWindowController implements IUI, Initializable {
         imageView.fitHeightProperty().bind(parentOfImageView.heightProperty());
     }
 
-
-    @Override
-    public void injectBusiness(IBusiness business) {
+    void injectBusiness(IBusiness business) {
         this.business = business;
     }
 
