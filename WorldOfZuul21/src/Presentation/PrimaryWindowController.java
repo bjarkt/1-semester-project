@@ -173,22 +173,22 @@ public class PrimaryWindowController implements IUI, Initializable {
                 // logic
                 int speed = 150;
                 sPlayer.setVelocity(0, 0);
-                if (inputs.contains("A") || inputs.contains("LEFT")) {
+                if (inputs.contains("A")) {
                     sPlayer.addVelocity(-speed, 0);
                     sPlayer.getWestTimeline().play();
                     //sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
                 }
-                if (inputs.contains("D") || inputs.contains("RIGHT")) {
+                if (inputs.contains("D")) {
                     sPlayer.addVelocity(speed, 0);
                     sPlayer.getEastTimeline().play();
                     //sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
                 }
-                if (inputs.contains("W") || inputs.contains("UP")) {
+                if (inputs.contains("W")) {
                     sPlayer.addVelocity(0, -speed);
                     sPlayer.getNorthTimeline().play();
                     //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
                 }
-                if (inputs.contains("S") || inputs.contains("DOWN")) {
+                if (inputs.contains("S")) {
                     sPlayer.addVelocity(0, speed);
                     sPlayer.getSouthTimeline().play();
                     //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
@@ -520,6 +520,9 @@ public class PrimaryWindowController implements IUI, Initializable {
 
     public void handleKeyPress(KeyEvent e) {
         String code = e.getCode().toString();
+        if (code.equals("UP") || code.equals("DOWN") || code.equals("RIGHT") || code.equals("LEFT")) {
+            e.consume();
+        }
         if (!inputs.contains(code) && !forcedToQuit && isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
             inputs.add(code);
         }
