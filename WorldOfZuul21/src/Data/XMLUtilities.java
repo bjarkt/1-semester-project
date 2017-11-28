@@ -1,6 +1,5 @@
 package Data;
 
-import Acq.IData;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;

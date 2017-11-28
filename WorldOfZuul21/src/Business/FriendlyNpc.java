@@ -6,14 +6,12 @@
 package Business;
 
 import Acq.Direction;
-import Acq.IGuard;
 import Acq.ILocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author jeppe
  */
 public class FriendlyNpc {

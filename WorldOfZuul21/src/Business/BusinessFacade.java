@@ -2,13 +2,17 @@ package Business;
 
 import Acq.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BusinessFacade implements IBusiness {
 
     private Game game;
     private HighScoreManager highScoreManager;
     private IData data;
+
     public BusinessFacade() {
         game = new Game();
         highScoreManager = new HighScoreManager();
@@ -65,7 +69,7 @@ public class BusinessFacade implements IBusiness {
 
     @Override
     public int getRoundsLeftBeforePowerTurnsOn() {
-        return game.getPowerOffTime()/2;
+        return game.getPowerOffTime() / 2;
     }
 
     @Override

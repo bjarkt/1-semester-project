@@ -10,6 +10,7 @@ public class BooleanMessage implements IBooleanMessage {
         this.aBoolean = aBoolean;
         this.message = message;
     }
+
     public BooleanMessage() {
         this(false, "");
     }

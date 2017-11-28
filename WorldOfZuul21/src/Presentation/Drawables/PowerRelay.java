@@ -1,9 +1,7 @@
 package Presentation.Drawables;
 
-import Presentation.Drawables.PowerSwitch;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class PowerRelay extends VisibleDrawable {
     private Point2D location;

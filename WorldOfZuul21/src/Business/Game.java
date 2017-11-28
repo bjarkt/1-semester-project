@@ -1,10 +1,10 @@
 package Business;
 
-import Acq.*;
+import Acq.Direction;
+import Acq.IData;
+import Acq.IGuard;
 
 import java.util.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Michael Kolling and David J. Barnes
@@ -149,10 +149,10 @@ public class Game {
         List<Room> guardRooms = Guard.Spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
-        
+
         guards[0].setOldRoom(guardSpawnPointRooms.get(0));
         guards[1].setOldRoom(guardSpawnPointRooms.get(1));
-        
+
         // spawn the powerswitch in one of three rooms
         powerSwitchRoom = PowerSwitch.Spawn(switchSpawnPointRooms).get(0);
         powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
@@ -627,7 +627,7 @@ public class Game {
                 gotBusted = true;
                 return true;
             }
-            
+
         }
         return false;
     }

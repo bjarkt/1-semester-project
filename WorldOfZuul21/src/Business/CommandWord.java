@@ -9,7 +9,7 @@ public enum CommandWord {
     GO("go"), QUIT("quit"), HELP("help"), INTERACT("interact"), UNKNOWN("?"), STEAL("steal"), ESCAPE("escape"),
     YES("yes"), NO("no"), HIDE("hide"), CALL("call"), SAVE("save"), LOAD("load"), NEW("new"), HIGHSCORE("highscore");
 
-//  Here is a atributes of a string defined.     
+    //  Here is a atributes of a string defined.
     private String commandString;
 // Mathod that sets a parameter to another parameter. 
 

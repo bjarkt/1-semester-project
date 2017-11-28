@@ -6,8 +6,8 @@ package Acq;
  */
 // Makes a datatype that enables a variable to be set of predifened contants.
 public enum Direction {
- NORTH("north"), SOUTH("south"), WEST("west"), EAST("east"), NORTHWEST("northwest"), NORTHEAST("northeast"), SOUTHWEST("southwest"), SOUTHEAST("southeast"), NOWHERE("nowhere");
-//  Here is a atributes of a string defined.     
+    NORTH("north"), SOUTH("south"), WEST("west"), EAST("east"), NORTHWEST("northwest"), NORTHEAST("northeast"), SOUTHWEST("southwest"), SOUTHEAST("southeast"), NOWHERE("nowhere");
+    //  Here is a atributes of a string defined.
     private String commandString;
 // Mathod that sets a parameter to another parameter. 
 

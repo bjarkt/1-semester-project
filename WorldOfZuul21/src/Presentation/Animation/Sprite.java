@@ -8,7 +8,6 @@ import javafx.scene.image.*;
 import javafx.util.Duration;
 
 import java.nio.IntBuffer;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
