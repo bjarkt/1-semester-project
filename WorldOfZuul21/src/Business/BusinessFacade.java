@@ -191,7 +191,7 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public String interact() {
+    public IBooleanMessage interact() {
         return game.interact();
     }
 

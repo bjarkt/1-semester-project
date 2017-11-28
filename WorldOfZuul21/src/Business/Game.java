@@ -397,9 +397,10 @@ public class Game {
         }
     }
 
-    String interact() {
+    BooleanMessage interact() {
         // used to turn off the powerswitch and sabotage powerRelays
         String s = "";
+        BooleanMessage booleanMessage = new BooleanMessage();
         if (currentRoom.getPowerRelay() != null) {
             if (!powerStatus) {
                 currentRoom.getPowerRelay().sabotage();
@@ -413,7 +414,8 @@ public class Game {
         } else if (currentRoom.getPowerSwitch() != null) {
             if (!currentRoom.getPowerSwitch().getIsOn()) {
                 s += "The power is already turned off\n";
-                return s;
+                booleanMessage.setMessage(s);
+                return booleanMessage;
             } else if (currentRoom.getPowerSwitch().getIsOn()) {
                 currentRoom.getPowerSwitch().turnPowerOff();
                 s += "The power will be turned off, for " + powerOffTime + " turns\n";
@@ -423,7 +425,9 @@ public class Game {
         } else {
             s += "There is nothing to interact with\n";
         }
-        return s;
+        booleanMessage.setMessage(s);
+        booleanMessage.setaBoolean(gotBusted);
+        return booleanMessage;
     }
 
     boolean stealItem() {

@@ -491,7 +491,11 @@ public class PrimaryWindowController implements IUI, Initializable {
     }
 
     public void handleInteractButtonAction(ActionEvent e) {
-        println(business.interact());
+        IBooleanMessage message = business.interact();
+        println(message.getMessage());
+        forcedToQuit = message.getABoolean();
+
+        update();
     }
 
     public void handleHideButtonAction(ActionEvent e) {

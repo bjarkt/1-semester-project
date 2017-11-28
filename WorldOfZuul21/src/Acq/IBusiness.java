@@ -45,7 +45,7 @@ public interface IBusiness {
 
     boolean goDirection(Direction direction);
     boolean steal();
-    String interact();
+    IBooleanMessage interact();
     boolean hide();
     void escape(boolean wantToGoBackInside);
     List<IRoom> getRooms();
