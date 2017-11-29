@@ -280,24 +280,12 @@ public class Room implements IRoom {
         // the HashSet specialRooms contains rooms, which are not allowed to have exits to each other
 
         // first the max and min values of x and y are found
-        Integer maxX = null;
-        Integer maxY = null;
-        Integer minX = null;
-        Integer minY = null;
+        Integer maxX = Integer.MIN_VALUE; // set the max values to the smallest integer, so it will be overwritten atleast once
+        Integer maxY = Integer.MIN_VALUE;
+        Integer minX = Integer.MAX_VALUE; // set the min value to the largest integer, so it will be overwritten atleast once
+        Integer minY = Integer.MAX_VALUE;
         for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
             if (room.getValue().getLocation().getX() != 9 && room.getValue().getLocation().getX() != 9) {
-                if (maxX == null) {
-                    maxX = room.getValue().getLocation().getX();
-                }
-                if (maxY == null) {
-                    maxY = room.getValue().getLocation().getY();
-                }
-                if (minX == null) {
-                    minX = room.getValue().getLocation().getX();
-                }
-                if (minY == null) {
-                    minY = room.getValue().getLocation().getY();
-                }
                 if (maxX < room.getValue().getLocation().getX()) {
                     maxX = room.getValue().getLocation().getX();
                 }
@@ -325,13 +313,7 @@ public class Room implements IRoom {
                 for (Room r : specialRooms) {
                     if (room.getValue().getLocation().isNextTo(r.getLocation())) {
                         Direction directionNotAllowed = room.getValue().getLocation().getDirectionOfAdjacentLocation(r.getLocation());
-                        if (exitsAllowed.containsKey(directionNotAllowed)) {
-                            for (Map.Entry<Direction, Boolean> entry : exitsAllowed.entrySet()) {
-                                if (entry.getKey().equals(directionNotAllowed)) {
-                                    entry.setValue(Boolean.FALSE);
-                                }
-                            }
-                        }
+                        exitsAllowed.put(directionNotAllowed, Boolean.FALSE);
                     }
                 }
 
