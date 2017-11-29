@@ -2,6 +2,7 @@ package Presentation;
 
 import Acq.*;
 import Presentation.Animation.LongValue;
+import Presentation.Animation.Point2DProperty;
 import Presentation.Animation.ResizableCanvas;
 import Presentation.Animation.Sprite;
 import Presentation.Drawables.*;
@@ -58,17 +59,17 @@ public class PrimaryWindowController implements Initializable {
     private VBox rootVBox;
 
     private Sprite sPlayer;
-    private Point2D playerStartPos;
+    private Point2DProperty playerStartPos;
 
     private List<Sprite> doors;
     private Sprite northDoor;
-    private Point2D northDoorPos;
+    private Point2DProperty northDoorPos;
     private Sprite southDoor;
-    private Point2D southDoorPos;
+    private Point2DProperty southDoorPos;
     private Sprite eastDoor;
-    private Point2D eastDoorPos;
+    private Point2DProperty eastDoorPos;
     private Sprite westDoor;
-    private Point2D westDoorPos;
+    private Point2DProperty westDoorPos;
 
     private ResizableCanvas canvas;
     private List<String> inputs;
@@ -102,8 +103,9 @@ public class PrimaryWindowController implements Initializable {
         initGroundImageView();
         initButtons();
         initDrawables();
-        initCanvas();
         initSprites();
+        initCanvas();
+
 
         inputs = new ArrayList<>();
 
@@ -129,37 +131,64 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void initSprites() {
+        System.out.println(((Pane)groundImageView.getParent()).getWidth());
+        System.out.println(stackPane.widthProperty().divide(2).doubleValue());
         sPlayer = new Sprite();
-        playerStartPos = new Point2D(220, 170);
         sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64);
-        setPlayerStartPos();
 
         doors = new ArrayList<>();
         northDoor = new Sprite();
         northDoor.setImage("/Presentation/Pictures/door2.png");
-        northDoorPos = new Point2D(220, 0);
-        northDoor.setPosition(northDoorPos.getX(), northDoorPos.getY());
 
         southDoor = new Sprite();
         southDoor.setImage("/Presentation/Pictures/door2.png");
-        southDoorPos = new Point2D(220, 440);
-        southDoor.setPosition(southDoorPos.getX(), southDoorPos.getY());
 
         eastDoor = new Sprite();
         eastDoor.setImage("/Presentation/Pictures/door.png");
-        eastDoorPos = new Point2D(500, 180);
-        eastDoor.setPosition(eastDoorPos.getX(), eastDoorPos.getY());
 
         westDoor = new Sprite();
         westDoor.setImage("/Presentation/Pictures/door.png");
-        westDoorPos = new Point2D(0, 180);
-        westDoor.setPosition(westDoorPos.getX(), westDoorPos.getY());
 
+        updateSpritePosition();
         Collections.addAll(doors, northDoor, southDoor, eastDoor, westDoor);
     }
 
+    public void updateSpritePosition() {
+        playerStartPos = new Point2DProperty();
+        if (stackPane.getWidth() == 0) {
+            // hvis stackpane ikke har fået en bredde, skal spilleren placeres på (200, 200)
+            // ellers bliver han placeret oven på døren, og går i gennem den, og ender i fx. rum 15, eller bliver busted
+            playerStartPos = new Point2DProperty(200, 200);
+        } else {
+            playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2));
+            playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2));
+        }
+        setPlayerStartPos();
+
+
+        northDoorPos = new Point2DProperty();
+        northDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(northDoor.getWidth()/2));
+        northDoorPos.setPropertyY(0);
+        northDoor.setPosition(northDoorPos.getPropertyX(), northDoorPos.getPropertyY());
+
+        southDoorPos = new Point2DProperty();
+        southDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(southDoor.getWidth()/2));
+        southDoorPos.propertyYProperty().bind(stackPane.heightProperty().subtract(20));
+        southDoor.setPosition(southDoorPos.getPropertyX(), southDoorPos.getPropertyY());
+
+        eastDoorPos = new Point2DProperty();
+        eastDoorPos.propertyXProperty().bind(stackPane.widthProperty().subtract(20));
+        eastDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(eastDoor.getHeight()/2));
+        eastDoor.setPosition(eastDoorPos.getPropertyX(), eastDoorPos.getPropertyY());
+
+        westDoorPos = new Point2DProperty();
+        westDoorPos.setPropertyX(0);
+        westDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(westDoor.getHeight()/2));
+        westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
+    }
+
     private void setPlayerStartPos() {
-        sPlayer.setPosition(playerStartPos.getX(), playerStartPos.getY());
+        sPlayer.setPosition(playerStartPos.getPropertyX(), playerStartPos.getPropertyY());
     }
 
     private void animateSprite() {
@@ -236,7 +265,7 @@ public class PrimaryWindowController implements Initializable {
                 // render
                 gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
 
-                //for (Sprite door : doors) { door.render(gc); }
+                for (Sprite door : doors) { door.render(gc); }
                 sPlayer.render(gc);
             }
         }.start();
@@ -248,7 +277,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void initCanvas() {
-        canvas = new ResizableCanvas();
+        canvas = new ResizableCanvas(this);
         canvas.widthProperty().bind(((Pane) groundImageView.getParent()).widthProperty());
         canvas.heightProperty().bind(((Pane) groundImageView.getParent()).heightProperty());
         canvas.prefWidth(((Pane) groundImageView.getParent()).getPrefWidth());
@@ -329,22 +358,22 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
-    private void positionExits() {
+    public void positionExits() {
         Set<Direction> exits = business.getExitsForCurrentRoom();
         for (Sprite door : doors) {
             door.setPosition(-1000, -1000);
         }
         if (exits.contains(Direction.NORTH)) {
-            northDoor.setPosition(northDoorPos.getX(), northDoorPos.getY());
+            northDoor.setPosition(northDoorPos.getPropertyX(), northDoorPos.getPropertyY());
         }
         if (exits.contains(Direction.SOUTH)) {
-            southDoor.setPosition(southDoorPos.getX(), southDoorPos.getY());
+            southDoor.setPosition(southDoorPos.getPropertyX(), southDoorPos.getPropertyY());
         }
         if (exits.contains(Direction.EAST)) {
-            eastDoor.setPosition(eastDoorPos.getX(), eastDoorPos.getY());
+            eastDoor.setPosition(eastDoorPos.getPropertyX(), eastDoorPos.getPropertyY());
         }
         if (exits.contains(Direction.WEST)) {
-            westDoor.setPosition(westDoorPos.getX(), westDoorPos.getY());
+            westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
         }
 
     }
@@ -422,11 +451,8 @@ public class PrimaryWindowController implements Initializable {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
             for (int i = children.size() - 1; i > 0; i--) {
-                // Vi ved at texten er på position 0, så hent teksten, før der bliver clearet.
-                //Text text = (Text) children.get(0);
                 if (children.get(i) instanceof Rectangle) {
                     children.remove(children.get(i));
-                    //children.add(text);
                 }
             }
         }
@@ -477,7 +503,6 @@ public class PrimaryWindowController implements Initializable {
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callFriendlyNpc());
         println("TOGGLED CHEAT MODE - FJERN DETTE I RIGTIG VERSION");
-        println(playerName);
         business.toggleCheatMode();
     }
 
