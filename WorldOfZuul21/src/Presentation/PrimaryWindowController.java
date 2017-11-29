@@ -131,8 +131,6 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void initSprites() {
-        System.out.println(((Pane)groundImageView.getParent()).getWidth());
-        System.out.println(stackPane.widthProperty().divide(2).doubleValue());
         sPlayer = new Sprite();
         sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64);
 
