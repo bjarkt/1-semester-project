@@ -43,7 +43,7 @@ public interface IBusiness {
     void load();
     String getLoadedPlayerName();
 
-    boolean goDirection(Direction direction);
+    IBooleanMessage goDirection(Direction direction);
     boolean steal();
     IBooleanMessage interact();
     boolean hide();

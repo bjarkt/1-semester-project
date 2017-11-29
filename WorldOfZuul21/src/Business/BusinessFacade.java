@@ -183,10 +183,10 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public boolean goDirection(Direction direction) {
+    public IBooleanMessage goDirection(Direction direction) {
         Command command = new Command(CommandWord.GO, direction.toString());
-        boolean forcedToQuit = game.goRoom(command);
-        return forcedToQuit;
+        IBooleanMessage message = game.goRoom(command);
+        return message;
     }
 
     @Override

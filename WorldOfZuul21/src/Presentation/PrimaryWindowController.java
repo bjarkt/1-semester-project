@@ -580,28 +580,36 @@ public class PrimaryWindowController implements Initializable {
 
     private void goNorth() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.NORTH) && !business.getCheatMode();
+            IBooleanMessage message = business.goDirection(Direction.NORTH);
+            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            println(message.getMessage());
             update();
         }
     }
 
     private void goSouth() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.SOUTH) && !business.getCheatMode();
+            IBooleanMessage message = business.goDirection(Direction.SOUTH);
+            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            println(message.getMessage());
             update();
         }
     }
 
     private void goEast() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.EAST) && !business.getCheatMode();
+            IBooleanMessage message = business.goDirection(Direction.EAST);
+            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            println(message.getMessage());
             update();
         }
     }
 
     private void goWest() {
         if (!forcedToQuit) {
-            forcedToQuit = business.goDirection(Direction.WEST) && !business.getCheatMode();
+            IBooleanMessage message = business.goDirection(Direction.WEST);
+            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            println(message.getMessage());
             update();
         }
     }
@@ -655,7 +663,9 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void println(String text) {
-        textArea.appendText(text + "\n");
+        if (text.length() != 0) {
+            textArea.appendText(text + "\n");
+        }
     }
 
     private void clear() {

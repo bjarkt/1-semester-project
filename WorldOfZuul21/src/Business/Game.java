@@ -250,7 +250,9 @@ public class Game {
         if (commandWord == CommandWord.HELP) {
             printHelp();
         } else if (commandWord == CommandWord.GO) {
-            wantToQuit = goRoom(command);
+            BooleanMessage message = goRoom(command);
+            wantToQuit = message.getABoolean();
+            System.out.println(message.getMessage());
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
@@ -327,21 +329,25 @@ public class Game {
     }
 
     /* Updates the currentRoom variable, and prints description of the room. */
-    boolean goRoom(Command command) {
+    BooleanMessage goRoom(Command command) {
+        BooleanMessage booleanMessage = new BooleanMessage();
         boolean forcedToQuit = false;
 
         // Stop the method if a second word isn't supplied.
         if (!command.hasSecondWord()) {
             System.out.println("Go where?");
-            return forcedToQuit;
+            booleanMessage.setMessage("Go where?");
+            booleanMessage.setaBoolean(forcedToQuit);
+            return booleanMessage;
         }
 
         // In the go command, the second word is the direction.
         String direction = command.getSecondWord();
 
         if (!Direction.isInEnum(direction)) {
-            System.out.println("That is not a correct direction");
-            return false;
+            booleanMessage.setMessage("That is not a correct direction");
+            booleanMessage.setaBoolean(false);
+            return booleanMessage;
         }
 
         // check if the player has a key
@@ -357,14 +363,12 @@ public class Game {
         //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!"); // when there is no exit
+            booleanMessage.setMessage("There is no door!"); // when there is no exit
         } else if (nextRoom.isLocked() && !gotKey) {
-            System.out.println("The door is locked!");
-            System.out.println("\"You need to find a key.\"");
+            booleanMessage.setMessage("The door is locked!\n\"You need to find a key.\"");
         } else {
             if (nextRoom.isLocked() && gotKey) {
-                System.out.println("The door is locked.");
-                System.out.println("You use your key to open it.");
+                booleanMessage.setMessage("The door is locked.\nYou use your key to open it.");
                 nextRoom.unlock();
             }
             oldRoom = currentRoom;
@@ -375,10 +379,13 @@ public class Game {
             printGuardLocations();
             forcedToQuit = checkForBusted();
             if (checkTimer()) {
-                return true;
+                booleanMessage.setaBoolean(true);
+                booleanMessage.setMessage("");
+                return booleanMessage;
             }
         }
-        return forcedToQuit;
+        booleanMessage.setaBoolean(forcedToQuit);
+        return booleanMessage;
     }
 
     private boolean checkTimer() {
