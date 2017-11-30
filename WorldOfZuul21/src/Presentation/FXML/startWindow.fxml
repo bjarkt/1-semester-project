@@ -42,7 +42,7 @@
                <children>
                   <ImageView fx:id="imageView" fitHeight="435.0" fitWidth="784.0" pickOnBounds="true">
                      <image>
-                        <Image url="@../Pictures/natm.jpg" />
+                        <Image url="@../Pictures/museum.png" />
                      </image>
                      <viewport>
                         <Rectangle2D />
