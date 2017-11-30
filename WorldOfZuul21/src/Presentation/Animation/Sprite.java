@@ -28,6 +28,10 @@ public class Sprite
     private Timeline southTimeline;
     private Timeline eastTimeline;
     private Timeline westTimeline;
+    private int northRow;
+    private int southRow;
+    private int eastRow;
+    private int westRow;
     private List<Timeline> timelines;
 
     public Sprite()
@@ -52,17 +56,22 @@ public class Sprite
         setImage(i);
     }
 
-    public void setImage(String filename, int amountOfImagesInSheet, int rows, int cols, int imageWidth, int imageHeight) {
+    public void setImage(String filename, int amountOfImagesInSheet, int rows, int cols, int spriteWidth, int spriteHeight, int northRow, int southRow, int eastRow, int westRow) {
         images = new Image[amountOfImagesInSheet];
         Image fullImage = new Image(filename);
         int i = 0;
         for (int j = 0; j < rows; j++) {
             for (int k = 0; k < cols; k++) {
-                Image tmp = crop(fullImage, k, j, imageWidth, imageHeight);
+                Image tmp = crop(fullImage, k, j, spriteWidth, spriteHeight);
                 images[i] = tmp;
                 i++;
             }
         }
+
+        this.northRow = northRow;
+        this.southRow = southRow;
+        this.eastRow = eastRow;
+        this.westRow = westRow;
 
         initNorthKeyframes();
         initSouthKeyframes();
@@ -107,7 +116,7 @@ public class Sprite
         Collection<KeyFrame> frames = northTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = 4; i < 8; i++) {
+        for (int i = northRow*4; i < 4+(northRow*4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -119,7 +128,7 @@ public class Sprite
         Collection<KeyFrame> frames = southTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = 0; i < 4; i++) {
+        for (int i = southRow*4; i < 4+(southRow*4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -131,7 +140,7 @@ public class Sprite
         Collection<KeyFrame> frames = eastTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = 8; i < 12; i++) {
+        for (int i = eastRow*4; i < 4+(eastRow*4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -143,7 +152,7 @@ public class Sprite
         Collection<KeyFrame> frames = westTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = 12; i < 16; i++) {
+        for (int i = westRow*4; i < 4+(westRow*4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));

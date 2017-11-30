@@ -132,7 +132,8 @@ public class PrimaryWindowController implements Initializable {
 
     private void initSprites() {
         sPlayer = new Sprite();
-        sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64);
+        //sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64, 1, 0, 2, 3);
+        sPlayer.setImage("/Presentation/Pictures/spriteSheetTest4.png", 16, 4, 4, 48, 71, 3, 0, 2, 1);
 
         doors = new ArrayList<>();
         northDoor = new Sprite();
@@ -158,8 +159,8 @@ public class PrimaryWindowController implements Initializable {
             // ellers bliver han placeret oven på døren, og går i gennem den, og ender i fx. rum 15, eller bliver busted
             playerStartPos = new Point2DProperty(200, 200);
         } else {
-            playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2));
-            playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2));
+            playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(sPlayer.getWidth()/2));
+            playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(sPlayer.getHeight()/2));
         }
         setPlayerStartPos();
 
