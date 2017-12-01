@@ -220,8 +220,13 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public String callFriendlyNpc() {
+    public String callMasterMindDaniel() {
         return game.call();
+    }
+
+    @Override
+    public String callFriendlyNPC() {
+        return game.callFriendlyNpc();
     }
 
     @Override

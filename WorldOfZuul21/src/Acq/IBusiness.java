@@ -51,7 +51,8 @@ public interface IBusiness {
     void escape(boolean wantToGoBackInside);
     List<IRoom> getRooms();
 
-    String callFriendlyNpc();
+    String callMasterMindDaniel();
+    String callFriendlyNPC();
 
     void injectData(IData data);
 }

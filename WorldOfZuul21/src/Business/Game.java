@@ -955,6 +955,10 @@ public class Game {
         return (timerPoint + powerOffTime) - timer;
     }
 
+    public String callFriendlyNpc() {
+        return friendlyNpc.help(currentRoom.getLocation(), guards);
+    }
+
     public void injectData(IData data) {
         this.data = data;
         highScoreManager.injectData(data);

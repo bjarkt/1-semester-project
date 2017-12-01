@@ -207,22 +207,18 @@ public class PrimaryWindowController implements Initializable {
                 if (inputs.contains("A")) {
                     sPlayer.addVelocity(-speed, 0);
                     sPlayer.getWestTimeline().play();
-                    //sPlayer.setPosition(sPlayer.getPositionX() + 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("D")) {
                     sPlayer.addVelocity(speed, 0);
                     sPlayer.getEastTimeline().play();
-                    //sPlayer.setPosition(sPlayer.getPositionX() - 1, sPlayer.getPositionY());
                 }
                 if (inputs.contains("W")) {
                     sPlayer.addVelocity(0, -speed);
                     sPlayer.getNorthTimeline().play();
-                    //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()+1);
                 }
                 if (inputs.contains("S")) {
                     sPlayer.addVelocity(0, speed);
                     sPlayer.getSouthTimeline().play();
-                    //sPlayer.setPosition(sPlayer.getPositionX(), sPlayer.getPositionY()-1);
                 }
                 if (!isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                     inputs.clear();
@@ -396,6 +392,7 @@ public class PrimaryWindowController implements Initializable {
 
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
+        //println(business.callFriendlyNPC());
 
         if (!business.getPowerStatus()) {
             println("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
@@ -406,7 +403,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void checkForBusted() {
-        if (forcedToQuit || business.getPolicedArrived() || (business.isGotBusted() && !business.getCheatMode())) {
+        if ((forcedToQuit && !business.getCheatMode()) || (business.getPolicedArrived() && !business.getCheatMode()) || (business.isGotBusted() && !business.getCheatMode())) {
             inputs.clear();
             business.updateHighScore(playerName);
             ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -502,7 +499,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     public void handleCallButtonAction(ActionEvent e) {
-        println(business.callFriendlyNpc());
+        println(business.callMasterMindDaniel());
         println("TOGGLED CHEAT MODE - FJERN DETTE I RIGTIG VERSION");
         business.toggleCheatMode();
     }
