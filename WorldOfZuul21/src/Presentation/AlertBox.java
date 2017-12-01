@@ -18,6 +18,11 @@ import java.util.Scanner;
 
 public class AlertBox {
 
+    /**
+     * Display a popup window
+     * @param header the text in the title bar of the window
+     * @param textfilename the filename of the textfile. Textfile must be placed in Presentation/Textfiles/
+     */
     static void display(String header, String textfilename) {
         StringBuilder text = new StringBuilder();
         Stage window = new Stage();
@@ -58,6 +63,12 @@ public class AlertBox {
         window.setScene(scene);
         window.showAndWait();
     }
+
+    /**
+     * Display a popup window, with a highscore list
+     * @param header the text in the title bar of the window
+     * @param highScore List containing {@link IHighScore}
+     */
     static void display(String header, List<IHighScore> highScore ) {
         Stage window = new Stage();
         window.setTitle(header);

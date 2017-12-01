@@ -17,11 +17,18 @@ import Presentation.UI;
 public class StartGUI {
 
     public static void main(String[] args) {
+        // Create data facade
         IData data = new DataFacade();
+
+        // Create business facade
         IBusiness business = new BusinessFacade();
+
+        // Inject data into busines
         business.injectData(data);
 
+        // Create UI
         IUI ui = new UI();
+        // Inject business into UI
         ui.injectBusiness(business);
 
         ui.startApplication(args);

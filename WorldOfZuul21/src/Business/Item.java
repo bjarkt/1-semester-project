@@ -46,8 +46,10 @@ public class Item implements IItem {
         return isKey;
     }
 
-    /* This method chooses a random item to spawn from the list of items. If an item has been spawned before,
-    it is added to usedItems, so it cannot be spawned agian  
+    /**
+     * This method chooses a random item to spawn from the list of items.
+     * @param rooms a list of possible rooms, in which the item may spawn
+     * @return a list of size 1, containing the room that the item spawned in
      */
     public static List<Room> Spawn(List<Room> rooms) {
         List<Room> rooms_ = new ArrayList<>();

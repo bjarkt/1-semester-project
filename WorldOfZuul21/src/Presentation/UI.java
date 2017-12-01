@@ -23,7 +23,7 @@ public class UI extends Application implements IUI{
 
         primaryStage.setMinWidth(600);
         primaryStage.setMinHeight(450);
-        primaryStage.setTitle("Night at the Museum - GUI test");
+        primaryStage.setTitle("Night at the Museum");
         primaryStage.setScene(startWindowScene);
         primaryStage.show();
     }

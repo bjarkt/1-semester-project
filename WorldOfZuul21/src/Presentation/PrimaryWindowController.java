@@ -124,6 +124,8 @@ public class PrimaryWindowController implements Initializable {
                 } else {
                     playerName = s.get();
                 }
+            } else {
+                Platform.exit();
             }
         } else {
             playerName = business.getLoadedPlayerName();
@@ -356,22 +358,34 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
-    public void positionExits() {
+    public void positionExitsAndDisableButtons() {
         Set<Direction> exits = business.getExitsForCurrentRoom();
+        Set<Button> buttons = new HashSet<>();
+        Collections.addAll(buttons, northButton, southButton, eastButton, westButton);
+
         for (Sprite door : doors) {
             door.setPosition(-1000, -1000);
         }
+
+        for (Button button : buttons) {
+            button.setDisable(true);
+        }
+
         if (exits.contains(Direction.NORTH)) {
             northDoor.setPosition(northDoorPos.getPropertyX(), northDoorPos.getPropertyY());
+            northButton.setDisable(false);
         }
         if (exits.contains(Direction.SOUTH)) {
             southDoor.setPosition(southDoorPos.getPropertyX(), southDoorPos.getPropertyY());
+            southButton.setDisable(false);
         }
         if (exits.contains(Direction.EAST)) {
             eastDoor.setPosition(eastDoorPos.getPropertyX(), eastDoorPos.getPropertyY());
+            eastButton.setDisable(false);
         }
         if (exits.contains(Direction.WEST)) {
             westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
+            westButton.setDisable(false);
         }
 
     }
@@ -389,7 +403,7 @@ public class PrimaryWindowController implements Initializable {
             powerSwitch.setSeen(true);
         }
 
-        positionExits();
+        positionExitsAndDisableButtons();
 
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
@@ -528,9 +542,11 @@ public class PrimaryWindowController implements Initializable {
     }
 
     public void handleStealButtonAction(ActionEvent e) {
+        if (business.getItemForCurrentRoom() != null && !business.getItemForCurrentRoom().getName().equalsIgnoreCase("Key")) {
+            item.setSeen(false);
+        }
         forcedToQuit = business.steal();
         updateInventoryList();
-        item.setSeen(false);
         initImages();
         update();
     }
@@ -550,8 +566,10 @@ public class PrimaryWindowController implements Initializable {
 
     public void handleEscapeButtonAction(ActionEvent e) {
         if (business.isAtEntrance()) {
-            ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?");
-            if (choice == ButtonType.OK) {
+            ButtonType yesBtn = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+            ButtonType noBtn  = new ButtonType("No", ButtonBar.ButtonData.NO);
+            ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?", yesBtn, noBtn);
+            if (choice == yesBtn) {
                 business.escape(true);
                 updateLootList();
                 business.getInventoryList().clear();
@@ -613,8 +631,8 @@ public class PrimaryWindowController implements Initializable {
         AlertBox.display("Help", "HelpFile.txt");
     }
 
-    private ButtonType createAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
+    private ButtonType createAlert(Alert.AlertType type, String title, String header, String content, ButtonType... buttons) {
+        Alert alert = new Alert(type, content, buttons);
         if (header.length() > 0) {
             alert.setHeaderText(header);
         }

@@ -15,16 +15,28 @@ import java.util.Scanner;
 public class XMLUtilities implements LoadableSavable{
     private String filename;
 
+    /**
+     * creates a new {@link XMLUtilities} from a filename
+     * @param filename the file that this object should interact with
+     */
     public XMLUtilities(String filename) {
         this.filename = filename;
     }
 
+    /**
+     *
+     * @return if the file exists, return true
+     */
     @Override
     public boolean doesFileExist() {
         File file = new File(filename);
         return file.exists();
     }
 
+    /**
+     *
+     * @return if the file was deleted successflly
+     */
     @Override
     public boolean deleteFile() {
         if (doesFileExist()) {
@@ -34,6 +46,10 @@ public class XMLUtilities implements LoadableSavable{
         return false;
     }
 
+    /**
+     *
+     * @return loads a hashmap of strings from filename
+     */
     @Override
     public Map<String, String> load() {
         Map<String, String> map = new LinkedHashMap<>();
@@ -65,6 +81,10 @@ public class XMLUtilities implements LoadableSavable{
         return map;
     }
 
+    /**
+     * saves a hashmap of strings to filename
+     * @param map a map of strings
+     */
     @Override
     public void save(Map<String, String> map) {
         StringBuilder buffer = new StringBuilder();

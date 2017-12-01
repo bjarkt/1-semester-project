@@ -8,15 +8,20 @@ public class ResizableCanvas extends Canvas {
     private PrimaryWindowController controller;
     public ResizableCanvas(PrimaryWindowController controller) {
         this.controller = controller;
+
+        // When the window is resized, call the draw method
         widthProperty().addListener(evt -> draw());
         heightProperty().addListener(evt -> draw());
     }
 
+    /**
+     * redraws the scene, and positions the sprite.
+     */
     private void draw() {
         double width = getWidth();
         double height = getHeight();
         controller.updateSpritePosition();
-        controller.positionExits();
+        controller.positionExitsAndDisableButtons();
 
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, width, height);

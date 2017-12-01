@@ -3,6 +3,9 @@ package Presentation.Drawables;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * VisibleDrawable extends Drawable and be visible or not visisble
+ */
 public abstract class VisibleDrawable extends Drawable {
     private boolean seen;
 
@@ -21,6 +24,10 @@ public abstract class VisibleDrawable extends Drawable {
     }
 
 
+    /**
+     * Only draw player has seen object. This method does not check for other rectangles, like the parent class does.
+     * @param paneToDrawOn a pane
+     */
     @Override
     public void draw(Pane paneToDrawOn) {
         if (this.hasSeen()) {

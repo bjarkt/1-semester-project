@@ -15,6 +15,7 @@ public interface IBusiness {
 
     int getRoundsLeftBeforePowerTurnsOn();
 
+    IItem getItemForCurrentRoom();
     boolean currentRoomContainsItem();
     boolean currentRoomContainsPowerSwitch();
     boolean currentRoomContainsPowerRelay();

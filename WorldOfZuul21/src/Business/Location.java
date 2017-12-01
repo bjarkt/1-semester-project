@@ -24,18 +24,28 @@ public class Location implements ILocation {
         xy = Integer.parseInt("" + x + y);
     }
 
+    /**
+     * Method for getting X
+     * @return x
+     */
     public int getX() {
-        // Method for getting X
         return x;
     }
 
+    /**
+     * Method for getting Y
+     * @return y
+     */
     public int getY() {
-        // Method for getting Y
         return y;
     }
 
+    /**
+     * Method for getting XY
+     * @return xy
+     */
     public int getXY() {
-        // Method for getting XY
+
         return xy;
     }
 
@@ -45,12 +55,17 @@ public class Location implements ILocation {
         return xy + "";
     }
 
-    // Not in use 
+    // Not in use
     @Override
     public int hashCode() {
         return (Integer.toString(x) + "," + Integer.toString(y)).hashCode();
     }
 
+    /**
+     *
+     * @param loc another location
+     * @return true if the this location is next to the other location
+     */
     public boolean isNextTo(Location loc) {
         if (this.x == loc.getX() + 1 || this.x == loc.getX() - 1) {
             if (this.y == loc.getY()) {
@@ -64,6 +79,11 @@ public class Location implements ILocation {
         return false;
     }
 
+    /**
+     *
+     * @param loc another location
+     * @return the direction that the other location is, compared to this
+     */
     public Direction getDirectionOfAdjacentLocation(Location loc) {
         if (!isNextTo(loc)) {
             return null;

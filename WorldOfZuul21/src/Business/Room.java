@@ -101,18 +101,32 @@ public class Room implements IRoom {
         return location;
     }
 
+    /**
+     *
+     * @return true if the room is locked
+     */
     public boolean isLocked() {
         return locked;
     }
-    
+
+    /**
+     * lock the room (locked = true);
+     */
     public void lock() {
         locked = true;
     }
-    
+
+    /**
+     * unlock the room (locked = false);
+     */
     public void unlock() {
         locked = false;
     }
 
+    /**
+     * set the locked var to the parameter
+     * @param lockStatus new locked status
+     */
     public void setLocked(boolean lockStatus) {
         locked = lockStatus;
     }
@@ -126,10 +140,18 @@ public class Room implements IRoom {
         return powerSwitch;
     }
 
+    /**
+     *
+     * @return return the powerrelay placed in this room, returns null if there is no powerrelay
+     */
     public PowerRelay getPowerRelay() {
         return this.powerRelay;
     }
 
+    /**
+     * set the powerrelay of this room
+     * @param powerRelay a powerrelay object to place in this room
+     */
     public void setPowerRelay(PowerRelay powerRelay) {
         if (powerRelay == null) {
             this.visualDescription = this.baseVisualDescription;
@@ -247,6 +269,10 @@ public class Room implements IRoom {
         }
     }
 
+    /**
+     *
+     * @return a string indicating if there is a powerrelay in this room
+     */
     public String getPowerRelayToString() {
         if (this.powerRelay == null) {
             return "";
@@ -261,19 +287,43 @@ public class Room implements IRoom {
         }
     }
 
+    /**
+     *
+     * @param item item to set in this room
+     */
     public void setSpawn(Item item) {
         this.setItem(item);
     }
+
+    /**
+     *
+     * @param guard guard to set in this room
+     */
     public void setSpawn(Guard guard) {
         this.addGuard(guard);
     }
+
+    /**
+     *
+     * @param pr powerrelay to set in this room
+     */
     public void setSpawn(PowerRelay pr) {
         this.setPowerRelay(pr);
     }
+
+    /**
+     *
+     * @param pw powerswitch to set in this room
+     */
     public void setSpawn(PowerSwitch pw) {
         this.setPowerSwitch(pw);
     }
 
+    /**
+     * set the exits, and take care of special rooms
+     * @param rooms all the rooms and their locations in a hashmap
+     * @param specialRooms the rooms that are special
+     */
     public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
         // set the rooms' exits
         // The HashMap rooms is expected to contain a series of rooms shaped as a square

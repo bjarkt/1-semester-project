@@ -67,6 +67,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * remove all keys from the inventory
+     */
     private void removeKeys() {
         for (int i = 0; i < inventory.size(); i++) {
             if (inventory.get(i).isKey()) {

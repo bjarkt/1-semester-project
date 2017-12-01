@@ -43,6 +43,10 @@ public class Sprite
         timelines = new ArrayList<>();
     }
 
+    /**
+     * Set the image for the sprite, from a {@link Image}
+     * @param i image
+     */
     public void setImage(Image i)
     {
         image = i;
@@ -50,18 +54,36 @@ public class Sprite
         height = i.getHeight();
     }
 
+    /**
+     * Set the image for the sprite, from a {@link String}
+     * @param filename the path to the image
+     */
     public void setImage(String filename)
     {
         Image i = new Image(filename);
         setImage(i);
     }
 
+    /**
+     * Set the image for the sprite, from a spritesheet
+     * @param filename filename of the spritesheet
+     * @param amountOfImagesInSheet how many images are in the sprite sheet
+     * @param rows how many rows are in the sprite sheet
+     * @param cols how many columns are in the sprite sheet
+     * @param spriteWidth width of the individual sprite
+     * @param spriteHeight height of the individual sprite
+     * @param northRow the row in which the sprite walks north
+     * @param southRow the row in which the sprite walks south
+     * @param eastRow the row in which the sprite walks east
+     * @param westRow the row in which the sprite walks west
+     */
     public void setImage(String filename, int amountOfImagesInSheet, int rows, int cols, int spriteWidth, int spriteHeight, int northRow, int southRow, int eastRow, int westRow) {
         images = new Image[amountOfImagesInSheet];
         Image fullImage = new Image(filename);
         int i = 0;
         for (int j = 0; j < rows; j++) {
             for (int k = 0; k < cols; k++) {
+                // Crop the image, based on the current row, column, sprite height and sprite width
                 Image tmp = crop(fullImage, k, j, spriteWidth, spriteHeight);
                 images[i] = tmp;
                 i++;
@@ -206,6 +228,10 @@ public class Sprite
         return out ;
     }
 
+    /**
+     * Stop all the timelines, except currentTimeline
+     * @param currentTimeline the timeline that will not be stopped.
+     */
     private void stopTimelines(Timeline currentTimeline) {
         for (Timeline timeline : timelines) {
             if (currentTimeline != timeline)
@@ -213,21 +239,37 @@ public class Sprite
         }
     }
 
+    /**
+     * Returns the timeline, and stops the others
+     * @return a timeline
+     */
     public Timeline getWestTimeline() {
         stopTimelines(westTimeline);
         return westTimeline;
     }
 
+    /**
+     * Returns the timeline, and stops the others
+     * @return a timeline
+     */
     public Timeline getEastTimeline() {
         stopTimelines(eastTimeline);
         return eastTimeline;
     }
 
+    /**
+     * Returns the timeline, and stops the others
+     * @return a timeline
+     */
     public Timeline getNorthTimeline() {
         stopTimelines(northTimeline);
         return northTimeline;
     }
 
+    /**
+     * Returns the timeline, and stops the others
+     * @return a timeline
+     */
     public Timeline getSouthTimeline() {
         stopTimelines(southTimeline);
         return southTimeline;

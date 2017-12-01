@@ -660,7 +660,6 @@ public class Game {
                 System.out.println("The police arrived. You got busted. No points for you. Better luck next time");
             } else {
                 int points = inventory.calculatePoints();
-                //updateHighScore();
                 if (points > 0) {
                     // won the game
                     System.out.println("You grab your loot from the bush, and run. You won the game. You got " + points + " points");

@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class StartWindowController implements Initializable {
+public class StartWindowController {
     @FXML private Button loadButton;
     @FXML private Button newGameButton;
     @FXML private ImageView imageView;
@@ -52,13 +52,20 @@ public class StartWindowController implements Initializable {
         changeScene();
     }
 
+    /**
+     * Changes the scene to the one defined in primaryWindow.fxml
+     */
     private void changeScene() {
+        // get the scene of this window
         Scene scene = loadButton.getScene();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/primaryWindow.fxml"));
-            //IUI controller = (IUI)loader.getController();
+
+            // create new controller
             PrimaryWindowController controller = new PrimaryWindowController(nameLoaded);
             controller.injectBusiness(this.business);
+
+            // set the controller for the loader
             loader.setController(controller);
             Parent root = loader.load();
 
@@ -76,12 +83,12 @@ public class StartWindowController implements Initializable {
         imageView.fitHeightProperty().bind(parentOfImageView.heightProperty());
     }
 
+    /**
+     * Injects the business facade
+     * @param business business facade
+     */
     void injectBusiness(IBusiness business) {
         this.business = business;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 }

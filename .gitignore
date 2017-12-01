@@ -1,3 +1,7 @@
 /WorldOfZuul21/nbproject/private/
 /WorldOfZuul21/build/
 /WorldOfZuul21/dist/
+.idea
+*.xml
+*.txt
+bin

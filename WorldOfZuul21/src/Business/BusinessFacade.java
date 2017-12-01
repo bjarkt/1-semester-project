@@ -235,6 +235,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public IItem getItemForCurrentRoom() {
+        return game.getCurrentRoom().getItems();
+    }
+
+    @Override
     public boolean doesGameSaveFileExist() {
         return data.doesGameSaveFileExist();
     }
