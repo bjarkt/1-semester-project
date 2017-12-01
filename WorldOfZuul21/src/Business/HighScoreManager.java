@@ -36,7 +36,7 @@ class HighScoreManager {
     void updateHighScore(int points, String playerName) {
         Map<String, String> loadedHighScoreMap = new HashMap<>();
 
-        if (data.doesGameSaveFileExist()) {
+        if (data.doesHighScoreFileExist()) {
             loadedHighScoreMap = data.loadHighScore();
         }
         //System.out.println("Whats your name?");

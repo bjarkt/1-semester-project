@@ -224,6 +224,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public boolean doesGameSaveFileExist() {
+        return data.doesGameSaveFileExist();
+    }
+
+    @Override
     public void injectData(IData data) {
         this.data = data;
         highScoreManager.injectData(data);

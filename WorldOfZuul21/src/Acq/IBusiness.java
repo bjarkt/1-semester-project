@@ -42,6 +42,7 @@ public interface IBusiness {
     void save(String playerName);
     void load();
     String getLoadedPlayerName();
+    boolean doesGameSaveFileExist();
 
     IBooleanMessage goDirection(Direction direction);
     boolean steal();
