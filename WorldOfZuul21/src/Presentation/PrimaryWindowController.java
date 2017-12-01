@@ -263,9 +263,7 @@ public class PrimaryWindowController implements Initializable {
                 // render
                 gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
 
-                for (Sprite door : doors) {
-                    door.render(gc);
-                }
+                //for (Sprite door : doors) { door.render(gc); }
                 sPlayer.render(gc);
             }
         }.start();
@@ -576,6 +574,7 @@ public class PrimaryWindowController implements Initializable {
                 updateInventoryList();
                 initImages();
                 setAllDrawablesSeen(false);
+                textArea.clear();
                 update();
             } else {
                 business.escape(false);
