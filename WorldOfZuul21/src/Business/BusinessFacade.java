@@ -179,6 +179,7 @@ public class BusinessFacade implements IBusiness {
     @Override
     public String getLoadedPlayerName() {
         Map<String, String> loadedMap = data.load();
+        data.deleteFile();
         return loadedMap.get("playerName");
     }
 

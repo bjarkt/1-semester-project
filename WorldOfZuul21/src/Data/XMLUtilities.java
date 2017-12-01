@@ -27,7 +27,7 @@ public class XMLUtilities implements LoadableSavable{
 
     @Override
     public boolean deleteFile() {
-        if (!doesFileExist()) {
+        if (doesFileExist()) {
             File file = new File(filename);
             return file.delete();
         }
