@@ -16,57 +16,52 @@ import java.util.List;
  */
 public class FriendlyNpc {
 
-    public boolean checkForGuard(ILocation currentLocation, Guard[] guards) {
-        for (Guard guard : guards) {
-            if (currentLocation.getX() <= guard.getRoom().getLocation().getX() + 1
-                    && currentLocation.getX() <= guard.getRoom().getLocation().getX() - 1
-                    && currentLocation.getY() <= guard.getRoom().getLocation().getY() + 1
-                    && currentLocation.getY() <= guard.getRoom().getLocation().getY() - 1) {
-                return true;
+    public String help(Location currenLocation, Guard[] guards) {
+        StringBuilder s = new StringBuilder();
+        for (Direction direction : getDirectionOfGuards(currenLocation, guards)) {
+            if (s.toString().length() != 0) {
+                s.append(System.lineSeparator());
             }
+            s.append("Watch out, there is a guard ").append(direction).append(" of you!");
         }
-        return false;
+        return s.toString();
     }
 
-    public List<Direction> getDirectionOfGuards(ILocation currentLocation, Guard[] guards) {
-        if (checkForGuard(currentLocation, guards)) {
-            List<Direction> directions = new ArrayList<>();
-            for (Guard guard : guards) {
-                if (currentLocation.getX() == guard.getRoom().getLocation().getX()) {
-                    if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.NORTH);
-                    } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.SOUTH);
-                    }
-                }
-
-                if (currentLocation.getY() == guard.getRoom().getLocation().getY()) {
-                    if (currentLocation.getX() + 1 == guard.getRoom().getLocation().getX()) {
-                        directions.add(Direction.EAST);
-                    } else if (currentLocation.getX() - 1 == guard.getRoom().getLocation().getX()) {
-                        directions.add(Direction.WEST);
-                    }
-                }
-
-                if (currentLocation.getX() - 1 == guard.getRoom().getLocation().getX()) {
-                    if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.NORTHWEST);
-                    } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.SOUTHWEST);
-                    }
-                }
-                if (currentLocation.getX() + 1 == guard.getRoom().getLocation().getX()) {
-                    if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.NORTHEAST);
-                    } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
-                        directions.add(Direction.SOUTHEAST);
-                    }
+    public List<Direction> getDirectionOfGuards(Location currentLocation, Guard[] guards) {
+        List<Direction> directions = new ArrayList<>();
+        for (Guard guard : guards) {
+            if (currentLocation.getX() == guard.getRoom().getLocation().getX()) {
+                if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.NORTH);
+                } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.SOUTH);
                 }
             }
-            return directions;
 
+            if (currentLocation.getY() == guard.getRoom().getLocation().getY()) {
+                if (currentLocation.getX() + 1 == guard.getRoom().getLocation().getX()) {
+                    directions.add(Direction.EAST);
+                } else if (currentLocation.getX() - 1 == guard.getRoom().getLocation().getX()) {
+                    directions.add(Direction.WEST);
+                }
+            }
+
+            if (currentLocation.getX() - 1 == guard.getRoom().getLocation().getX()) {
+                if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.NORTHWEST);
+                } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.SOUTHWEST);
+                }
+            }
+            if (currentLocation.getX() + 1 == guard.getRoom().getLocation().getX()) {
+                if (currentLocation.getY() + 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.NORTHEAST);
+                } else if (currentLocation.getY() - 1 == guard.getRoom().getLocation().getY()) {
+                    directions.add(Direction.SOUTHEAST);
+                }
+            }
         }
-        return null;
+        return directions;
     }
 
 }

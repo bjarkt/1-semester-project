@@ -563,7 +563,7 @@ public class Game {
         }
         System.out.println();
 
-        System.out.println(friendlyNpc.getDirectionOfGuards(currentRoom.getLocation(), guards));
+        System.out.println(friendlyNpc.help(currentRoom.getLocation(), guards));
     }
 
     boolean hide() {
