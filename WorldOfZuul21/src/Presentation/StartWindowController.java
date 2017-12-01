@@ -49,6 +49,7 @@ public class StartWindowController {
     @FXML
     private void handleNewGameButtonAction(ActionEvent e) {
         nameLoaded = false;
+        business.deleteSaveGameFile();
         changeScene();
     }
 

@@ -14,6 +14,7 @@ public interface IBusiness {
     ILocation getItemLocation();
 
     int getRoundsLeftBeforePowerTurnsOn();
+    boolean deleteSaveGameFile();
 
     IItem getItemForCurrentRoom();
     boolean currentRoomContainsItem();

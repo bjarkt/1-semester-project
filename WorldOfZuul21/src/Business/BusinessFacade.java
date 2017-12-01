@@ -244,6 +244,10 @@ public class BusinessFacade implements IBusiness {
         return data.doesGameSaveFileExist();
     }
 
+    public boolean deleteSaveGameFile() {
+        return data.deleteFile();
+    }
+
     @Override
     public void injectData(IData data) {
         this.data = data;
