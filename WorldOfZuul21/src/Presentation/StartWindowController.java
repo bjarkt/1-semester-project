@@ -34,6 +34,7 @@ public class StartWindowController implements Initializable {
             changeScene();
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Game save file not found. Start new game?");
+            alert.setHeaderText("");
             alert.setTitle("File not found");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {

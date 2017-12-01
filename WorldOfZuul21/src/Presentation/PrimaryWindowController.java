@@ -246,8 +246,10 @@ public class PrimaryWindowController implements Initializable {
                 for (Sprite door : doors) {
                     if (sPlayer.intersects(door)) {
                         if (door == northDoor) {
-                            goNorth();
-                            setPlayerStartPos();
+                            if (inputs.contains("W")) {
+                                goNorth();
+                                setPlayerStartPos();
+                            }
                         } else if (door == southDoor) {
                             goSouth();
                             setPlayerStartPos();
