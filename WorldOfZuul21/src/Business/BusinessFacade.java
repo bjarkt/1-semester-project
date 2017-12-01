@@ -17,8 +17,13 @@ public class BusinessFacade implements IBusiness {
         game = new Game();
         highScoreManager = new HighScoreManager();
 
+        
     }
-
+    @Override
+     public void restartGame() {
+        game = new Game();
+     }
+     
     @Override
     public ILocation getCurrentLocation() {
         return game.getCurrentRoom().getLocation();

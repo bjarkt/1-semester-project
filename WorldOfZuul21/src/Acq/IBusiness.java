@@ -41,6 +41,7 @@ public interface IBusiness {
 
     void save(String playerName);
     void load();
+    void restartGame(); 
     String getLoadedPlayerName();
     boolean doesGameSaveFileExist();
 
@@ -54,5 +55,5 @@ public interface IBusiness {
     String callMasterMindDaniel();
     String callFriendlyNPC();
 
-    void injectData(IData data);
+    void injectData(IData data);  
 }

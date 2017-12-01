@@ -1,6 +1,7 @@
 package Presentation;
 
 import Acq.*;
+import Business.BusinessFacade;
 import Presentation.Animation.LongValue;
 import Presentation.Animation.Point2DProperty;
 import Presentation.Animation.ResizableCanvas;
@@ -106,7 +107,6 @@ public class PrimaryWindowController implements Initializable {
         initSprites();
         initCanvas();
 
-
         inputs = new ArrayList<>();
 
         animateSprite();
@@ -159,30 +159,29 @@ public class PrimaryWindowController implements Initializable {
             // ellers bliver han placeret oven på døren, og går i gennem den, og ender i fx. rum 15, eller bliver busted
             playerStartPos = new Point2DProperty(200, 200);
         } else {
-            playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(sPlayer.getWidth()/2));
-            playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(sPlayer.getHeight()/2));
+            playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(sPlayer.getWidth() / 2));
+            playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(sPlayer.getHeight() / 2));
         }
         setPlayerStartPos();
 
-
         northDoorPos = new Point2DProperty();
-        northDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(northDoor.getWidth()/2));
+        northDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(northDoor.getWidth() / 2));
         northDoorPos.setPropertyY(0);
         northDoor.setPosition(northDoorPos.getPropertyX(), northDoorPos.getPropertyY());
 
         southDoorPos = new Point2DProperty();
-        southDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(southDoor.getWidth()/2));
+        southDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(southDoor.getWidth() / 2));
         southDoorPos.propertyYProperty().bind(stackPane.heightProperty().subtract(20));
         southDoor.setPosition(southDoorPos.getPropertyX(), southDoorPos.getPropertyY());
 
         eastDoorPos = new Point2DProperty();
         eastDoorPos.propertyXProperty().bind(stackPane.widthProperty().subtract(20));
-        eastDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(eastDoor.getHeight()/2));
+        eastDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(eastDoor.getHeight() / 2));
         eastDoor.setPosition(eastDoorPos.getPropertyX(), eastDoorPos.getPropertyY());
 
         westDoorPos = new Point2DProperty();
         westDoorPos.setPropertyX(0);
-        westDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(westDoor.getHeight()/2));
+        westDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(westDoor.getHeight() / 2));
         westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
     }
 
@@ -262,7 +261,9 @@ public class PrimaryWindowController implements Initializable {
                 // render
                 gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
 
-                for (Sprite door : doors) { door.render(gc); }
+                for (Sprite door : doors) {
+                    door.render(gc);
+                }
                 sPlayer.render(gc);
             }
         }.start();
@@ -410,6 +411,8 @@ public class PrimaryWindowController implements Initializable {
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close);
             quitPopup.getDialogPane().lookupButton(close).setVisible(false);
 
+            BooleanValue newGameClicked = new BooleanValue(false);
+
             GridPane grid = new GridPane();
             grid.setHgap(10);
             grid.setVgap(10);
@@ -418,6 +421,22 @@ public class PrimaryWindowController implements Initializable {
             ImageView customImage = new ImageView(new Image(getClass().getResourceAsStream("Pictures/BUSTED.png"), 500, 400, false, true));
 
             ButtonBar buttonBar = new ButtonBar();
+
+            Button newgameBtn = new Button("New Game");
+            newgameBtn.setOnAction(actionEvent -> {
+                newGameClicked.value = true;
+                business.restartGame();
+                forcedToQuit = false;
+                initDrawables();
+                initImages();
+                update();
+                quitPopup.close();
+                textArea.clear();
+                updateInventoryList();
+                updateLootList();
+                
+            });
+            buttonBar.setButtonData(newgameBtn, ButtonBar.ButtonData.OTHER);
 
             Button highscoreBtn = new Button("Show Highscore");
             highscoreBtn.setOnAction(actionEvent -> {
@@ -429,7 +448,7 @@ public class PrimaryWindowController implements Initializable {
             Button closeBtn = new Button("Close");
             closeBtn.setOnAction(actionEvent -> quitPopup.close());
             ButtonBar.setButtonData(closeBtn, ButtonBar.ButtonData.CANCEL_CLOSE);
-            buttonBar.getButtons().addAll(highscoreBtn, closeBtn);
+            buttonBar.getButtons().addAll(highscoreBtn, closeBtn, newgameBtn);
 
             grid.add(customImage, 0, 0);
             grid.add(buttonBar, 0, 1);
@@ -441,7 +460,11 @@ public class PrimaryWindowController implements Initializable {
             quitPopup.initModality(Modality.WINDOW_MODAL);
             Platform.runLater(quitPopup::showAndWait);
 
-            quitPopup.setOnCloseRequest(dialogEvent -> Platform.exit());
+            quitPopup.setOnCloseRequest(dialogEvent -> {
+                if (newGameClicked.value == false) {
+                    Platform.exit();
+                }
+            });
         }
     }
 
@@ -604,7 +627,7 @@ public class PrimaryWindowController implements Initializable {
     private void goNorth() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.NORTH);
-            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
             update();
         }
@@ -613,7 +636,7 @@ public class PrimaryWindowController implements Initializable {
     private void goSouth() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.SOUTH);
-            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
             update();
         }
@@ -622,7 +645,7 @@ public class PrimaryWindowController implements Initializable {
     private void goEast() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.EAST);
-            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
             update();
         }
@@ -631,7 +654,7 @@ public class PrimaryWindowController implements Initializable {
     private void goWest() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.WEST);
-            forcedToQuit = message.getABoolean()&& !business.getCheatMode();
+            forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
             update();
         }
