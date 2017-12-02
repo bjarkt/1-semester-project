@@ -153,6 +153,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public int getTimeBeforePoliceArrives() {
+        return game.getTimeBeforePoliceArrives();
+    }
+
+    @Override
     public IItem getItem() {
         for (Room room : game.getItemSpawnPointRooms()) {
             if (room.getItems() != null) {
@@ -244,8 +249,24 @@ public class BusinessFacade implements IBusiness {
         return data.doesGameSaveFileExist();
     }
 
+    @Override
     public boolean deleteSaveGameFile() {
         return data.deleteFile();
+    }
+
+    @Override
+    public BooleanMessage checkTimer() {
+        return game.checkTimer();
+    }
+
+    @Override
+    public String getGlobalMessage() {
+        return game.getGlobalMessage();
+    }
+
+    @Override
+    public void clearGlobalMessage() {
+        game.setGlobalMessage("");
     }
 
     @Override

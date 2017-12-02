@@ -17,6 +17,7 @@ public class Game {
     private HighScoreManager highScoreManager;
     private boolean saved;
     private String playerName;
+    private String globalMessage;
 
     private Room currentRoom; // the room that the player is currently in
     private Room oldRoom;
@@ -64,6 +65,7 @@ public class Game {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         highScoreManager = new HighScoreManager();
         saved = false;
+        globalMessage =  "";
 
         powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
@@ -256,7 +258,7 @@ public class Game {
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         } else if (commandWord == CommandWord.INTERACT) {
-            System.out.println(interact());
+            System.out.println(interact().getMessage());
         } else if (commandWord == CommandWord.STEAL) {
             wantToQuit = stealItem();
         } else if (commandWord == CommandWord.ESCAPE) {
@@ -378,7 +380,9 @@ public class Game {
             moveGuards(); // move guards
             printGuardLocations();
             forcedToQuit = checkForBusted();
-            if (checkTimer()) {
+            BooleanMessage timerMessage = checkTimer();
+            System.out.println(timerMessage.getMessage());
+            if (timerMessage.getABoolean()) {
                 booleanMessage.setaBoolean(true);
                 booleanMessage.setMessage("");
                 return booleanMessage;
@@ -388,20 +392,24 @@ public class Game {
         return booleanMessage;
     }
 
-    private boolean checkTimer() {
+    public BooleanMessage checkTimer() {
         // return true, if the player has lost the game
         // check how many turns there are left before power turns back on
+        BooleanMessage message = new BooleanMessage();
+        String s = "";
         if (timer == timerPoint + powerOffTime / 2 && !powerStatus) {
-            System.out.println("You have " + powerOffTime / 2 + " turns left before power turns on.");
+            s += "You have " + powerOffTime / 2 + " turns left before power turns on.";
         }
         // check if it is time for the power to turn back on
         if (timer >= timerPoint + powerOffTime && !powerStatus) {
             powerStatus = true;
             rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
-            System.out.println("The power is back on");
+            s += "The power is back on\n";
+            globalMessage += "The power is back on\n";
             // alert the police
             if (!policeAlerted) {
-                System.out.println("The police has been alerted");
+                s += "The police has been alerted";
+                globalMessage += "The police has been alerted. They will arrive in " + policeArrivalTime + " rounds.";
                 policeAlerted = true;
                 alertPoint = timer;
             }
@@ -409,9 +417,13 @@ public class Game {
         // check if the police has arrived
         if (timer >= alertPoint + policeArrivalTime && policeAlerted) {
             policeArrived = true;
-            return true;
+            message.setMessage(s);
+            message.setaBoolean(true);
+            return message;
         }
-        return false;
+        message.setMessage(s);
+        message.setaBoolean(false);
+        return message;
     }
 
     // return true, if a second word has not been supplied
@@ -578,7 +590,8 @@ public class Game {
         timer += 1;
         moveGuards();
         printGuardLocations();
-        forcedToQuit = checkTimer();
+        BooleanMessage message = checkTimer();
+        forcedToQuit = message.getABoolean();
         System.out.println("You hide.");
         if (forcedToQuit) {
             return forcedToQuit;
@@ -586,7 +599,8 @@ public class Game {
         hasCheckedForTime = true;
         while (checkForBusted()) {
             if (!hasCheckedForTime) {
-                forcedToQuit = checkTimer();
+                message = checkTimer();
+                forcedToQuit = message.getABoolean();
                 if (forcedToQuit) {
                     return forcedToQuit;
                 }
@@ -958,8 +972,20 @@ public class Game {
         return (timerPoint + powerOffTime) - timer;
     }
 
+    int getTimeBeforePoliceArrives() {
+        return (timerPoint + powerOffTime + policeArrivalTime) - timer;
+    }
+
     public String callFriendlyNpc() {
         return friendlyNpc.help(currentRoom.getLocation(), guards);
+    }
+
+    public String getGlobalMessage() {
+        return globalMessage;
+    }
+
+    public void setGlobalMessage(String globalMessage) {
+        this.globalMessage = globalMessage;
     }
 
     public void injectData(IData data) {

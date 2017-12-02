@@ -1,5 +1,7 @@
 package Acq;
 
+import Business.BooleanMessage;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +38,10 @@ public interface IBusiness {
     boolean getPolicedArrived();
     int getPowerOffTime();
     int getTimeBeforePowerTurnsBackOn();
+    int getTimeBeforePoliceArrives();
+    BooleanMessage checkTimer();
+    String getGlobalMessage();
+    void clearGlobalMessage();
 
     IItem getItem();
     List<IItem> getInventoryList();

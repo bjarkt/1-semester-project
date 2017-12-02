@@ -1,6 +1,7 @@
 package Presentation;
 
 import Acq.*;
+import Business.BooleanMessage;
 import Business.BusinessFacade;
 import Presentation.Animation.LongValue;
 import Presentation.Animation.Point2DProperty;
@@ -58,6 +59,8 @@ public class PrimaryWindowController implements Initializable {
     private StackPane stackPane;
     @FXML
     private VBox rootVBox;
+    @FXML
+    private Label timeLeftLabel;
 
     private Sprite sPlayer;
     private Point2DProperty playerStartPos;
@@ -408,7 +411,19 @@ public class PrimaryWindowController implements Initializable {
         //println(business.callFriendlyNPC());
 
         if (!business.getPowerStatus()) {
-            println("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
+            timeLeftLabel.setText("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
+        }
+        else if (business.getPoliceAlerted()) {
+            timeLeftLabel.setText("Time before the police arrives: " + business.getTimeBeforePoliceArrives());
+        }
+        else {
+            timeLeftLabel.setText("");
+        }
+        println(business.getGlobalMessage());
+        business.clearGlobalMessage();
+
+        if (business.getPolicedArrived()) {
+            println("The police arrived. You got busted. No points for you. Better luck next time");
         }
 
         checkForBusted();
