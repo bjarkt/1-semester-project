@@ -34,33 +34,19 @@ import java.util.*;
 
 public class PrimaryWindowController implements Initializable {
 
-    /**
-     * JavaFX gui elements
-     */
-    @FXML
-    private GridPane minimapGrid;
-    @FXML
-    private Button northButton;
-    @FXML
-    private Button westButton;
-    @FXML
-    private Button eastButton;
-    @FXML
-    private Button southButton;
-    @FXML
-    private ImageView groundImageView;
-    @FXML
-    private TextArea textArea;
-    @FXML
-    private ListView<IItem> inventoryListView;
-    @FXML
-    private ListView<IItem> lootListView;
-    @FXML
-    private StackPane stackPane;
-    @FXML
-    private VBox rootVBox;
-    @FXML
-    private Label timeLeftLabel;
+    // JavaFX GUI elements
+    @FXML private GridPane minimapGrid;
+    @FXML private Button northButton;
+    @FXML private Button westButton;
+    @FXML private Button eastButton;
+    @FXML private Button southButton;
+    @FXML private ImageView groundImageView;
+    @FXML private TextArea textArea;
+    @FXML private ListView<IItem> inventoryListView;
+    @FXML private ListView<IItem> lootListView;
+    @FXML private StackPane stackPane;
+    @FXML private VBox rootVBox;
+    @FXML private Label timeLeftLabel;
 
     // player and its position
     private Sprite sPlayer;
@@ -589,7 +575,9 @@ public class PrimaryWindowController implements Initializable {
         if (business.getItemForCurrentRoom() != null && !business.getItemForCurrentRoom().getName().equalsIgnoreCase("Key")) {
             item.setSeen(false);
         }
-        forcedToQuit = business.steal();
+        IBooleanMessage message = business.steal();
+        forcedToQuit = message.getABoolean();
+        println(message.getMessage());
         updateInventoryList();
         initImages();
         update();

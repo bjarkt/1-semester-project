@@ -260,7 +260,9 @@ public class Game {
         } else if (commandWord == CommandWord.INTERACT) {
             System.out.println(interact().getMessage());
         } else if (commandWord == CommandWord.STEAL) {
-            wantToQuit = stealItem();
+            BooleanMessage stealItemMessage = stealItem();
+            System.out.println(stealItemMessage.getMessage());
+            wantToQuit = stealItemMessage.getABoolean();
         } else if (commandWord == CommandWord.ESCAPE) {
             System.out.println("Do you want to go back inside?");
             Command escapeCommand = parser.getCommand();
@@ -476,7 +478,7 @@ public class Game {
         return booleanMessage;
     }
 
-    boolean stealItem() {
+    BooleanMessage stealItem() {
         // used to steal an item
         boolean forcedToQuit = false;
 
@@ -487,23 +489,25 @@ public class Game {
             containsKey = true;
         }
 
+        BooleanMessage message = new BooleanMessage();
         if (currentRoom.getItems() != null) {
             if (!powerStatus || containsKey) {
                 if (inventory.addToInventory(currentRoom.getItems())) {
-                    System.out.println("You have stolen a " + currentRoom.getItems().getName());
+                    message.setMessage("You have stolen a " + currentRoom.getItems().getName());
                     currentRoom.removeItem();
                 } else {
-                    System.out.println("Your inventory is full");
+                    message.setMessage("You inventory is full");
                 }
             } else {
-                System.out.println("The alarm starts ringing");
+                message.setMessage("The alarm starts ringing");
                 printBusted();
                 forcedToQuit = true;
             }
         } else {
-            System.out.println("There is no item to steal");
+            message.setMessage("There is no item to steal");
         }
-        return forcedToQuit;
+        message.setaBoolean(forcedToQuit);
+        return message;
     }
 
     boolean escape(Command command) {

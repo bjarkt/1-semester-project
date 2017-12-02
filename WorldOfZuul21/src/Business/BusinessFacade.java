@@ -181,7 +181,7 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public boolean steal() {
+    public IBooleanMessage steal() {
         return game.stealItem();
     }
 

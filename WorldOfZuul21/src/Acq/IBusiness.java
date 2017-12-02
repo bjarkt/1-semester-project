@@ -50,7 +50,7 @@ public interface IBusiness {
     boolean doesGameSaveFileExist();
 
     IBooleanMessage goDirection(Direction direction);
-    boolean steal();
+    IBooleanMessage steal();
     IBooleanMessage interact();
     boolean hide();
     void escape(boolean wantToGoBackInside);
