@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 
 import java.net.URL;
@@ -47,6 +48,7 @@ public class PrimaryWindowController implements Initializable {
     @FXML private StackPane stackPane;
     @FXML private VBox rootVBox;
     @FXML private Label timeLeftLabel;
+    @FXML private Label friendlyNpcLabel;
 
     // player and its position
     private Sprite sPlayer;
@@ -100,6 +102,8 @@ public class PrimaryWindowController implements Initializable {
         initCanvas();
 
         inputs = new ArrayList<>();
+
+        friendlyNpcLabel.setTextAlignment(TextAlignment.JUSTIFY);
 
         animateSprite();
 
@@ -417,7 +421,8 @@ public class PrimaryWindowController implements Initializable {
 
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
-        println(business.callFriendlyNPC());
+
+        friendlyNpcLabel.setText(business.callFriendlyNPC());
 
         if (!business.getPowerStatus()) {
             timeLeftLabel.setText("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
@@ -434,7 +439,6 @@ public class PrimaryWindowController implements Initializable {
         }
 
         checkForBusted();
-
     }
 
     private void checkForBusted() {

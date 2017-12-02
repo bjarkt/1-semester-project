@@ -24,7 +24,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="rootVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="600.0" onKeyPressed="#handleKeyPress" onKeyReleased="#handleKeyReleased" onKeyTyped="#handleKeyPress" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="rootVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="600.0" onKeyPressed="#handleKeyPress" onKeyReleased="#handleKeyReleased" onKeyTyped="#handleKeyPress" prefHeight="800.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="2000.0" prefWidth="2000.0">
          <bottom>
@@ -118,7 +118,7 @@
             </MenuBar>
          </top>
          <right>
-            <SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL" prefWidth="250.0">
+            <SplitPane dividerPositions="0.5, 0.5" orientation="VERTICAL" prefWidth="300.0">
                <items>
                   <TabPane focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
@@ -163,8 +163,13 @@
                         </Tab>
                     </tabs>
                   </TabPane>
-                  <Label fx:id="timeLeftLabel" maxWidth="1.7976931348623157E308" SplitPane.resizableWithParent="false" />
-                  <TextArea fx:id="textArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+                  <VBox maxHeight="-Infinity">
+                     <children>
+                        <Label fx:id="timeLeftLabel" maxWidth="1.7976931348623157E308" wrapText="true" />
+                        <Label fx:id="friendlyNpcLabel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" />
+                     </children>
+                  </VBox>
+                  <TextArea fx:id="textArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" />
                </items>
             </SplitPane>
          </right>
