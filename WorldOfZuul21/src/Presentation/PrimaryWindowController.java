@@ -417,6 +417,9 @@ public class PrimaryWindowController implements Initializable {
             powerSwitch.setSeen(true);
         }
 
+        updateInventoryList();
+        updateLootList();
+
         positionExitsAndDisableButtons();
 
         drawMinimap();

@@ -853,7 +853,13 @@ public class Game {
 
         for (String s : map.keySet()) {
             if (s.startsWith("inventory_")) {
-                Item item = new Item(map.get(s));
+                String itemName = map.get(s);
+                Item item;
+                if (itemName.equalsIgnoreCase("key")) {
+                    item = new Item(true);
+                } else {
+                    item = new Item(map.get(s));
+                }
                 inventory.addToInventory(item);
             }
         }
