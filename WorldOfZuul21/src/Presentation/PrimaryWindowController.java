@@ -1,8 +1,6 @@
 package Presentation;
 
 import Acq.*;
-import Business.BooleanMessage;
-import Business.BusinessFacade;
 import Presentation.Animation.LongValue;
 import Presentation.Animation.Point2DProperty;
 import Presentation.Animation.ResizableCanvas;
@@ -408,15 +406,13 @@ public class PrimaryWindowController implements Initializable {
 
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
-        //println(business.callFriendlyNPC());
+        println(business.callFriendlyNPC());
 
         if (!business.getPowerStatus()) {
             timeLeftLabel.setText("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
-        }
-        else if (business.getPoliceAlerted()) {
+        } else if (business.getPoliceAlerted()) {
             timeLeftLabel.setText("Time before the police arrives: " + business.getTimeBeforePoliceArrives());
-        }
-        else {
+        } else {
             timeLeftLabel.setText("");
         }
         println(business.getGlobalMessage());
@@ -461,9 +457,9 @@ public class PrimaryWindowController implements Initializable {
                 textArea.clear();
                 updateInventoryList();
                 updateLootList();
-                
+
             });
-            buttonBar.setButtonData(newgameBtn, ButtonBar.ButtonData.OTHER);
+            ButtonBar.setButtonData(newgameBtn, ButtonBar.ButtonData.OTHER);
 
             Button highscoreBtn = new Button("Show Highscore");
             highscoreBtn.setOnAction(actionEvent -> {
@@ -488,7 +484,7 @@ public class PrimaryWindowController implements Initializable {
             Platform.runLater(quitPopup::showAndWait);
 
             quitPopup.setOnCloseRequest(dialogEvent -> {
-                if (newGameClicked.value == false) {
+                if (!newGameClicked.value) {
                     Platform.exit();
                 }
             });
@@ -580,7 +576,7 @@ public class PrimaryWindowController implements Initializable {
     public void handleEscapeButtonAction(ActionEvent e) {
         if (business.isAtEntrance()) {
             ButtonType yesBtn = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-            ButtonType noBtn  = new ButtonType("No", ButtonBar.ButtonData.NO);
+            ButtonType noBtn = new ButtonType("No", ButtonBar.ButtonData.NO);
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?", yesBtn, noBtn);
             if (choice == yesBtn) {
                 business.escape(true);
@@ -744,10 +740,6 @@ public class PrimaryWindowController implements Initializable {
         if (text.length() != 0) {
             textArea.appendText(text + "\n");
         }
-    }
-
-    private void clear() {
-        textArea.clear();
     }
 
     public void injectBusiness(IBusiness business) {

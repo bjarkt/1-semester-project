@@ -48,7 +48,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return name of room
      */
     public String getName() {
@@ -94,7 +93,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return the location of this room
      */
     public Location getLocation() {
@@ -102,7 +100,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return true if the room is locked
      */
     public boolean isLocked() {
@@ -125,14 +122,14 @@ public class Room implements IRoom {
 
     /**
      * set the locked var to the parameter
+     *
      * @param lockStatus new locked status
      */
     public void setLocked(boolean lockStatus) {
         locked = lockStatus;
     }
-    
+
     /**
-     *
      * @return the powerswitch placed in this room. Returns null if there is no
      * powerswitch.
      */
@@ -141,7 +138,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return return the powerrelay placed in this room, returns null if there is no powerrelay
      */
     public PowerRelay getPowerRelay() {
@@ -150,6 +146,7 @@ public class Room implements IRoom {
 
     /**
      * set the powerrelay of this room
+     *
      * @param powerRelay a powerrelay object to place in this room
      */
     public void setPowerRelay(PowerRelay powerRelay) {
@@ -162,7 +159,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return a string, indicating if there is a powerswitch in this room.
      */
     public String getPowerSwitchToString() {
@@ -195,7 +191,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return a string, indicating if there is an item in this room.
      */
     public String getItemToString() {
@@ -207,7 +202,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return the first item of the items array.
      */
     public Item getItems() {
@@ -237,7 +231,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return an array containing the guards in this room
      */
     public Guard[] getGuards() {
@@ -270,7 +263,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @return a string indicating if there is a powerrelay in this room
      */
     public String getPowerRelayToString() {
@@ -288,7 +280,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @param item item to set in this room
      */
     public void setSpawn(Item item) {
@@ -296,7 +287,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @param guard guard to set in this room
      */
     public void setSpawn(Guard guard) {
@@ -304,7 +294,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @param pr powerrelay to set in this room
      */
     public void setSpawn(PowerRelay pr) {
@@ -312,7 +301,6 @@ public class Room implements IRoom {
     }
 
     /**
-     *
      * @param pw powerswitch to set in this room
      */
     public void setSpawn(PowerSwitch pw) {
@@ -321,7 +309,8 @@ public class Room implements IRoom {
 
     /**
      * set the exits, and take care of special rooms
-     * @param rooms all the rooms and their locations in a hashmap
+     *
+     * @param rooms        all the rooms and their locations in a hashmap
      * @param specialRooms the rooms that are special
      */
     public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {

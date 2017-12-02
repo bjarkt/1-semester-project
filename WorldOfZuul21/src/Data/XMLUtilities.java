@@ -12,11 +12,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class XMLUtilities implements LoadableSavable{
+public class XMLUtilities implements LoadableSavable {
     private String filename;
 
     /**
      * creates a new {@link XMLUtilities} from a filename
+     *
      * @param filename the file that this object should interact with
      */
     public XMLUtilities(String filename) {
@@ -24,7 +25,6 @@ public class XMLUtilities implements LoadableSavable{
     }
 
     /**
-     *
      * @return if the file exists, return true
      */
     @Override
@@ -34,7 +34,6 @@ public class XMLUtilities implements LoadableSavable{
     }
 
     /**
-     *
      * @return if the file was deleted successflly
      */
     @Override
@@ -47,7 +46,6 @@ public class XMLUtilities implements LoadableSavable{
     }
 
     /**
-     *
      * @return loads a hashmap of strings from filename
      */
     @Override
@@ -83,6 +81,7 @@ public class XMLUtilities implements LoadableSavable{
 
     /**
      * saves a hashmap of strings to filename
+     *
      * @param map a map of strings
      */
     @Override

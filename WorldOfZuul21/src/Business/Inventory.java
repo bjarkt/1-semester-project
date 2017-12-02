@@ -20,7 +20,6 @@ public class Inventory {
     }
 
     /**
-     *
      * @return the inventory
      */
     public ArrayList<Item> getInventory() {
@@ -32,7 +31,6 @@ public class Inventory {
     }
 
     /**
-     *
      * @param item to add to inventory
      * @return returns true if the item was added successfully, false if there
      * is not enough room in the inventory.
@@ -49,7 +47,6 @@ public class Inventory {
     }
 
     /**
-     *
      * @return true if the item added was successfully, false if there is no
      * item in the inventory
      */
@@ -79,7 +76,6 @@ public class Inventory {
     }
 
     /**
-     *
      * @return the amount of points earned for the amount of items that has been
      * stolen.
      */
@@ -88,9 +84,9 @@ public class Inventory {
         // trims the capacity of the list, so it is equal to the size
         loot.trimToSize();
         // Sets the score to be 2 times the amount of items in the loot ArrayList
-        int score = loot.size() *2;
+        int score = loot.size() * 2;
         return score;
-        
+
     }
 
     /**

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Nikolaj
  */
 public class Guard implements IGuard {
@@ -19,22 +18,22 @@ public class Guard implements IGuard {
     private final int ID;
     private Room currentRoom;
     private Room oldRoom;
-    
+
     public Guard(int ID) {
         // ID for Guard objekt
         this.ID = ID;
     }
-    
+
     public int getID() {
         // metohod for getting ID
         return ID;
     }
-    
+
     public Room getRoom() {
         //metodhod for getting currentRoom
         return currentRoom;
     }
-    
+
     public void setRoom(Room room) {
         // set metodhod for room
         currentRoom = room;
@@ -44,7 +43,7 @@ public class Guard implements IGuard {
         Guard[] guards = new Guard[2];
         List<Room> rooms_ = new ArrayList<>();
         for (int i = 0; i < guards.length; i++) {
-            guards[i] = new Guard(i+1);
+            guards[i] = new Guard(i + 1);
             guards[i].setRoom(rooms.get(i));
             rooms.get(i).addGuard(guards[i]);
             rooms_.add(rooms.get(i));
@@ -60,5 +59,5 @@ public class Guard implements IGuard {
     public Room getOldRoom() {
         return oldRoom;
     }
-    
+
 }

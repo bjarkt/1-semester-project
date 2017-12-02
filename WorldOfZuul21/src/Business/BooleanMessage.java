@@ -8,8 +8,9 @@ public class BooleanMessage implements IBooleanMessage {
 
     /**
      * A way to return both a string and boolean
+     *
      * @param aBoolean the boolean value
-     * @param message the string
+     * @param message  the string
      */
     public BooleanMessage(boolean aBoolean, String message) {
         this.aBoolean = aBoolean;

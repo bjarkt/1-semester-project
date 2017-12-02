@@ -6,7 +6,6 @@
 package Business;
 
 import Acq.Direction;
-import Acq.ILocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +16,9 @@ import java.util.List;
 public class FriendlyNpc {
 
     /**
-     *
      * @param currenLocation the location of the player
-     * @param guards an array of guards
-     * @return  description of the guards location compared to yours
+     * @param guards         an array of guards
+     * @return description of the guards location compared to yours
      */
     public String help(Location currenLocation, Guard[] guards) {
         StringBuilder s = new StringBuilder();
@@ -35,8 +33,9 @@ public class FriendlyNpc {
 
     /**
      * Figures out where the guards are, compared to the current location of the player
+     *
      * @param currentLocation current location of the player
-     * @param guards the guard array
+     * @param guards          the guard array
      * @return a list of {@link Direction}s, which contains the direction of the guards
      */
     public List<Direction> getDirectionOfGuards(Location currentLocation, Guard[] guards) {

@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import Acq.IBusiness;
 import Acq.IData;
 import Acq.IUI;
@@ -11,7 +12,6 @@ import Data.DataFacade;
 import Presentation.UI;
 
 /**
- *
  * @author Nikolaj Brandt Filipsen
  */
 public class StartGUI {

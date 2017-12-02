@@ -14,12 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 // taget fra https://github.com/tutsplus/Introduction-to-JavaFX-for-Game-Development
-public class Sprite
-{
+public class Sprite {
     private Image image;
     private Image[] images;
     private double positionX;
-    private double positionY;    
+    private double positionY;
     private double velocityX;
     private double velocityY;
     private double width;
@@ -34,10 +33,9 @@ public class Sprite
     private int westRow;
     private List<Timeline> timelines;
 
-    public Sprite()
-    {
+    public Sprite() {
         positionX = 0;
-        positionY = 0;    
+        positionY = 0;
         velocityX = 0;
         velocityY = 0;
         timelines = new ArrayList<>();
@@ -45,10 +43,10 @@ public class Sprite
 
     /**
      * Set the image for the sprite, from a {@link Image}
+     *
      * @param i image
      */
-    public void setImage(Image i)
-    {
+    public void setImage(Image i) {
         image = i;
         width = i.getWidth();
         height = i.getHeight();
@@ -56,26 +54,27 @@ public class Sprite
 
     /**
      * Set the image for the sprite, from a {@link String}
+     *
      * @param filename the path to the image
      */
-    public void setImage(String filename)
-    {
+    public void setImage(String filename) {
         Image i = new Image(filename);
         setImage(i);
     }
 
     /**
      * Set the image for the sprite, from a spritesheet
-     * @param filename filename of the spritesheet
+     *
+     * @param filename              filename of the spritesheet
      * @param amountOfImagesInSheet how many images are in the sprite sheet
-     * @param rows how many rows are in the sprite sheet
-     * @param cols how many columns are in the sprite sheet
-     * @param spriteWidth width of the individual sprite
-     * @param spriteHeight height of the individual sprite
-     * @param northRow the row in which the sprite walks north
-     * @param southRow the row in which the sprite walks south
-     * @param eastRow the row in which the sprite walks east
-     * @param westRow the row in which the sprite walks west
+     * @param rows                  how many rows are in the sprite sheet
+     * @param cols                  how many columns are in the sprite sheet
+     * @param spriteWidth           width of the individual sprite
+     * @param spriteHeight          height of the individual sprite
+     * @param northRow              the row in which the sprite walks north
+     * @param southRow              the row in which the sprite walks south
+     * @param eastRow               the row in which the sprite walks east
+     * @param westRow               the row in which the sprite walks west
      */
     public void setImage(String filename, int amountOfImagesInSheet, int rows, int cols, int spriteWidth, int spriteHeight, int northRow, int southRow, int eastRow, int westRow) {
         images = new Image[amountOfImagesInSheet];
@@ -104,33 +103,28 @@ public class Sprite
         setImage(images[0]);
     }
 
-    public void setPosition(double x, double y)
-    {
+    public void setPosition(double x, double y) {
         positionX = x;
         positionY = y;
     }
 
-    public void setVelocity(double x, double y)
-    {
+    public void setVelocity(double x, double y) {
         velocityX = x;
         velocityY = y;
     }
 
-    public void addVelocity(double x, double y)
-    {
+    public void addVelocity(double x, double y) {
         velocityX += x;
         velocityY += y;
     }
 
-    public void update(double time)
-    {
+    public void update(double time) {
         positionX += velocityX * time;
         positionY += velocityY * time;
     }
 
-    public void render(GraphicsContext gc)
-    {
-        gc.drawImage( image, positionX, positionY );
+    public void render(GraphicsContext gc) {
+        gc.drawImage(image, positionX, positionY);
     }
 
     public void initNorthKeyframes() {
@@ -138,7 +132,7 @@ public class Sprite
         Collection<KeyFrame> frames = northTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = northRow*4; i < 4+(northRow*4); i++) {
+        for (int i = northRow * 4; i < 4 + (northRow * 4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -150,7 +144,7 @@ public class Sprite
         Collection<KeyFrame> frames = southTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = southRow*4; i < 4+(southRow*4); i++) {
+        for (int i = southRow * 4; i < 4 + (southRow * 4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -162,7 +156,7 @@ public class Sprite
         Collection<KeyFrame> frames = eastTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = eastRow*4; i < 4+(eastRow*4); i++) {
+        for (int i = eastRow * 4; i < 4 + (eastRow * 4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -174,7 +168,7 @@ public class Sprite
         Collection<KeyFrame> frames = westTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
-        for (int i = westRow*4; i < 4+(westRow*4); i++) {
+        for (int i = westRow * 4; i < 4 + (westRow * 4); i++) {
             Image img = images[i];
             frameTime = frameTime.add(frameGap);
             frames.add(new KeyFrame(frameTime, e -> setImage(img)));
@@ -182,20 +176,17 @@ public class Sprite
     }
 
 
-    public Rectangle2D getBoundary()
-    {
-        return new Rectangle2D(positionX,positionY,width,height);
+    public Rectangle2D getBoundary() {
+        return new Rectangle2D(positionX, positionY, width, height);
     }
 
-    public boolean intersects(Sprite s)
-    {
-        return s.getBoundary().intersects( this.getBoundary() );
+    public boolean intersects(Sprite s) {
+        return s.getBoundary().intersects(this.getBoundary());
     }
-    
-    public String toString()
-    {
-        return " Position: [" + positionX + "," + positionY + "]" 
-        + " Velocity: [" + velocityX + "," + velocityY + "]";
+
+    public String toString() {
+        return " Position: [" + positionX + "," + positionY + "]"
+                + " Velocity: [" + velocityX + "," + velocityY + "]";
     }
 
     public double getPositionX() {
@@ -217,7 +208,7 @@ public class Sprite
     // https://stackoverflow.com/a/36073509
     private static Image crop(Image src, int col, int row, int imageWidth, int imageHeight) {
         PixelReader r = src.getPixelReader();
-        WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbInstance() ;
+        WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbInstance();
         int[] pixels = new int[imageWidth * imageHeight];
         r.getPixels(col * imageWidth, row * imageHeight, imageWidth, imageHeight, pixelFormat,
                 pixels, 0, imageWidth);
@@ -225,11 +216,12 @@ public class Sprite
         PixelWriter w = out.getPixelWriter();
         w.setPixels(0, 0, imageWidth, imageHeight, pixelFormat,
                 pixels, 0, imageWidth);
-        return out ;
+        return out;
     }
 
     /**
      * Stop all the timelines, except currentTimeline
+     *
      * @param currentTimeline the timeline that will not be stopped.
      */
     private void stopTimelines(Timeline currentTimeline) {
@@ -241,6 +233,7 @@ public class Sprite
 
     /**
      * Returns the timeline, and stops the others
+     *
      * @return a timeline
      */
     public Timeline getWestTimeline() {
@@ -250,6 +243,7 @@ public class Sprite
 
     /**
      * Returns the timeline, and stops the others
+     *
      * @return a timeline
      */
     public Timeline getEastTimeline() {
@@ -259,6 +253,7 @@ public class Sprite
 
     /**
      * Returns the timeline, and stops the others
+     *
      * @return a timeline
      */
     public Timeline getNorthTimeline() {
@@ -268,6 +263,7 @@ public class Sprite
 
     /**
      * Returns the timeline, and stops the others
+     *
      * @return a timeline
      */
     public Timeline getSouthTimeline() {

@@ -13,7 +13,6 @@ class HighScoreManager {
     }
 
     /**
-     *
      * @return A top five list of {@link IHighScore}
      */
     List<IHighScore> getHighScores() {
@@ -39,7 +38,8 @@ class HighScoreManager {
 
     /**
      * saves the players highscore
-     * @param points the amount of points the player got
+     *
+     * @param points     the amount of points the player got
      * @param playerName the name of the player
      */
     void updateHighScore(int points, String playerName) {
@@ -66,6 +66,7 @@ class HighScoreManager {
 
     /**
      * injects data facade
+     *
      * @param data data facade
      */
     void injectData(IData data) {

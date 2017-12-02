@@ -2,7 +2,7 @@ package Presentation.Drawables;
 
 import javafx.scene.paint.Color;
 
-public class PowerSwitch extends VisibleDrawable{
+public class PowerSwitch extends VisibleDrawable {
 
     public PowerSwitch() {
         this.color = Color.YELLOW;

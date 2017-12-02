@@ -15,6 +15,7 @@ public class DataFacade implements IData {
 
     /**
      * Save a game
+     *
      * @param mapToSave the map to save
      */
     public void save(Map<String, String> mapToSave) {
@@ -23,6 +24,7 @@ public class DataFacade implements IData {
 
     /**
      * save a highscore
+     *
      * @param mapToSave the map to save
      */
     public void saveHighScore(Map<String, String> mapToSave) {
@@ -31,6 +33,7 @@ public class DataFacade implements IData {
 
     /**
      * delete the game save file
+     *
      * @return if the file was deleted successfully
      */
     @Override
@@ -39,7 +42,6 @@ public class DataFacade implements IData {
     }
 
     /**
-     *
      * @return if the highscore file exists
      */
     @Override
@@ -48,7 +50,6 @@ public class DataFacade implements IData {
     }
 
     /**
-     *
      * @return if the game save file exists
      */
     @Override
@@ -58,6 +59,7 @@ public class DataFacade implements IData {
 
     /**
      * load the saved game
+     *
      * @return a map of the saved game
      */
     public Map<String, String> load() {
@@ -70,6 +72,7 @@ public class DataFacade implements IData {
 
     /**
      * load the high score
+     *
      * @return a map of the highscore
      */
     public Map<String, String> loadHighScore() {

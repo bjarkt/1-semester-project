@@ -17,13 +17,14 @@ public class BusinessFacade implements IBusiness {
         game = new Game();
         highScoreManager = new HighScoreManager();
 
-        
+
     }
+
     @Override
-     public void restartGame() {
+    public void restartGame() {
         game = new Game();
-     }
-     
+    }
+
     @Override
     public ILocation getCurrentLocation() {
         return game.getCurrentRoom().getLocation();
@@ -196,8 +197,7 @@ public class BusinessFacade implements IBusiness {
     @Override
     public IBooleanMessage goDirection(Direction direction) {
         Command command = new Command(CommandWord.GO, direction.toString());
-        IBooleanMessage message = game.goRoom(command);
-        return message;
+        return game.goRoom(command);
     }
 
     @Override

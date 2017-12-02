@@ -21,6 +21,7 @@ public abstract class Drawable {
 
     /**
      * Draw the rectangle on a {@link Pane}. Makes sure not to draw two rectangles on top of eachother.
+     *
      * @param paneToDrawOn a pane
      */
     public void draw(Pane paneToDrawOn) {
@@ -32,7 +33,7 @@ public abstract class Drawable {
         this.rectangle.setX(0);
         for (Node node : paneToDrawOn.getChildren()) {
             if (node instanceof Rectangle) {
-                this.rectangle.setX(rectangle.getX()+ rectangleBufferWidth);
+                this.rectangle.setX(rectangle.getX() + rectangleBufferWidth);
             }
         }
         paneToDrawOn.getChildren().add(rectangle);

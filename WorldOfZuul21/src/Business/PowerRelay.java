@@ -11,18 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Nikolaj
  */
-public class PowerRelay implements IPowerRelay{
-    
+public class PowerRelay implements IPowerRelay {
+
     private int ID;
     private boolean status; // false when sabotaged
     private int timeBoost;
 
     /**
      * Creates a new PowerRelay with an id, and how long the time should be boosted
-     * @param ID id
+     *
+     * @param ID        id
      * @param timeBoost how much to increase the time if interacted with
      */
     public PowerRelay(int ID, int timeBoost) {
@@ -32,7 +32,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @return the id of this powerrelay
      */
     public int getID() {
@@ -40,7 +39,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @return true if turned on, false if turned off
      */
     public boolean getStatus() {
@@ -48,7 +46,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @return the amount of time boosted
      */
     public int getTimeBoost() {
@@ -70,7 +67,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @param timeBoost new time boost
      */
     public void setTimeBoost(int timeBoost) {
@@ -78,7 +74,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @param status the status to set (on=true, off=false)
      */
     public void setStatus(boolean status) {
@@ -86,7 +81,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @param ID new id
      */
     public void setID(int ID) {
@@ -94,7 +88,6 @@ public class PowerRelay implements IPowerRelay{
     }
 
     /**
-     *
      * @param rooms list of possible spawn rooms
      * @return a list of rooms, that has been spawned in
      */

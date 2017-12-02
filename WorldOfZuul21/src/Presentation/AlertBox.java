@@ -20,7 +20,8 @@ public class AlertBox {
 
     /**
      * Display a popup window
-     * @param header the text in the title bar of the window
+     *
+     * @param header       the text in the title bar of the window
      * @param textfilename the filename of the textfile. Textfile must be placed in Presentation/Textfiles/
      */
     static void display(String header, String textfilename) {
@@ -66,19 +67,20 @@ public class AlertBox {
 
     /**
      * Display a popup window, with a highscore list
-     * @param header the text in the title bar of the window
+     *
+     * @param header    the text in the title bar of the window
      * @param highScore List containing {@link IHighScore}
      */
-    static void display(String header, List<IHighScore> highScore ) {
+    static void display(String header, List<IHighScore> highScore) {
         Stage window = new Stage();
         window.setTitle(header);
         window.setMinWidth(400);
         window.setMaxWidth(600);
-        
+
         ListView<IHighScore> highscore = new ListView<>();
-        ObservableList<IHighScore> highscorelist = highscore.getItems();        
+        ObservableList<IHighScore> highscorelist = highscore.getItems();
         highscorelist.addAll(highScore);
-       
+
 
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> window.close());

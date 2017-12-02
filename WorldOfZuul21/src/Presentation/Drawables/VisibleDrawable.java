@@ -26,6 +26,7 @@ public abstract class VisibleDrawable extends Drawable {
 
     /**
      * Only draw player has seen object. This method does not check for other rectangles, like the parent class does.
+     *
      * @param paneToDrawOn a pane
      */
     @Override

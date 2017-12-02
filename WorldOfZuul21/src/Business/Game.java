@@ -65,7 +65,7 @@ public class Game {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         highScoreManager = new HighScoreManager();
         saved = false;
-        globalMessage =  "";
+        globalMessage = "";
 
         powerRelays = new PowerRelay[3];
         powerRelayLocations = new HashSet<>();
@@ -108,29 +108,29 @@ public class Game {
 
         // Instantiate the rooms, and write their descriptions.
         room00 = new Room("room00", "at the entrance of the museum", "NSE", 0, 0);
-        room01 = new Room("room01", "in room 1", "NEW",1, 0);
-        room02 = new Room("room02", "in room 2", "NEW",2, 0);
-        room03 = new Room("room03", "in room 3", "NEW",3, 0);
-        room04 = new Room("room04", "in room 4", "NW",4, 0);
+        room01 = new Room("room01", "in room 1", "NEW", 1, 0);
+        room02 = new Room("room02", "in room 2", "NEW", 2, 0);
+        room03 = new Room("room03", "in room 3", "NEW", 3, 0);
+        room04 = new Room("room04", "in room 4", "NW", 4, 0);
 
-        room05 = new Room("room05", "in room 5", "NSE",0, 1);
-        room06 = new Room("room06", "in room 6", "NSEW",1, 1);
-        room07 = new Room("room07", "in room 7", "NSEW",2, 1);
-        room08 = new Room("room08", "in room 8", "NSEW",3, 1);
-        room09 = new Room("room09", "in room 9", "NSW",4, 1);
+        room05 = new Room("room05", "in room 5", "NSE", 0, 1);
+        room06 = new Room("room06", "in room 6", "NSEW", 1, 1);
+        room07 = new Room("room07", "in room 7", "NSEW", 2, 1);
+        room08 = new Room("room08", "in room 8", "NSEW", 3, 1);
+        room09 = new Room("room09", "in room 9", "NSW", 4, 1);
 
-        room10 = new Room("room10", "in room 10", "NSE",0, 2);
-        room11 = new Room("room11", "in room 11", "NSEW",1, 2);
-        room12 = new Room("room12", "in room 12", "NSEW",2, 2);
-        room13 = new Room("room13", "in room 13", "NSEW",3, 2);
-        room14 = new Room("room14", "in room 14", "SW",4, 2);
+        room10 = new Room("room10", "in room 10", "NSE", 0, 2);
+        room11 = new Room("room11", "in room 11", "NSEW", 1, 2);
+        room12 = new Room("room12", "in room 12", "NSEW", 2, 2);
+        room13 = new Room("room13", "in room 13", "NSEW", 3, 2);
+        room14 = new Room("room14", "in room 14", "SW", 4, 2);
 
-        room15 = new Room("room15", "in room 15", "SE",0, 3);
-        room16 = new Room("room16", "in room 16", "SEW",1, 3);
-        room17 = new Room("room17", "in room 17", "SEW",2, 3);
-        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "SEW-Stairs",3, 3);
-        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "W-Stairs",4, 3);
-        noRoom = new Room("nowhere", "nowhere", "nowhere",9, 9);
+        room15 = new Room("room15", "in room 15", "SE", 0, 3);
+        room16 = new Room("room16", "in room 16", "SEW", 1, 3);
+        room17 = new Room("room17", "in room 17", "SEW", 2, 3);
+        room18 = new Room("room18", "in room 18. There are stairs to the upper floor, to the east", "SEW-Stairs", 3, 3);
+        room19 = new Room("room19", "in room 19, on the upper floor. There are stairs to the groundfloor, to the west", "W-Stairs", 4, 3);
+        noRoom = new Room("nowhere", "nowhere", "nowhere", 9, 9);
 
         // lock the appropriate doors
         lockedRooms.add(room19);
@@ -292,7 +292,7 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println("Do you want to start a new game, load a saved game, or print the current highscores? " +
-                    "(" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW +  "/" + CommandWord.HIGHSCORE +")");
+                    "(" + CommandWord.LOAD.toString() + "/" + CommandWord.NEW + "/" + CommandWord.HIGHSCORE + ")");
             command = parser.getCommand();
             commandWord = command.getCommandWord();
 
@@ -314,11 +314,11 @@ public class Game {
                 play();
             } else if (commandWord == CommandWord.HIGHSCORE) {
                 System.out.println(highScoreManager.getHighScores());
-            }
-            else if (commandWord == CommandWord.QUIT) {
+            } else if (commandWord == CommandWord.QUIT) {
                 System.out.println("The game has been closed.");
             }
-        } while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
+        }
+        while (!(commandWord == CommandWord.LOAD || commandWord == CommandWord.NEW || commandWord == CommandWord.QUIT));
 
     }
 
@@ -648,7 +648,7 @@ public class Game {
                 gotBusted = true;
                 return true;
             }
-            if(currentRoom.getLocation().getXY() == guard.getOldRoom().getLocation().getXY() && oldRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
+            if (currentRoom.getLocation().getXY() == guard.getOldRoom().getLocation().getXY() && oldRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
                 gotBusted = true;
                 return true;
             }
@@ -870,7 +870,8 @@ public class Game {
             if (room.getName().equals(map.get("guard0"))) {
                 room.addGuard(guards[0]);
                 guards[0].setRoom(room);
-            } if (room.getName().equals(map.get("guard1"))) {
+            }
+            if (room.getName().equals(map.get("guard1"))) {
                 room.addGuard(guards[1]);
                 guards[1].setRoom(room);
             }

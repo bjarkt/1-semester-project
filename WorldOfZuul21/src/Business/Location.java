@@ -9,7 +9,6 @@ import Acq.Direction;
 import Acq.ILocation;
 
 /**
- *
  * @author Nikolaj
  */
 public class Location implements ILocation {
@@ -26,6 +25,7 @@ public class Location implements ILocation {
 
     /**
      * Method for getting X
+     *
      * @return x
      */
     public int getX() {
@@ -34,6 +34,7 @@ public class Location implements ILocation {
 
     /**
      * Method for getting Y
+     *
      * @return y
      */
     public int getY() {
@@ -42,6 +43,7 @@ public class Location implements ILocation {
 
     /**
      * Method for getting XY
+     *
      * @return xy
      */
     public int getXY() {
@@ -62,7 +64,6 @@ public class Location implements ILocation {
     }
 
     /**
-     *
      * @param loc another location
      * @return true if the this location is next to the other location
      */
@@ -80,7 +81,6 @@ public class Location implements ILocation {
     }
 
     /**
-     *
      * @param loc another location
      * @return the direction that the other location is, compared to this
      */

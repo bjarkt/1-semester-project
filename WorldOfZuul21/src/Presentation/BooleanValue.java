@@ -6,12 +6,11 @@
 package Presentation;
 
 /**
- *
  * @author Thomas Korgaard
  */
 public class BooleanValue {
-    public boolean value; 
-    
+    public boolean value;
+
     public BooleanValue(boolean b) {
         value = b;
     }

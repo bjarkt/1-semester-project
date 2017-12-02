@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class UI extends Application implements IUI{
+public class UI extends Application implements IUI {
 
     private static IBusiness business;
 

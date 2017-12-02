@@ -8,7 +8,8 @@ public class HighScore implements IHighScore {
 
     /**
      * Creates a new highscore object from a name and a score
-     * @param name name of the player
+     *
+     * @param name  name of the player
      * @param score the amount of points the player got
      */
     public HighScore(String name, int score) {

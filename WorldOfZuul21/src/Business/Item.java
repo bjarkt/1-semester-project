@@ -48,6 +48,7 @@ public class Item implements IItem {
 
     /**
      * This method chooses a random item to spawn from the list of items.
+     *
      * @param rooms a list of possible rooms, in which the item may spawn
      * @return a list of size 1, containing the room that the item spawned in
      */
@@ -56,7 +57,7 @@ public class Item implements IItem {
         for (Room room : rooms) {
             room.setItem(null);
         }
-        
+
         int spawnID = (int) (Math.random() * itemNames.length);
         String newName = itemNames[spawnID];
 
