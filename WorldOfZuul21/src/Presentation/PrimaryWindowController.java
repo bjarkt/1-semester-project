@@ -20,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -35,6 +34,9 @@ import java.util.*;
 
 public class PrimaryWindowController implements Initializable {
 
+    /**
+     * JavaFX gui elements
+     */
     @FXML
     private GridPane minimapGrid;
     @FXML
@@ -60,9 +62,11 @@ public class PrimaryWindowController implements Initializable {
     @FXML
     private Label timeLeftLabel;
 
+    // player and its position
     private Sprite sPlayer;
     private Point2DProperty playerStartPos;
 
+    // the doors and their positions
     private List<Sprite> doors;
     private Sprite northDoor;
     private Point2DProperty northDoorPos;
@@ -85,6 +89,7 @@ public class PrimaryWindowController implements Initializable {
     private HashMap<Point2D, Pane> paneMap;
     private HashMap<Point2D, Image> boardBackgroundMap;
 
+    // the drawables
     private Player player;
     private Guard[] guards;
     private PowerSwitch powerSwitch;
@@ -114,6 +119,7 @@ public class PrimaryWindowController implements Initializable {
 
         update();
 
+        // get the name of the player
         if (!nameLoaded) {
             TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
             t.setTitle("Enter name");
@@ -121,14 +127,17 @@ public class PrimaryWindowController implements Initializable {
             Optional<String> s = t.showAndWait();
             if (s.isPresent()) {
                 if (s.get().contains(" ")) {
+                    // spaces are not allowed in the xml, so replace them with '-'.
                     playerName = s.get().replace(" ", "-");
                 } else {
                     playerName = s.get();
                 }
             } else {
+                // if the cancel button was pressed, exit the game
                 Platform.exit();
             }
         } else {
+            // if the game is loaded, load the name
             playerName = business.getLoadedPlayerName();
         }
     }
@@ -158,30 +167,35 @@ public class PrimaryWindowController implements Initializable {
     public void updateSpritePosition() {
         playerStartPos = new Point2DProperty();
         if (stackPane.getWidth() == 0) {
-            // hvis stackpane ikke har fået en bredde, skal spilleren placeres på (200, 200)
-            // ellers bliver han placeret oven på døren, og går i gennem den, og ender i fx. rum 15, eller bliver busted
+            // if the stackpane hasn't gotten a width, place the player at (200, 200)
+            // otherwise he will be placed ontop of doors, and walk through them
             playerStartPos = new Point2DProperty(200, 200);
         } else {
+            // place the player in the middle of the stackpane
             playerStartPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(sPlayer.getWidth() / 2));
             playerStartPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(sPlayer.getHeight() / 2));
         }
         setPlayerStartPos();
 
+        // place north door at top middle
         northDoorPos = new Point2DProperty();
         northDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(northDoor.getWidth() / 2));
         northDoorPos.setPropertyY(0);
         northDoor.setPosition(northDoorPos.getPropertyX(), northDoorPos.getPropertyY());
 
+        // place south door at bottom middle
         southDoorPos = new Point2DProperty();
         southDoorPos.propertyXProperty().bind(stackPane.widthProperty().divide(2).subtract(southDoor.getWidth() / 2));
         southDoorPos.propertyYProperty().bind(stackPane.heightProperty().subtract(20));
         southDoor.setPosition(southDoorPos.getPropertyX(), southDoorPos.getPropertyY());
 
+        // place east door at right middle
         eastDoorPos = new Point2DProperty();
         eastDoorPos.propertyXProperty().bind(stackPane.widthProperty().subtract(20));
         eastDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(eastDoor.getHeight() / 2));
         eastDoor.setPosition(eastDoorPos.getPropertyX(), eastDoorPos.getPropertyY());
 
+        // place west door at left middle
         westDoorPos = new Point2DProperty();
         westDoorPos.setPropertyX(0);
         westDoorPos.propertyYProperty().bind(stackPane.heightProperty().divide(2).subtract(westDoor.getHeight() / 2));
@@ -222,6 +236,8 @@ public class PrimaryWindowController implements Initializable {
                     sPlayer.addVelocity(0, speed);
                     sPlayer.getSouthTimeline().play();
                 }
+
+                // if the player is outside the allowed area, stop him, and move him back a bit
                 if (!isSpriteOutsideRectangle(sPlayer, 0, 0, stackPane.getWidth(), stackPane.getHeight())) {
                     inputs.clear();
                     sPlayer.setVelocity(0, 0);
@@ -244,6 +260,9 @@ public class PrimaryWindowController implements Initializable {
                 for (Sprite door : doors) {
                     if (sPlayer.intersects(door)) {
                         if (door == northDoor) {
+                            /* bug fix: the following line is not done, the player will begin to move at the screen
+                            *  where the user enters their name
+                            */
                             if (inputs.contains("W")) {
                                 goNorth();
                                 setPlayerStartPos();
@@ -317,6 +336,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void initGroundImageView() {
+        // make the imageview of the background resizable
         Pane parentOfImageView = (Pane) groundImageView.getParent();
         groundImageView.setPreserveRatio(false);
         groundImageView.fitWidthProperty().bind(parentOfImageView.widthProperty());
@@ -326,6 +346,10 @@ public class PrimaryWindowController implements Initializable {
     private void initMinimapGrid() {
         int maxCol = getColCount(minimapGrid);
         int maxRow = getRowCount(minimapGrid);
+
+        /*
+        This list is used to place the correct numbers on the tiles in the minimap
+         */
         List<Integer> stupidList = new ArrayList<>();
         Collections.addAll(stupidList, 15, 16, 17, 18, 19, 10, 11, 12, 13, 14, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4);
 
@@ -333,6 +357,7 @@ public class PrimaryWindowController implements Initializable {
         for (int r = 0; r < maxRow; r++) {
             for (int c = 0; c < maxCol; c++, i++) {
                 Pane p = new Pane();
+                // add the number, and append zero if needed
                 String s = stupidList.get(i) + "";
                 if (s.length() == 1) {
                     s = "0" + stupidList.get(i);
@@ -340,7 +365,6 @@ public class PrimaryWindowController implements Initializable {
                 Text text = new Text(4, 20, s);
                 int rowIndex = (maxRow - r) - 1;
 
-                p.setOnMouseClicked(this::handleMinimapPaneClick);
                 p.getChildren().add(text);
                 minimapGrid.add(p, c, (maxRow - rowIndex) - 1);
                 paneMap.put(new Point2D(c, rowIndex), p);
@@ -390,6 +414,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void update() {
+        // Check if any of the VisibleDrawables can be seen in the current room
         if (business.currentRoomContainsItem()) {
             item.setSeen(true);
         } else if (business.currentRoomContainsPowerRelay()) {
@@ -428,12 +453,15 @@ public class PrimaryWindowController implements Initializable {
 
     private void checkForBusted() {
         if ((forcedToQuit && !business.getCheatMode()) || (business.getPolicedArrived() && !business.getCheatMode()) || (business.isGotBusted() && !business.getCheatMode())) {
+            // clear the inputs, so the player stops moving
             inputs.clear();
+            // update the highscore
             business.updateHighScore(playerName);
-            ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE); // make the built in button invisible
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close);
-            quitPopup.getDialogPane().lookupButton(close).setVisible(false);
+            quitPopup.getDialogPane().lookupButton(close).setVisible(false); // make the built in button invisible
 
+            // BooleanValue is needed, so the value can be changed in the OnAction event
             BooleanValue newGameClicked = new BooleanValue(false);
 
             GridPane grid = new GridPane();
@@ -480,6 +508,11 @@ public class PrimaryWindowController implements Initializable {
 
             quitPopup.setTitle("You got busted!");
             quitPopup.setHeaderText("You got busted!");
+
+            /*
+                quitPopup.showAndWait cannot be used, because an animation is most likely running,
+                when this popup will happen
+             */
             quitPopup.initModality(Modality.WINDOW_MODAL);
             Platform.runLater(quitPopup::showAndWait);
 
@@ -494,6 +527,7 @@ public class PrimaryWindowController implements Initializable {
     private void drawMinimap() {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
+            // Start from the last element, so it checks all elements, and does not skip any
             for (int i = children.size() - 1; i > 0; i--) {
                 if (children.get(i) instanceof Rectangle) {
                     children.remove(children.get(i));
@@ -551,6 +585,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     public void handleStealButtonAction(ActionEvent e) {
+        // Do not change the seen status of the drawable item, if the item stolen is a key
         if (business.getItemForCurrentRoom() != null && !business.getItemForCurrentRoom().getName().equalsIgnoreCase("Key")) {
             item.setSeen(false);
         }
@@ -604,6 +639,10 @@ public class PrimaryWindowController implements Initializable {
 
     public void handleKeyPress(KeyEvent e) {
         String code = e.getCode().toString();
+        /*
+        Arrow keys also navigate the javafx gui elements, so if they are pressed, consume their event
+        so the focus stays on the canvas
+         */
         if (code.equals("UP") || code.equals("DOWN") || code.equals("RIGHT") || code.equals("LEFT")) {
             e.consume();
         }
@@ -688,26 +727,21 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * set the seen status of all drawables
+     * @param seen seen boolean value
+     */
     private void setAllDrawablesSeen(boolean seen) {
         for (VisibleDrawable visibleDrawable : visibleDrawables) {
             visibleDrawable.setSeen(seen);
         }
     }
 
-    private void handleMinimapPaneClick(MouseEvent e) {
-        Pane clicked = ((Pane) e.getSource());
-        for (Map.Entry<Point2D, Pane> entry : paneMap.entrySet()) {
-            if (entry.getValue() == clicked) {
-                System.out.println(entry.getKey());
-                for (IRoom room : business.getRooms()) {
-                    if (room.getLocation().getX() == entry.getKey().getX() && room.getLocation().getY() == entry.getKey().getY()) {
-                        System.out.println(room.getVisualDescription());
-                    }
-                }
-            }
-        }
-    }
-
+    /**
+     * get amount of columns in gridpane
+     * @param pane a {@link GridPane}
+     * @return amount of columns in gridpane
+     */
     private int getColCount(GridPane pane) {
         int numCols = pane.getColumnConstraints().size();
         for (int i = 0; i < pane.getChildren().size(); i++) {
@@ -722,6 +756,12 @@ public class PrimaryWindowController implements Initializable {
         return numCols;
     }
 
+    /**
+     * Found at https://stackoverflow.com/a/20766735
+     * Get the amount of rows in a grid pane
+     * @param pane a {@link GridPane}
+     * @return amount of rows in pane
+     */
     private int getRowCount(GridPane pane) {
         int numRows = pane.getRowConstraints().size();
         for (int i = 0; i < pane.getChildren().size(); i++) {
@@ -736,6 +776,10 @@ public class PrimaryWindowController implements Initializable {
         return numRows;
     }
 
+    /**
+     * print text to textarea. Do not print if text is empty
+     * @param text some text
+     */
     private void println(String text) {
         if (text.length() != 0) {
             textArea.appendText(text + "\n");
@@ -746,6 +790,11 @@ public class PrimaryWindowController implements Initializable {
         this.business = business;
     }
 
+    /**
+     * Convert a {@link ILocation} to a {@link Point2D}
+     * @param loc location
+     * @return a Point2D version of loc
+     */
     private Point2D locationToPoint(ILocation loc) {
         return new Point2D(loc.getX(), loc.getY());
     }
