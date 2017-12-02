@@ -433,10 +433,14 @@ public class Game {
         BooleanMessage booleanMessage = new BooleanMessage();
         if (currentRoom.getPowerRelay() != null) {
             if (!powerStatus) {
-                currentRoom.getPowerRelay().sabotage();
-                this.powerOffTime += currentRoom.getPowerRelay().getTimeBoost();
-                s += "You sabotaged the relay\n";
-                s += "You have got " + currentRoom.getPowerRelay().getTimeBoost() + " more rounds before the power comes back\n";
+                if (currentRoom.getPowerRelay().getStatus()) { // if the power relay has not been sabotaged
+                    currentRoom.getPowerRelay().sabotage();
+                    this.powerOffTime += currentRoom.getPowerRelay().getTimeBoost();
+                    s += "You sabotaged the relay\n";
+                    s += "You have got " + currentRoom.getPowerRelay().getTimeBoost() + " more rounds before the power comes back\n";
+                } else { // if the powerrelay has been sabotaged
+                    s += "This power relay is already sabotaged.";
+                }
             } else {
                 s += "When you try to sabotage the relay, you trigger the alarm\n";
                 this.gotBusted = true;
