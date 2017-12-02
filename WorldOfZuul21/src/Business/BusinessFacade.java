@@ -74,11 +74,6 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public int getRoundsLeftBeforePowerTurnsOn() {
-        return game.getPowerOffTime() / 2;
-    }
-
-    @Override
     public boolean currentRoomContainsItem() {
         return game.getCurrentRoom().getItems() != null && !game.getCurrentRoom().getItems().isKey();
     }
@@ -144,11 +139,6 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public int getPowerOffTime() {
-        return game.getPowerOffTime();
-    }
-
-    @Override
     public int getTimeBeforePowerTurnsBackOn() {
         return game.getTimeBeforePowerTurnsBackOn();
     }
@@ -156,16 +146,6 @@ public class BusinessFacade implements IBusiness {
     @Override
     public int getTimeBeforePoliceArrives() {
         return game.getTimeBeforePoliceArrives();
-    }
-
-    @Override
-    public IItem getItem() {
-        for (Room room : game.getItemSpawnPointRooms()) {
-            if (room.getItems() != null) {
-                return room.getItems();
-            }
-        }
-        return null;
     }
 
     @Override
@@ -252,11 +232,6 @@ public class BusinessFacade implements IBusiness {
     @Override
     public boolean deleteSaveGameFile() {
         return data.deleteFile();
-    }
-
-    @Override
-    public BooleanMessage checkTimer() {
-        return game.checkTimer();
     }
 
     @Override

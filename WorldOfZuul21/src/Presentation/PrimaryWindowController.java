@@ -261,8 +261,8 @@ public class PrimaryWindowController implements Initializable {
                     if (sPlayer.intersects(door)) {
                         if (door == northDoor) {
                             /* bug fix: the following line is not done, the player will begin to move at the screen
-                            *  where the user enters their name
-                            */
+                             *  where the user enters their name
+                             */
                             if (inputs.contains("W")) {
                                 goNorth();
                                 setPlayerStartPos();
@@ -729,6 +729,7 @@ public class PrimaryWindowController implements Initializable {
 
     /**
      * set the seen status of all drawables
+     *
      * @param seen seen boolean value
      */
     private void setAllDrawablesSeen(boolean seen) {
@@ -739,6 +740,7 @@ public class PrimaryWindowController implements Initializable {
 
     /**
      * get amount of columns in gridpane
+     *
      * @param pane a {@link GridPane}
      * @return amount of columns in gridpane
      */
@@ -759,6 +761,7 @@ public class PrimaryWindowController implements Initializable {
     /**
      * Found at https://stackoverflow.com/a/20766735
      * Get the amount of rows in a grid pane
+     *
      * @param pane a {@link GridPane}
      * @return amount of rows in pane
      */
@@ -778,6 +781,7 @@ public class PrimaryWindowController implements Initializable {
 
     /**
      * print text to textarea. Do not print if text is empty
+     *
      * @param text some text
      */
     private void println(String text) {
@@ -792,6 +796,7 @@ public class PrimaryWindowController implements Initializable {
 
     /**
      * Convert a {@link ILocation} to a {@link Point2D}
+     *
      * @param loc location
      * @return a Point2D version of loc
      */

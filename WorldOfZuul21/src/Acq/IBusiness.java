@@ -15,7 +15,6 @@ public interface IBusiness {
     ILocation getPowerSwitchLocation();
     ILocation getItemLocation();
 
-    int getRoundsLeftBeforePowerTurnsOn();
     boolean deleteSaveGameFile();
 
     IItem getItemForCurrentRoom();
@@ -36,14 +35,11 @@ public interface IBusiness {
     boolean getPoliceAlerted();
     boolean isGotBusted();
     boolean getPolicedArrived();
-    int getPowerOffTime();
     int getTimeBeforePowerTurnsBackOn();
     int getTimeBeforePoliceArrives();
-    BooleanMessage checkTimer();
     String getGlobalMessage();
     void clearGlobalMessage();
 
-    IItem getItem();
     List<IItem> getInventoryList();
     List<IItem> getLootList();
 
