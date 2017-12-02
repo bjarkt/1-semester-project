@@ -74,8 +74,8 @@ public class PrimaryWindowController implements Initializable {
 
     private boolean forcedToQuit;
 
-    private HashMap<Point2D, Pane> paneMap;
-    private HashMap<Point2D, Image> boardBackgroundMap;
+    private HashMap<ILocation, Pane> paneMap;
+    private HashMap<ILocation, Image> boardBackgroundMap;
 
     // the drawables
     private Player player;
@@ -303,7 +303,7 @@ public class PrimaryWindowController implements Initializable {
         ILocation[] powerRelayLocations = business.getPowerRelayLocations();
         this.powerRelays = new PowerRelay[powerRelayLocations.length];
         for (int i = 0; i < powerRelays.length; i++) {
-            this.powerRelays[i] = new PowerRelay(locationToPoint(powerRelayLocations[i]));
+            this.powerRelays[i] = new PowerRelay(powerRelayLocations[i]);
         }
         this.item = new Item();
 
@@ -357,7 +357,7 @@ public class PrimaryWindowController implements Initializable {
 
                 p.getChildren().add(text);
                 minimapGrid.add(p, c, (maxRow - rowIndex) - 1);
-                paneMap.put(new Point2D(c, rowIndex), p);
+                paneMap.put(business.createLocation(c, rowIndex), p);
             }
         }
 
@@ -367,7 +367,7 @@ public class PrimaryWindowController implements Initializable {
     private void initImages() {
         for (IRoom room : business.getRooms()) {
             String filename = "Pictures/" + room.getVisualDescription() + ".png";
-            boardBackgroundMap.put(locationToPoint(room.getLocation()), new Image(getClass().getResourceAsStream(filename)));
+            boardBackgroundMap.put(room.getLocation(), new Image(getClass().getResourceAsStream(filename)));
         }
     }
 
@@ -409,7 +409,7 @@ public class PrimaryWindowController implements Initializable {
             item.setSeen(true);
         } else if (business.currentRoomContainsPowerRelay()) {
             for (PowerRelay relay : powerRelays) {
-                if (relay.getLocation().equals(locationToPoint(business.getCurrentLocation()))) {
+                if (relay.getLocation().equals(business.getCurrentLocation())) {
                     relay.setSeen(true);
                 }
             }
@@ -420,7 +420,7 @@ public class PrimaryWindowController implements Initializable {
         positionExitsAndDisableButtons();
 
         drawMinimap();
-        groundImageView.setImage(boardBackgroundMap.get(locationToPoint(business.getCurrentLocation())));
+        groundImageView.setImage(boardBackgroundMap.get(business.getCurrentLocation()));
 
         friendlyNpcLabel.setText(business.callFriendlyNPC());
 
@@ -536,18 +536,18 @@ public class PrimaryWindowController implements Initializable {
             }
         }
 
-        player.draw(paneMap.get(locationToPoint(business.getCurrentLocation())));
-        powerSwitch.draw(paneMap.get(locationToPoint(business.getPowerSwitchLocation())));
+        player.draw(paneMap.get(business.getCurrentLocation()));
+        powerSwitch.draw(paneMap.get(business.getPowerSwitchLocation()));
 
         if (business.getItemLocation() != null) {
-            item.draw(paneMap.get(locationToPoint(business.getItemLocation())));
+            item.draw(paneMap.get(business.getItemLocation()));
         }
 
         for (int i = 0; i < powerRelays.length; i++) {
-            powerRelays[i].draw(paneMap.get(locationToPoint(business.getPowerRelayLocations()[i])));
+            powerRelays[i].draw(paneMap.get(business.getPowerRelayLocations()[i]));
         }
         for (int i = 0; i < guards.length; i++) {
-            guards[i].draw(paneMap.get(locationToPoint(business.getGuardLocations()[i])));
+            guards[i].draw(paneMap.get(business.getGuardLocations()[i]));
         }
     }
 
@@ -581,8 +581,8 @@ public class PrimaryWindowController implements Initializable {
 
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callMasterMindDaniel());
-        println("TOGGLED CHEAT MODE - FJERN DETTE I RIGTIG VERSION");
         business.toggleCheatMode();
+        println("CHEAT MODE SAT TIL " + String.valueOf(business.getCheatMode()).toUpperCase() + " - FJERN DETTE I RIGTIG VERSION");
     }
 
     public void handleStealButtonAction(ActionEvent e) {
@@ -663,7 +663,6 @@ public class PrimaryWindowController implements Initializable {
     public void handleMenuItemSaveAction(ActionEvent e) {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
-            System.out.println("saved the game");
             business.save(playerName);
             Platform.exit();
         }
@@ -804,8 +803,4 @@ public class PrimaryWindowController implements Initializable {
      * @param loc location
      * @return a Point2D version of loc
      */
-    private Point2D locationToPoint(ILocation loc) {
-        return new Point2D(loc.getX(), loc.getY());
-    }
-
 }

@@ -8,59 +8,20 @@ package Business;
 import Acq.Direction;
 import Acq.ILocation;
 
+import java.awt.geom.Point2D;
+
 /**
+ * This class extends Point2D, so we can make our own additional methods
  * @author Nikolaj
  */
-public class Location implements ILocation {
+public class Location extends Point2D implements ILocation {
 
-    private int x;
-    private int y;
-    private int xy;
+    private double x;
+    private double y;
 
-    public Location(int x, int y) {
+    public Location(double x, double y) {
         this.x = x;
         this.y = y;
-        xy = Integer.parseInt("" + x + y);
-    }
-
-    /**
-     * Method for getting X
-     *
-     * @return x
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Method for getting Y
-     *
-     * @return y
-     */
-    public int getY() {
-        return y;
-    }
-
-    /**
-     * Method for getting XY
-     *
-     * @return xy
-     */
-    public int getXY() {
-
-        return xy;
-    }
-
-    @Override
-    public String toString() {
-        // Method for returning xy as a string
-        return xy + "";
-    }
-
-    // Not in use
-    @Override
-    public int hashCode() {
-        return (Integer.toString(x) + "," + Integer.toString(y)).hashCode();
     }
 
     /**
@@ -69,13 +30,9 @@ public class Location implements ILocation {
      */
     public boolean isNextTo(Location loc) {
         if (this.x == loc.getX() + 1 || this.x == loc.getX() - 1) {
-            if (this.y == loc.getY()) {
-                return true;
-            }
+            return this.y == loc.getY();
         } else if (this.y == loc.getY() + 1 || this.y == loc.getY() - 1) {
-            if (this.x == loc.getX()) {
-                return true;
-            }
+            return this.x == loc.getX();
         }
         return false;
     }
@@ -100,5 +57,21 @@ public class Location implements ILocation {
                 return null;
             }
         }
+    }
+
+    @Override
+    public double getX() {
+        return this.x;
+    }
+
+    @Override
+    public double getY() {
+        return this.y;
+    }
+
+    @Override
+    public void setLocation(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 }

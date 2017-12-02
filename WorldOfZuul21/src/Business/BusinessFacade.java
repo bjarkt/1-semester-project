@@ -245,6 +245,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public ILocation createLocation(double x, double y) {
+        return new Location(x, y);
+    }
+
+    @Override
     public void injectData(IData data) {
         this.data = data;
         highScoreManager.injectData(data);

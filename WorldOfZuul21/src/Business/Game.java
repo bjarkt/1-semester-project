@@ -21,13 +21,13 @@ public class Game {
 
     private Room currentRoom; // the room that the player is currently in
     private Room oldRoom;
-    private HashMap<Integer, Room> rooms; // a map storing all the rooms
+    private HashMap<Location, Room> rooms; // a map storing all the rooms
 
     private PowerRelay[] powerRelays;
     private HashSet<Room> powerRelayLocations;
     private HashSet<Room> lockedRooms;
     private Room powerSwitchRoom; // the room with the powerswitch
-    private int powerSwitchLocation; // the coordinates of the room with the powerswitch
+    private Location powerSwitchLocation; // the coordinates of the room with the powerswitch
     private boolean powerStatus; // true when the power is on
 
     private Item key;
@@ -160,7 +160,7 @@ public class Game {
 
         // spawn the powerswitch in one of three rooms
         powerSwitchRoom = PowerSwitch.Spawn(switchSpawnPointRooms).get(0);
-        powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
+        powerSwitchLocation = powerSwitchRoom.getLocation();
 
         // spawn powerRelays in three out of 6 random rooms
         powerRelayLocations = new HashSet<>(PowerRelay.Spawn(relaySpawnPointRooms));
@@ -175,31 +175,31 @@ public class Game {
 
         // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();
-        rooms.put(room00.getLocation().getXY(), room00);
-        rooms.put(room01.getLocation().getXY(), room01);
-        rooms.put(room02.getLocation().getXY(), room02);
-        rooms.put(room03.getLocation().getXY(), room03);
-        rooms.put(room04.getLocation().getXY(), room04);
-        rooms.put(room05.getLocation().getXY(), room05);
-        rooms.put(room06.getLocation().getXY(), room06);
-        rooms.put(room07.getLocation().getXY(), room07);
-        rooms.put(room08.getLocation().getXY(), room08);
-        rooms.put(room09.getLocation().getXY(), room09);
-        rooms.put(room10.getLocation().getXY(), room10);
-        rooms.put(room11.getLocation().getXY(), room11);
-        rooms.put(room12.getLocation().getXY(), room12);
-        rooms.put(room13.getLocation().getXY(), room13);
-        rooms.put(room14.getLocation().getXY(), room14);
-        rooms.put(room15.getLocation().getXY(), room15);
-        rooms.put(room16.getLocation().getXY(), room16);
-        rooms.put(room17.getLocation().getXY(), room17);
-        rooms.put(room18.getLocation().getXY(), room18);
-        rooms.put(room19.getLocation().getXY(), room19);
-        rooms.put(noRoom.getLocation().getXY(), noRoom);
+        rooms.put(room01.getLocation(), room01);
+        rooms.put(room00.getLocation(), room00);
+        rooms.put(room02.getLocation(), room02);
+        rooms.put(room03.getLocation(), room03);
+        rooms.put(room04.getLocation(), room04);
+        rooms.put(room05.getLocation(), room05);
+        rooms.put(room06.getLocation(), room06);
+        rooms.put(room07.getLocation(), room07);
+        rooms.put(room08.getLocation(), room08);
+        rooms.put(room09.getLocation(), room09);
+        rooms.put(room10.getLocation(), room10);
+        rooms.put(room11.getLocation(), room11);
+        rooms.put(room12.getLocation(), room12);
+        rooms.put(room13.getLocation(), room13);
+        rooms.put(room14.getLocation(), room14);
+        rooms.put(room15.getLocation(), room15);
+        rooms.put(room16.getLocation(), room16);
+        rooms.put(room17.getLocation(), room17);
+        rooms.put(room18.getLocation(), room18);
+        rooms.put(room19.getLocation(), room19);
+        rooms.put(noRoom.getLocation(), noRoom);
 
         // Set the room, in which the player starts.
-        currentRoom = rooms.get(room00.getLocation().getXY()); // set the room in which the player starts
-        oldRoom = rooms.get(room00.getLocation().getXY());
+        currentRoom = rooms.get(room00.getLocation()); // set the room in which the player starts
+        oldRoom = rooms.get(room00.getLocation());
         // Set the exits for each room
         HashSet<Room> specialRooms = new HashSet<>();
         specialRooms.add(room14);
@@ -516,7 +516,7 @@ public class Game {
     boolean escape(Command command) {
         // used to escape the museum through the entrance
         boolean wantToQuit = false;
-        if (currentRoom.getLocation().getXY() == 0) {
+        if (currentRoom.getLocation().equals(new Location(0, 0))) {
             wantToQuit = escaped(command);
         } else {
             if (textMode) System.out.println("There is no door to escape through");
@@ -654,11 +654,11 @@ public class Game {
     private boolean checkForBusted() {
         // return true if there is a guard in the same room as the player
         for (Guard guard : guards) {
-            if (currentRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
+            if (currentRoom.getLocation().equals(guard.getRoom().getLocation())) {
                 gotBusted = true;
                 return true;
             }
-            if (currentRoom.getLocation().getXY() == guard.getOldRoom().getLocation().getXY() && oldRoom.getLocation().getXY() == guard.getRoom().getLocation().getXY()) {
+            if (currentRoom.getLocation().equals(guard.getOldRoom().getLocation()) && oldRoom.getLocation().equals(guard.getRoom().getLocation())) {
                 gotBusted = true;
                 return true;
             }
@@ -703,8 +703,9 @@ public class Game {
 
     private void reset() {
         // reset the guards
-        guards[0].setRoom(rooms.get(40));
-        guards[1].setRoom(rooms.get(3));
+        guards[0].setRoom(rooms.get(new Location(4, 0)));
+        guards[1].setRoom(rooms.get(new Location(0, 3)));
+
         // turn the power back on
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
         powerStatus = true;
@@ -741,8 +742,8 @@ public class Game {
         mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
         int ii = 0;
-        for (Room powerRelayLocation : powerRelayLocations) {
-            mapToSave.put("powerRelayLocation_" + ii, powerRelayLocation.getName());
+        for (Room powerRelayRoom : powerRelayLocations) {
+            mapToSave.put("powerRelayLocation_" + ii, powerRelayRoom.getName());
             ii++;
         }
         mapToSave.put("itemName", itemName);
@@ -764,12 +765,6 @@ public class Game {
         mapToSave.put("guard1", guards[1].getRoom().getName());
 
         for (Room room : rooms.values()) {
-            /*if (room.getGuards()[0] != null) {
-                mapToSave.put("guard0", room.getName());
-            }
-            if (room.getGuards()[1] != null) {
-                mapToSave.put("guard1", room.getName());
-            }*/
             if (room.getItems() != null) {
                 mapToSave.put("itemRoom", room.getName());
             }
@@ -848,7 +843,7 @@ public class Game {
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
                 powerSwitchRoom = room;
-                powerSwitchLocation = powerSwitchRoom.getLocation().getXY();
+                powerSwitchLocation = powerSwitchRoom.getLocation();
                 room.setPowerSwitch(new PowerSwitch());
                 room.getPowerSwitch().turnPowerOn();
             }
@@ -947,12 +942,8 @@ public class Game {
         return new ArrayList<>(rooms.values());
     }
 
-    int getPowerOffTime() {
-        return powerOffTime;
-    }
-
     boolean isAtEntrace() {
-        return currentRoom.getLocation().getXY() == 0;
+        return currentRoom.getLocation().equals(new Location(0, 0));
     }
 
     boolean isCheatMode() {

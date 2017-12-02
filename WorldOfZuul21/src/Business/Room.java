@@ -19,7 +19,7 @@ public class Room implements IRoom {
     private String description;
     private String visualDescription;
     private String baseVisualDescription;
-    private HashMap<Direction, Integer> exits;
+    private HashMap<Direction, Location> exits;
     private PowerSwitch powerSwitch;
     private PowerRelay powerRelay;
     private boolean locked;
@@ -41,7 +41,7 @@ public class Room implements IRoom {
         this.visualDescription = visualDescription;
         this.baseVisualDescription = this.visualDescription;
         location = new Location(x, y);
-        exits = new HashMap<Direction, Integer>();
+        exits = new HashMap<>();
         locked = false;
         items = new Item[1]; // only one item per room
         guards = new Guard[2]; // two guards per room
@@ -60,7 +60,7 @@ public class Room implements IRoom {
      * @param direction
      * @param neighbor
      */
-    public void setExit(Direction direction, Integer neighbor) {
+    public void setExit(Direction direction, Location neighbor) {
         exits.put(direction, neighbor);
     }
 
@@ -88,7 +88,7 @@ public class Room implements IRoom {
 
     /* Returns room, that has the corresponding direction. 
        Returns null if there is no room, for a certain direction. */
-    public Integer getExit(Direction direction) {
+    public Location getExit(Direction direction) {
         return exits.get(direction);
     }
 
@@ -313,29 +313,29 @@ public class Room implements IRoom {
      * @param rooms        all the rooms and their locations in a hashmap
      * @param specialRooms the rooms that are special
      */
-    public static void setExits(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
+    public static void setExits(HashMap<Location, Room> rooms, HashSet<Room> specialRooms) {
         // set the rooms' exits
         // The HashMap rooms is expected to contain a series of rooms shaped as a square
         // the HashSet specialRooms contains rooms, which are not allowed to have exits to each other
 
         // first the max and min values of x and y are found
-        Integer maxX = Integer.MIN_VALUE; // set the max values to the smallest integer, so it will be overwritten atleast once
-        Integer maxY = Integer.MIN_VALUE;
-        Integer minX = Integer.MAX_VALUE; // set the min value to the largest integer, so it will be overwritten atleast once
-        Integer minY = Integer.MAX_VALUE;
-        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
-            if (room.getValue().getLocation().getX() != 9 && room.getValue().getLocation().getX() != 9) {
-                if (maxX < room.getValue().getLocation().getX()) {
-                    maxX = room.getValue().getLocation().getX();
+        Double maxX = Double.MIN_VALUE; // set the max values to the smallest integer, so it will be overwritten atleast once
+        Double maxY = Double.MIN_VALUE;
+        Double minX = Double.MAX_VALUE; // set the min value to the largest integer, so it will be overwritten atleast once
+        Double minY = Double.MAX_VALUE;
+        for (Map.Entry<Location, Room> entry : rooms.entrySet()) {
+            if (entry.getValue().getLocation().getX() != 9 && entry.getValue().getLocation().getX() != 9) {
+                if (maxX < entry.getValue().getLocation().getX()) {
+                    maxX = entry.getValue().getLocation().getX();
                 }
-                if (maxY < room.getValue().getLocation().getY()) {
-                    maxY = room.getValue().getLocation().getY();
+                if (maxY < entry.getValue().getLocation().getY()) {
+                    maxY = entry.getValue().getLocation().getY();
                 }
-                if (minX > room.getValue().getLocation().getX()) {
-                    minX = room.getValue().getLocation().getX();
+                if (minX > entry.getValue().getLocation().getX()) {
+                    minX = entry.getValue().getLocation().getX();
                 }
-                if (minY > room.getValue().getLocation().getY()) {
-                    minY = room.getValue().getLocation().getY();
+                if (minY > entry.getValue().getLocation().getY()) {
+                    minY = entry.getValue().getLocation().getY();
                 }
             }
         }
@@ -345,7 +345,7 @@ public class Room implements IRoom {
         exitsAllowed.put(Direction.SOUTH, Boolean.TRUE);
         exitsAllowed.put(Direction.EAST, Boolean.TRUE);
         exitsAllowed.put(Direction.WEST, Boolean.TRUE);
-        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+        for (Map.Entry<Location, Room> room : rooms.entrySet()) {
             /* if the current room can be found in specialRooms,
             it will not be allowed to have exits to the other rooms in specialRooms */
             if (specialRooms.contains(room.getValue())) {
@@ -362,28 +362,28 @@ public class Room implements IRoom {
                 if (room.getValue().getLocation().getX() != maxX) {
                     // the leftmost rooms have an exit to the east
                     Location loca = new Location(room.getValue().getLocation().getX() + 1, room.getValue().getLocation().getY());
-                    room.getValue().setExit(Direction.EAST, loca.getXY());
+                    room.getValue().setExit(Direction.EAST, loca);
                 }
             }
             if (exitsAllowed.get(Direction.WEST)) {
                 if (room.getValue().getLocation().getX() != minX) {
                     // the rightmost rooms have en exit to the west
                     Location loca = new Location(room.getValue().getLocation().getX() - 1, room.getValue().getLocation().getY());
-                    room.getValue().setExit(Direction.WEST, loca.getXY());
+                    room.getValue().setExit(Direction.WEST, loca);
                 }
             }
             if (exitsAllowed.get(Direction.NORTH)) {
                 if (room.getValue().getLocation().getY() != maxY) {
                     // the southmost rooms have an exit to the north
                     Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() + 1);
-                    room.getValue().setExit(Direction.NORTH, loca.getXY());
+                    room.getValue().setExit(Direction.NORTH, loca);
                 }
             }
             if (exitsAllowed.get(Direction.SOUTH)) {
                 if (room.getValue().getLocation().getY() != minY) {
                     // the northmost rooms have an exit to the south
                     Location loca = new Location(room.getValue().getLocation().getX(), room.getValue().getLocation().getY() - 1);
-                    room.getValue().setExit(Direction.SOUTH, loca.getXY());
+                    room.getValue().setExit(Direction.SOUTH, loca);
                 }
             }
             for (Map.Entry<Direction, Boolean> entry : exitsAllowed.entrySet()) {
@@ -392,7 +392,7 @@ public class Room implements IRoom {
         }
     }
 
-    public static void setExitsTest(HashMap<Integer, Room> rooms, HashSet<Room> specialRooms) {
+    public static void setExitsTest(HashMap<Location, Room> rooms, HashSet<Room> specialRooms) {
         HashMap<Direction, int[]> directions = new HashMap<>();
         int[] n = {0, 1};
         int[] e = {1, 0};
@@ -409,12 +409,12 @@ public class Room implements IRoom {
         exitsAllowed.put(Direction.EAST, Boolean.TRUE);
         exitsAllowed.put(Direction.WEST, Boolean.TRUE);
 
-        for (Map.Entry<Integer, Room> room : rooms.entrySet()) {
+        for (Map.Entry<Location, Room> room : rooms.entrySet()) {
             for (HashMap.Entry<Direction, int[]> d : directions.entrySet()) {
                 if (exitsAllowed.get(d.getKey())) {
                     Location loca = new Location(room.getValue().getLocation().getX() + d.getValue()[0], room.getValue().getLocation().getY() + d.getValue()[1]);
-                    if (rooms.containsKey(loca.getXY())) {
-                        room.getValue().setExit(d.getKey(), loca.getXY());
+                    if (rooms.containsKey(loca)) {
+                        room.getValue().setExit(d.getKey(), loca);
                     }
                 }
             }
@@ -425,7 +425,7 @@ public class Room implements IRoom {
         return visualDescription;
     }
 
-    public HashMap<Direction, Integer> getExits() {
+    public HashMap<Direction, Location> getExits() {
         return exits;
     }
 }

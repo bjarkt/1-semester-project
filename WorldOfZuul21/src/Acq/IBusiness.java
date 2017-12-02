@@ -59,5 +59,7 @@ public interface IBusiness {
     String callMasterMindDaniel();
     String callFriendlyNPC();
 
+    ILocation createLocation(double x, double y);
+
     void injectData(IData data);  
 }

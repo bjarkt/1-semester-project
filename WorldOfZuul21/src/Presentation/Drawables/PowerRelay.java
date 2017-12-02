@@ -1,18 +1,19 @@
 package Presentation.Drawables;
 
+import Acq.ILocation;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 public class PowerRelay extends VisibleDrawable {
-    private Point2D location;
+    private ILocation location;
 
-    public PowerRelay(Point2D location) {
+    public PowerRelay(ILocation location) {
         this.color = Color.BROWN;
         this.rectangle.setFill(this.color);
         this.location = location;
     }
 
-    public Point2D getLocation() {
+    public ILocation getLocation() {
         return location;
     }
 }
