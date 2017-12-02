@@ -447,6 +447,12 @@ public class PrimaryWindowController implements Initializable {
             inputs.clear();
             // update the highscore
             business.updateHighScore(playerName);
+
+            // Disable all gui elements, so they cannot be interacted with
+            for (Node node : rootVBox.getChildren()) {
+                node.setDisable(true);
+            }
+            
             ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE); // make the built in button invisible
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close);
             quitPopup.getDialogPane().lookupButton(close).setVisible(false); // make the built in button invisible
@@ -466,6 +472,9 @@ public class PrimaryWindowController implements Initializable {
             Button newgameBtn = new Button("New Game");
             newgameBtn.setOnAction(actionEvent -> {
                 newGameClicked.value = true;
+                for (Node node : rootVBox.getChildren()) {
+                    node.setDisable(false);
+                }
                 business.restartGame();
                 forcedToQuit = false;
                 initDrawables();
