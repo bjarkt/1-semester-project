@@ -606,6 +606,7 @@ public class PrimaryWindowController implements Initializable {
 
     public void handleHideButtonAction(ActionEvent e) {
         forcedToQuit = business.hide();
+        println("You hide.");
         update();
     }
 
