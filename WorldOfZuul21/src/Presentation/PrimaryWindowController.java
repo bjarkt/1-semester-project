@@ -426,7 +426,7 @@ public class PrimaryWindowController implements Initializable {
 
         if (!business.getPowerStatus()) {
             timeLeftLabel.setText("Time before power turns back on: " + business.getTimeBeforePowerTurnsBackOn());
-        } else if (business.getPoliceAlerted()) {
+        } else if (business.getPoliceAlerted() && business.getTimeBeforePoliceArrives() >= 0) {
             timeLeftLabel.setText("Time before the police arrives: " + business.getTimeBeforePoliceArrives());
         } else {
             timeLeftLabel.setText("");
@@ -434,15 +434,17 @@ public class PrimaryWindowController implements Initializable {
         println(business.getGlobalMessage());
         business.clearGlobalMessage();
 
-        if (business.getPolicedArrived()) {
+        if (business.getPolicedArrived() && !business.getCheatMode()) {
             println("The police arrived. You got busted. No points for you. Better luck next time");
         }
 
-        checkForBusted();
+        if (!business.getCheatMode()) {
+            checkForBusted();
+        }
     }
 
     private void checkForBusted() {
-        if ((forcedToQuit && !business.getCheatMode()) || (business.getPolicedArrived() && !business.getCheatMode()) || (business.isGotBusted() && !business.getCheatMode())) {
+        if (forcedToQuit || business.getPolicedArrived()  || business.isGotBusted()) {
             // clear the inputs, so the player stops moving
             inputs.clear();
             // update the highscore
@@ -694,7 +696,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void goNorth() {
-        if (!forcedToQuit) {
+        if (!forcedToQuit || business.getCheatMode()) {
             IBooleanMessage message = business.goDirection(Direction.NORTH);
             forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
@@ -703,7 +705,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void goSouth() {
-        if (!forcedToQuit) {
+        if (!forcedToQuit || business.getCheatMode()) {
             IBooleanMessage message = business.goDirection(Direction.SOUTH);
             forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
@@ -712,7 +714,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void goEast() {
-        if (!forcedToQuit) {
+        if (!forcedToQuit || business.getCheatMode()) {
             IBooleanMessage message = business.goDirection(Direction.EAST);
             forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
@@ -721,7 +723,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void goWest() {
-        if (!forcedToQuit) {
+        if (!forcedToQuit || business.getCheatMode()) {
             IBooleanMessage message = business.goDirection(Direction.WEST);
             forcedToQuit = message.getABoolean() && !business.getCheatMode();
             println(message.getMessage());
