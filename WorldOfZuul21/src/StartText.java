@@ -8,7 +8,7 @@ public class StartText {
         IData data = new DataFacade();
 
         // Create the game
-        Game game = new Game();
+        Game game = new Game(true);
 
         // Inject data facade into the game
         game.injectData(data);

@@ -14,7 +14,7 @@ public class BusinessFacade implements IBusiness {
     private IData data;
 
     public BusinessFacade() {
-        game = new Game();
+        game = new Game(false);
         highScoreManager = new HighScoreManager();
 
 
@@ -22,7 +22,7 @@ public class BusinessFacade implements IBusiness {
 
     @Override
     public void restartGame() {
-        game = new Game();
+        game = new Game(false);
     }
 
     @Override

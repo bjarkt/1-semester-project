@@ -53,6 +53,8 @@ public class Game {
     private boolean cheatMode;
     private boolean forceQuitCheatMode;
 
+    private boolean textMode;
+
     // List of rooms, in which Spawnable objects spawn
     private List<Room> guardSpawnPointRooms;
     private List<Room> switchSpawnPointRooms;
@@ -61,7 +63,7 @@ public class Game {
 
 
     /* zero argument constructor. */
-    public Game() {
+    public Game(boolean textMode) {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         highScoreManager = new HighScoreManager();
         saved = false;
@@ -89,6 +91,7 @@ public class Game {
 
         cheatMode = false;
         forceQuitCheatMode = false;
+        this.textMode = textMode;
 
         // spawnpoint rooms
         guardSpawnPointRooms = new ArrayList<>();
@@ -339,7 +342,7 @@ public class Game {
 
         // Stop the method if a second word isn't supplied.
         if (!command.hasSecondWord()) {
-            System.out.println("Go where?");
+            if (textMode) System.out.println("Go where?");
             booleanMessage.setMessage("Go where?");
             booleanMessage.setaBoolean(forcedToQuit);
             return booleanMessage;
@@ -377,13 +380,13 @@ public class Game {
             }
             oldRoom = currentRoom;
             currentRoom = nextRoom;
-            System.out.println(currentRoom.getLongDescription());
+            if (textMode) System.out.println(currentRoom.getLongDescription());
             timer += 1;
             moveGuards(); // move guards
             printGuardLocations();
             forcedToQuit = checkForBusted();
             BooleanMessage timerMessage = checkTimer();
-            System.out.println(timerMessage.getMessage());
+            if (textMode) System.out.println(timerMessage.getMessage());
             if (timerMessage.getABoolean()) {
                 booleanMessage.setaBoolean(true);
                 booleanMessage.setMessage("");
@@ -516,7 +519,7 @@ public class Game {
         if (currentRoom.getLocation().getXY() == 0) {
             wantToQuit = escaped(command);
         } else {
-            System.out.println("There is no door to escape through");
+            if (textMode) System.out.println("There is no door to escape through");
         }
         return wantToQuit;
     }
@@ -525,9 +528,9 @@ public class Game {
         // reset the game
         reset();
         boolean lootAdded = inventory.addToLoot();
-        System.out.println("You hide in the bush outside the museum. The police arrive. For some reason, they don't notice you");
+        if (textMode) System.out.println("You hide in the bush outside the museum. The police arrive. For some reason, they don't notice you");
         if (lootAdded) {
-            System.out.println("You hide the item you stole, in the bush");
+            if (textMode) System.out.println("You hide the item you stole, in the bush");
         }
         // either quit the game, or continue
         boolean choiceMade = false;
@@ -535,12 +538,12 @@ public class Game {
             //Command command = parser.getCommand();
             CommandWord commandWord = command.getCommandWord();
             if (commandWord == CommandWord.YES) {
-                System.out.println(currentRoom.getLongDescription());
+                if (textMode) System.out.println(currentRoom.getLongDescription());
                 return false;
             } else if (commandWord == CommandWord.NO) {
                 return true;
             } else {
-                System.out.println("What do you mean?");
+                if (textMode) System.out.println("What do you mean?");
             }
         }
         return false;
@@ -577,13 +580,15 @@ public class Game {
 
     private void printGuardLocations() {
         // print the guard's locations
-        System.out.println("The guards are located in the following rooms");
-        for (Guard guard : guards) {
-            System.out.print(guard.getRoom().getName() + "\t");
-        }
-        System.out.println();
+        if (textMode) {
+            System.out.println("The guards are located in the following rooms");
+            for (Guard guard : guards) {
+                System.out.print(guard.getRoom().getName() + "\t");
+            }
+            System.out.println();
 
-        System.out.println(friendlyNpc.help(currentRoom.getLocation(), guards));
+            System.out.println(friendlyNpc.help(currentRoom.getLocation(), guards));
+        }
     }
 
     boolean hide() {
@@ -596,7 +601,7 @@ public class Game {
         printGuardLocations();
         BooleanMessage message = checkTimer();
         forcedToQuit = message.getABoolean();
-        System.out.println("You hide.");
+        if (textMode) System.out.println("You hide.");
         if (forcedToQuit) {
             return forcedToQuit;
         }
@@ -616,14 +621,15 @@ public class Game {
                 forcedToQuit = checkForBusted();
                 return forcedToQuit;
             } else {
-                System.out.println("A guard entered your room, but didn't see you.");
+                globalMessage = "A guard entered your room, but didn't see you.";
+                if (textMode) System.out.println(globalMessage);
                 timer += 1;
                 moveGuards();
                 printGuardLocations();
-
+                gotBusted = false;
             }
         }
-        System.out.println("You are in the following room: " + currentRoom.getName());
+        if (textMode) System.out.println("You are in the following room: " + currentRoom.getName());
         return forcedToQuit;
     }
 
