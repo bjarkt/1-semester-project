@@ -765,7 +765,7 @@ public class Game {
         mapToSave.put("guard1", guards[1].getRoom().getName());
 
         for (Room room : rooms.values()) {
-            if (room.getItems() != null) {
+            if (room.getItems() != null && !room.getItems().getName().equalsIgnoreCase("key")) {
                 mapToSave.put("itemRoom", room.getName());
             }
         }
@@ -858,7 +858,7 @@ public class Game {
                 if (itemName.equalsIgnoreCase("key")) {
                     item = new Item(true);
                 } else {
-                    item = new Item(map.get(s));
+                    item = new Item(itemName);
                 }
                 inventory.addToInventory(item);
             }
