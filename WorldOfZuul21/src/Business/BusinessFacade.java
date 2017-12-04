@@ -16,13 +16,12 @@ public class BusinessFacade implements IBusiness {
     public BusinessFacade() {
         game = new Game(false);
         highScoreManager = new HighScoreManager();
-
-
     }
 
     @Override
     public void restartGame() {
         game = new Game(false);
+        game.injectData(data);
     }
 
     @Override
