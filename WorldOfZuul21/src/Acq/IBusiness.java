@@ -57,7 +57,7 @@ public interface IBusiness {
     String callMasterMindDaniel();
     String callFriendlyNPC();
 
-    ILocation createLocation(double x, double y);
+    ILocation newLocation(double x, double y);
 
     void saveSeenStatus(Map<String, String> mapToSave);
     Map<String,String> loadSeenStatus();

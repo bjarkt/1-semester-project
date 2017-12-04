@@ -24,7 +24,7 @@ public class Game {
     private HashMap<Location, Room> rooms; // a map storing all the rooms
 
     private PowerRelay[] powerRelays;
-    private HashSet<Room> powerRelayLocations;
+    private List<Room> powerRelayLocations;
     private HashSet<Room> lockedRooms;
     private Room powerSwitchRoom; // the room with the powerswitch
     private Location powerSwitchLocation; // the coordinates of the room with the powerswitch
@@ -67,7 +67,7 @@ public class Game {
         globalMessage = "";
 
         powerRelays = new PowerRelay[3];
-        powerRelayLocations = new HashSet<>();
+        powerRelayLocations = new ArrayList<>();
         lockedRooms = new HashSet<>();
         powerStatus = true; // turn on the power
 
@@ -158,7 +158,7 @@ public class Game {
         powerSwitchLocation = powerSwitchRoom.getLocation();
 
         // spawn powerRelays in three out of 6 random rooms
-        powerRelayLocations = new HashSet<>(PowerRelay.Spawn(relaySpawnPointRooms));
+        powerRelayLocations = new ArrayList<>(PowerRelay.Spawn(relaySpawnPointRooms));
         int i = 0;
         for (Room relayRoom : powerRelayLocations) {
             powerRelays[i] = relayRoom.getPowerRelay();
@@ -766,7 +766,7 @@ public class Game {
             room.removeGuard();
             room.setPowerSwitch(null);
             room.setPowerRelay(null);
-            powerRelayLocations = new HashSet<>();
+            powerRelayLocations = new ArrayList<>();
         }
 
         for (Room room : rooms.values()) {
@@ -894,7 +894,7 @@ public class Game {
         return switchSpawnPointRooms;
     }
 
-    HashSet<Room> getPowerRelayLocations() {
+    List<Room> getPowerRelayLocations() {
         return powerRelayLocations;
     }
 

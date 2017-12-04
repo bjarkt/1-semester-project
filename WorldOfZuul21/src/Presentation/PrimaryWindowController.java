@@ -356,7 +356,7 @@ public class PrimaryWindowController implements Initializable {
 
                 p.getChildren().add(text);
                 minimapGrid.add(p, c, (maxRow - rowIndex) - 1);
-                paneMap.put(business.createLocation(c, rowIndex), p);
+                paneMap.put(business.newLocation(c, rowIndex), p);
             }
         }
 
@@ -543,6 +543,7 @@ public class PrimaryWindowController implements Initializable {
         }
 
         for (int i = 0; i < powerRelays.length; i++) {
+            powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
             powerRelays[i].draw(paneMap.get(business.getPowerRelayLocations()[i]));
         }
         for (int i = 0; i < guards.length; i++) {
@@ -808,6 +809,7 @@ public class PrimaryWindowController implements Initializable {
         mapToSave.put("powerSwitchStatus", String.valueOf(powerSwitch.hasSeen()));
         for (int i = 0; i < powerRelays.length; i++) {
             mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].hasSeen()));
+            mapToSave.put("powerRelayLocation_" + i, powerRelays[i].getLocation().getX() + "," + powerRelays[i].getLocation().getY());
         }
         business.saveSeenStatus(mapToSave);
     }
@@ -823,6 +825,12 @@ public class PrimaryWindowController implements Initializable {
 
             for (int i = 0; i < powerRelays.length; i++) {
                 powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
+
+                String locationString = loadedMap.get("powerRelayLocation_" + i);
+                double x = Double.parseDouble(locationString.split(",")[0]);
+                double y = Double.parseDouble(locationString.split(",")[1]);
+                ILocation location = business.newLocation(x, y);
+                powerRelays[i].setLocation(location);
             }
         }
     }

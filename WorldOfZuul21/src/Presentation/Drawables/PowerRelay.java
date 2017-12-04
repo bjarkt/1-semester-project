@@ -16,4 +16,8 @@ public class PowerRelay extends VisibleDrawable {
     public ILocation getLocation() {
         return location;
     }
+
+    public void setLocation(ILocation location) {
+        this.location = location;
+    }
 }

@@ -234,7 +234,7 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public ILocation createLocation(double x, double y) {
+    public ILocation newLocation(double x, double y) {
         return new Location(x, y);
     }
 
