@@ -1,12 +1,10 @@
 
 package Business;
 
-import Acq.IPowerSwitch;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowerSwitch implements IPowerSwitch {
+public class PowerSwitch {
 
     private boolean isOn;
 
