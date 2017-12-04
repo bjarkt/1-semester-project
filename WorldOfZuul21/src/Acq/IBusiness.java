@@ -29,9 +29,6 @@ public interface IBusiness {
     List<IHighScore> getHighScores();
     int getCurrentHighScore();
 
-    boolean getCheatMode();
-    void toggleCheatMode();
-
     boolean getPowerStatus();
     boolean getPoliceAlerted();
     boolean isGotBusted();

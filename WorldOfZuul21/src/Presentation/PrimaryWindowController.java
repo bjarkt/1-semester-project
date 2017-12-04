@@ -436,12 +436,8 @@ public class PrimaryWindowController implements Initializable {
         println(business.getGlobalMessage());
         business.clearGlobalMessage();
 
-        if (business.getPolicedArrived() && !business.getCheatMode()) {
+        if (business.getPolicedArrived()) {
             println("The police arrived. You got busted. No points for you. Better luck next time");
-        }
-
-        if (!business.getCheatMode()) {
-            checkForBusted();
         }
     }
 
@@ -583,8 +579,6 @@ public class PrimaryWindowController implements Initializable {
 
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callMasterMindDaniel());
-        business.toggleCheatMode();
-        println("CHEAT MODE SAT TIL " + String.valueOf(business.getCheatMode()).toUpperCase() + " - FJERN DETTE I RIGTIG VERSION");
     }
 
     public void handleStealButtonAction(ActionEvent e) {
@@ -698,36 +692,36 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void goNorth() {
-        if (!forcedToQuit || business.getCheatMode()) {
+        if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.NORTH);
-            forcedToQuit = message.getABoolean() && !business.getCheatMode();
+            forcedToQuit = message.getABoolean();
             println(message.getMessage());
             update();
         }
     }
 
     private void goSouth() {
-        if (!forcedToQuit || business.getCheatMode()) {
+        if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.SOUTH);
-            forcedToQuit = message.getABoolean() && !business.getCheatMode();
+            forcedToQuit = message.getABoolean();
             println(message.getMessage());
             update();
         }
     }
 
     private void goEast() {
-        if (!forcedToQuit || business.getCheatMode()) {
+        if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.EAST);
-            forcedToQuit = message.getABoolean() && !business.getCheatMode();
+            forcedToQuit = message.getABoolean();
             println(message.getMessage());
             update();
         }
     }
 
     private void goWest() {
-        if (!forcedToQuit || business.getCheatMode()) {
+        if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.WEST);
-            forcedToQuit = message.getABoolean() && !business.getCheatMode();
+            forcedToQuit = message.getABoolean();
             println(message.getMessage());
             update();
         }

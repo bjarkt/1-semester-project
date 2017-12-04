@@ -50,9 +50,6 @@ public class Game {
     private int alertPoint; // the last time the police was alerted
     private boolean gotBusted; // true if you got busted by a guard
 
-    private boolean cheatMode;
-    private boolean forceQuitCheatMode;
-
     private boolean textMode;
 
     // List of rooms, in which Spawnable objects spawn
@@ -89,8 +86,6 @@ public class Game {
         policeArrivalTime = 5; // set the time that it takes for the police to arrive
         gotBusted = false; // the player has not been busted yet
 
-        cheatMode = false;
-        forceQuitCheatMode = false;
         this.textMode = textMode;
 
         // spawnpoint rooms
@@ -240,11 +235,6 @@ public class Game {
 
         CommandWord commandWord = command.getCommandWord();
 
-        if (cheatMode) {
-            gotBusted = false;
-            policeArrived = false;
-        }
-
         // Check if the first part of the command is an actual command.
         if (commandWord == CommandWord.UNKNOWN) {
             System.out.println("What do you mean?");
@@ -281,13 +271,7 @@ public class Game {
         if (gotBusted || policeArrived) {
             wantToQuit = true;
         }
-        if (cheatMode) {
-            if (forceQuitCheatMode) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+
         return wantToQuit;
     }
 
@@ -437,9 +421,6 @@ public class Game {
             System.out.println("Quit what?");
             return false;
         } else {
-            if (cheatMode) {
-                forceQuitCheatMode = true;
-            }
             return true;
         }
     }
@@ -935,14 +916,6 @@ public class Game {
 
     boolean isAtEntrace() {
         return currentRoom.getLocation().equals(new Location(0, 0));
-    }
-
-    boolean isCheatMode() {
-        return cheatMode;
-    }
-
-    void toggleCheatMode() {
-        this.cheatMode = !this.cheatMode;
     }
 
     boolean isPowerStatus() {

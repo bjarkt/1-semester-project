@@ -109,16 +109,6 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
-    public boolean getCheatMode() {
-        return game.isCheatMode();
-    }
-
-    @Override
-    public void toggleCheatMode() {
-        game.toggleCheatMode();
-    }
-
-    @Override
     public boolean getPowerStatus() {
         return game.isPowerStatus();
     }
