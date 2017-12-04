@@ -439,6 +439,7 @@ public class PrimaryWindowController implements Initializable {
         if (business.getPolicedArrived()) {
             println("The police arrived. You got busted. No points for you. Better luck next time");
         }
+        checkForBusted();
     }
 
     private void checkForBusted() {
