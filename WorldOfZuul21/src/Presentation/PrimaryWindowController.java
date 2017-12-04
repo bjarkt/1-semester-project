@@ -822,11 +822,13 @@ public class PrimaryWindowController implements Initializable {
      */
     private void loadVisibleDrawablesSeenStatus() {
         Map<String, String> loadedMap = business.loadSeenStatus();
-        item.setSeen(Boolean.valueOf(loadedMap.get("itemStatus")));
-        powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
+        if (loadedMap != null) {
+            item.setSeen(Boolean.valueOf(loadedMap.get("itemStatus")));
+            powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
 
-        for (int i = 0; i < powerRelays.length; i++) {
-            powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
+            for (int i = 0; i < powerRelays.length; i++) {
+                powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
+            }
         }
     }
 }
