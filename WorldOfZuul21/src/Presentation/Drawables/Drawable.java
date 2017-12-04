@@ -1,5 +1,6 @@
 package Presentation.Drawables;
 
+import Acq.ILocation;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -19,9 +20,15 @@ public abstract class Drawable {
      */
     Color color;
 
-    public Drawable() {
+    /**
+     * The location on the minimap
+     */
+    private ILocation location;
+
+    public Drawable(ILocation location) {
         rectangle = new Rectangle(0, 25, 10, 10);
         color = Color.BLACK;
+        this.location = location;
     }
 
     /**
@@ -43,4 +50,11 @@ public abstract class Drawable {
         paneToDrawOn.getChildren().add(rectangle);
     }
 
+    public ILocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(ILocation location) {
+        this.location = location;
+    }
 }

@@ -82,7 +82,7 @@ public class PrimaryWindowController implements Initializable {
     private PowerSwitch powerSwitch;
     private PowerRelay[] powerRelays;
     private Item item;
-    private List<VisibleDrawable> visibleDrawables;
+    private List<Drawable> drawables;
 
     public PrimaryWindowController(boolean nameLoaded) {
         this.paneMap = new HashMap<>();
@@ -294,21 +294,22 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void initDrawables() {
-        visibleDrawables = new ArrayList<>();
-        this.player = new Player();
-        this.guards = new Guard[]{new Guard(Color.RED), new Guard(Color.RED)};
-        this.powerSwitch = new PowerSwitch();
+        drawables = new ArrayList<>();
+
+        this.player = new Player(business.getCurrentLocation());
+        this.guards = new Guard[]{new Guard(business.getGuardLocations()[0]), new Guard(business.getGuardLocations()[1])};
+        this.powerSwitch = new PowerSwitch(business.getPowerSwitchLocation());
 
         ILocation[] powerRelayLocations = business.getPowerRelayLocations();
         this.powerRelays = new PowerRelay[powerRelayLocations.length];
         for (int i = 0; i < powerRelays.length; i++) {
             this.powerRelays[i] = new PowerRelay(powerRelayLocations[i]);
         }
-        this.item = new Item();
+        this.item = new Item(business.getItemLocation());
 
-        visibleDrawables.add(powerSwitch);
-        visibleDrawables.add(item);
-        visibleDrawables.addAll(Arrays.asList(powerRelays));
+        Collections.addAll(drawables, powerSwitch, item, player);
+        drawables.addAll(Arrays.asList(guards));
+        drawables.addAll(Arrays.asList(powerRelays));
     }
 
     private void initButtons() {
@@ -403,27 +404,14 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void update() {
-        // Check if any of the VisibleDrawables can be seen in the current room
-        if (business.currentRoomContainsItem()) {
-            item.setSeen(true);
-        } else if (business.currentRoomContainsPowerRelay()) {
-            for (PowerRelay relay : powerRelays) {
-                if (relay.getLocation().equals(business.getCurrentLocation())) {
-                    relay.setSeen(true);
-                }
-            }
-        } else if (business.currentRoomContainsPowerSwitch()) {
-            powerSwitch.setSeen(true);
-        }
-
         updateInventoryList();
         updateLootList();
 
-        positionExitsAndDisableButtons();
-
+        updateDrawables();
         drawMinimap();
         groundImageView.setImage(boardBackgroundMap.get(business.getCurrentLocation()));
 
+        positionExitsAndDisableButtons();
         friendlyNpcLabel.setText(business.callFriendlyNPC());
 
         if (!business.getPowerStatus()) {
@@ -440,6 +428,27 @@ public class PrimaryWindowController implements Initializable {
             println("The police arrived. You got busted. No points for you. Better luck next time");
         }
         checkForBusted();
+    }
+
+    private void updateDrawables() {
+        // Check if any of the VisibleDrawables can be seen in the current room
+        if (business.currentRoomContainsItem()) {
+            item.setSeen(true);
+        } else if (business.currentRoomContainsPowerRelay()) {
+            for (PowerRelay relay : powerRelays) {
+                if (relay.getLocation().equals(business.getCurrentLocation())) {
+                    relay.setSeen(true);
+                }
+            }
+        } else if (business.currentRoomContainsPowerSwitch()) {
+            powerSwitch.setSeen(true);
+        }
+
+        // update the location of the two things that can change location every time
+        player.setLocation(business.getCurrentLocation());
+        for (int i = 0; i < guards.length; i++) {
+            guards[i].setLocation(business.getGuardLocations()[i]);
+        }
     }
 
     private void checkForBusted() {
@@ -535,19 +544,10 @@ public class PrimaryWindowController implements Initializable {
             }
         }
 
-        player.draw(paneMap.get(business.getCurrentLocation()));
-        powerSwitch.draw(paneMap.get(business.getPowerSwitchLocation()));
-
-        if (business.getItemLocation() != null) {
-            item.draw(paneMap.get(business.getItemLocation()));
-        }
-
-        for (int i = 0; i < powerRelays.length; i++) {
-            powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
-            powerRelays[i].draw(paneMap.get(business.getPowerRelayLocations()[i]));
-        }
-        for (int i = 0; i < guards.length; i++) {
-            guards[i].draw(paneMap.get(business.getGuardLocations()[i]));
+        for (Drawable drawable : drawables) {
+            if (drawable.getLocation() != null) {
+                drawable.draw(paneMap.get(drawable.getLocation()));
+            }
         }
     }
 
@@ -617,6 +617,7 @@ public class PrimaryWindowController implements Initializable {
             ButtonType choice = createAlert(Alert.AlertType.CONFIRMATION, "Escape", "", "Do you want to go back inside?", yesBtn, noBtn);
             if (choice == yesBtn) {
                 business.escape(true);
+                initDrawables();
                 updateLootList();
                 business.getInventoryList().clear();
                 updateInventoryList();
@@ -730,13 +731,15 @@ public class PrimaryWindowController implements Initializable {
     }
 
     /**
-     * set the seen status of all drawables
+     * set the seen status of all visible drawables
      *
      * @param seen seen boolean value
      */
     private void setAllDrawablesSeen(boolean seen) {
-        for (VisibleDrawable visibleDrawable : visibleDrawables) {
-            visibleDrawable.setSeen(seen);
+        for (Drawable drawable : drawables) {
+            if (drawable instanceof VisibleDrawable) {
+                ((VisibleDrawable) drawable).setSeen(seen);
+            }
         }
     }
 
@@ -807,9 +810,10 @@ public class PrimaryWindowController implements Initializable {
         Map<String, String> mapToSave = new LinkedHashMap<>();
         mapToSave.put("itemStatus", String.valueOf(item.hasSeen()));
         mapToSave.put("powerSwitchStatus", String.valueOf(powerSwitch.hasSeen()));
-        for (int i = 0; i < powerRelays.length; i++) {
+        for (int i = 0; i < business.getPowerRelayLocations().length; i++) {
             mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].hasSeen()));
-            mapToSave.put("powerRelayLocation_" + i, powerRelays[i].getLocation().getX() + "," + powerRelays[i].getLocation().getY());
+            mapToSave.put("powerRelayLocation_" + i,
+                    business.getPowerRelayLocations()[i].getX() + "," + business.getPowerRelayLocations()[i].getY());
         }
         business.saveSeenStatus(mapToSave);
     }
@@ -818,19 +822,20 @@ public class PrimaryWindowController implements Initializable {
      * load the status of the visible drawables
      */
     private void loadVisibleDrawablesSeenStatus() {
+        setAllDrawablesSeen(false);
         Map<String, String> loadedMap = business.loadSeenStatus();
         if (loadedMap != null) {
             item.setSeen(Boolean.valueOf(loadedMap.get("itemStatus")));
             powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
 
-            for (int i = 0; i < powerRelays.length; i++) {
+            for (int i = 0; i < business.getPowerRelayLocations().length; i++) {
                 powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
-
-                String locationString = loadedMap.get("powerRelayLocation_" + i);
+                powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
+                /*String locationString = loadedMap.get("powerRelayLocation_" + i);
                 double x = Double.parseDouble(locationString.split(",")[0]);
                 double y = Double.parseDouble(locationString.split(",")[1]);
                 ILocation location = business.newLocation(x, y);
-                powerRelays[i].setLocation(location);
+                powerRelays[i].setLocation(location);*/
             }
         }
     }

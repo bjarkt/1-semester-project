@@ -1,5 +1,6 @@
 package Presentation.Drawables;
 
+import Acq.ILocation;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
@@ -9,7 +10,8 @@ import javafx.scene.shape.Rectangle;
 public abstract class VisibleDrawable extends Drawable {
     private boolean seen;
 
-    public VisibleDrawable() {
+    public VisibleDrawable(ILocation location) {
+        super(location);
         this.rectangle = new Rectangle(20, 5, 10, 10);
         seen = false;
     }
