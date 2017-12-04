@@ -19,13 +19,17 @@ public abstract class Drawable {
      */
     Color color;
 
+    public Drawable() {
+        rectangle = new Rectangle(0, 25, 10, 10);
+        color = Color.BLACK;
+    }
+
     /**
      * Draw the rectangle on a {@link Pane}. Makes sure not to draw two rectangles on top of eachother.
      *
      * @param paneToDrawOn a pane
      */
     public void draw(Pane paneToDrawOn) {
-        rectangle = new Rectangle(0, 25, 10, 10);
         int rectangleBufferWidth = 15;
         rectangle.setFill(color);
 
