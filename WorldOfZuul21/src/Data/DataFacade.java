@@ -7,10 +7,12 @@ import java.util.Map;
 public class DataFacade implements IData {
     private LoadableSavable highScoreSaverLoader;
     private LoadableSavable gameSaverLoader;
+    private LoadableSavable seenStatusSaverLoader;
 
     public DataFacade() {
         highScoreSaverLoader = new XMLUtilities("highscore.xml");
         gameSaverLoader = new XMLUtilities("savegame.xml");
+        seenStatusSaverLoader = new XMLUtilities("seenStatus.xml");
     }
 
     /**
@@ -78,6 +80,20 @@ public class DataFacade implements IData {
     public Map<String, String> loadHighScore() {
         if (highScoreSaverLoader.doesFileExist()) {
             return highScoreSaverLoader.load();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void saveSeenStatus(Map<String, String> mapToSave) {
+        seenStatusSaverLoader.save(mapToSave);
+    }
+
+    @Override
+    public Map<String, String> loadSeenStatus() {
+        if (seenStatusSaverLoader.doesFileExist()) {
+            return seenStatusSaverLoader.load();
         } else {
             return null;
         }

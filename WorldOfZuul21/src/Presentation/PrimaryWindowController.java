@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -107,8 +106,6 @@ public class PrimaryWindowController implements Initializable {
 
         animateSprite();
 
-        update();
-
         // get the name of the player
         if (!nameLoaded) {
             TextInputDialog t = new TextInputDialog("Jeg er for doven til at skrive et rigtigt navn");
@@ -128,8 +125,10 @@ public class PrimaryWindowController implements Initializable {
             }
         } else {
             // if the game is loaded, load the name
+            this.loadVisibleDrawablesSeenStatus();
             playerName = business.getLoadedPlayerName();
         }
+        update();
     }
 
     private void initSprites() {
@@ -667,6 +666,7 @@ public class PrimaryWindowController implements Initializable {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
             business.save(playerName);
+            this.saveVisibleDrawablesSeenStatus();
             Platform.exit();
         }
     }
@@ -796,14 +796,37 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * inject business facade into gui layer
+     * @param business the business facade
+     */
     public void injectBusiness(IBusiness business) {
         this.business = business;
     }
 
     /**
-     * Convert a {@link ILocation} to a {@link Point2D}
-     *
-     * @param loc location
-     * @return a Point2D version of loc
+     * Save the status of the visible drawables
      */
+    private void saveVisibleDrawablesSeenStatus() {
+        Map<String, String> mapToSave = new LinkedHashMap<>();
+        mapToSave.put("itemStatus", String.valueOf(item.hasSeen()));
+        mapToSave.put("powerSwitchStatus", String.valueOf(powerSwitch.hasSeen()));
+        for (int i = 0; i < powerRelays.length; i++) {
+            mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].hasSeen()));
+        }
+        business.saveSeenStatus(mapToSave);
+    }
+
+    /**
+     * load the status of the visible drawables
+     */
+    private void loadVisibleDrawablesSeenStatus() {
+        Map<String, String> loadedMap = business.loadSeenStatus();
+        item.setSeen(Boolean.valueOf(loadedMap.get("itemStatus")));
+        powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
+
+        for (int i = 0; i < powerRelays.length; i++) {
+            powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
+        }
+    }
 }

@@ -250,6 +250,16 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public void saveSeenStatus(Map<String, String> mapToSave) {
+        data.saveSeenStatus(mapToSave);
+    }
+
+    @Override
+    public Map<String, String> loadSeenStatus() {
+        return data.loadSeenStatus();
+    }
+
+    @Override
     public void injectData(IData data) {
         this.data = data;
         highScoreManager.injectData(data);

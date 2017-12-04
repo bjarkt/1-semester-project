@@ -10,4 +10,7 @@ public interface IData {
     boolean deleteFile();
     boolean doesHighScoreFileExist();
     boolean doesGameSaveFileExist();
+
+    void saveSeenStatus(Map<String, String> mapToSave);
+    Map<String,String> loadSeenStatus();
 }

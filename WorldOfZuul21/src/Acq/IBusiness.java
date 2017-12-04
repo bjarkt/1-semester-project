@@ -4,6 +4,7 @@ import Business.BooleanMessage;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface IBusiness {
@@ -61,5 +62,7 @@ public interface IBusiness {
 
     ILocation createLocation(double x, double y);
 
-    void injectData(IData data);  
+    void saveSeenStatus(Map<String, String> mapToSave);
+    Map<String,String> loadSeenStatus();
+    void injectData(IData data);
 }
