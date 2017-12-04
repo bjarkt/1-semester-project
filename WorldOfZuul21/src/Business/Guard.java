@@ -5,10 +5,10 @@
  */
 package Business;
 
+import Acq.Direction;
 import Acq.IGuard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Nikolaj
@@ -50,6 +50,26 @@ public class Guard implements IGuard {
         }
 
         return rooms_;
+    }
+
+    public void moveGuard(HashMap<Location, Room> rooms) {
+        Room nextRoom;
+        Direction direction;
+
+        Set<Direction> validDirections = new HashSet<>(this.getRoom().getExits().keySet());
+        validDirections.add(Direction.NOWHERE); // An extra option, that will make the guard not move, sometimes.
+        do {
+            direction = Game.generateRandomDirection();
+            nextRoom = rooms.get(this.getRoom().getExit(direction));
+        }
+        while (!validDirections.contains(direction));
+
+        if (nextRoom != null) {
+            this.setOldRoom(this.getRoom());
+            this.getRoom().removeGuard();
+            this.setRoom(nextRoom);
+            nextRoom.addGuard(this);
+        }
     }
 
     public void setOldRoom(Room oldRoom) {

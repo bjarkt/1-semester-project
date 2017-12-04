@@ -250,7 +250,7 @@ public class PrimaryWindowController implements Initializable {
                 for (Sprite door : doors) {
                     if (sPlayer.intersects(door)) {
                         if (door == northDoor) {
-                            /* bug fix: the following line is not done, the player will begin to move at the screen
+                            /* bug fix: if the following line is not done, the player will begin to move at the screen
                              *  where the user enters their name
                              */
                             if (inputs.contains("W")) {
