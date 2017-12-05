@@ -25,6 +25,11 @@ public abstract class Drawable {
      */
     private ILocation location;
 
+    /**
+     * Constructor for Drawable, default color is black.
+     *
+     * @param location where to place drawable.
+     */
     public Drawable(ILocation location) {
         rectangle = new Rectangle(0, 25, 10, 10);
         color = Color.BLACK;
@@ -50,10 +55,20 @@ public abstract class Drawable {
         paneToDrawOn.getChildren().add(rectangle);
     }
 
+    /**
+     * Get the location of the drawable on the minimap.
+     *
+     * @return location of the drawable.
+     */
     public ILocation getLocation() {
         return location;
     }
 
+    /**
+     * Set the location
+     *
+     * @param location new location.
+     */
     public void setLocation(ILocation location) {
         this.location = location;
     }

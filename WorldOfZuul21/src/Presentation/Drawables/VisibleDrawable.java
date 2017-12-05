@@ -10,17 +10,31 @@ import javafx.scene.shape.Rectangle;
 public abstract class VisibleDrawable extends Drawable {
     private boolean seen;
 
+    /**
+     * Constructor for VisibleDrawable. Seen is false be default.
+     *
+     * @param location
+     */
     public VisibleDrawable(ILocation location) {
         super(location);
         this.rectangle = new Rectangle(20, 5, 10, 10);
         seen = false;
     }
 
-
+    /**
+     * Has this drawable been seen yet?
+     *
+     * @return true if the drawable has been seen
+     */
     public boolean hasSeen() {
         return seen;
     }
 
+    /**
+     * Set the seen value
+     *
+     * @param seen new seen value.
+     */
     public void setSeen(boolean seen) {
         this.seen = seen;
     }

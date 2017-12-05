@@ -15,7 +15,13 @@ import java.util.List;
 
 // taget fra https://github.com/tutsplus/Introduction-to-JavaFX-for-Game-Development
 public class Sprite {
+    /**
+     * The current image of the sprite.
+     */
     private Image image;
+    /**
+     * When using a spritesheet, images contain all the possible images for the sprite.
+     */
     private Image[] images;
     private double positionX;
     private double positionY;
@@ -27,9 +33,22 @@ public class Sprite {
     private Timeline southTimeline;
     private Timeline eastTimeline;
     private Timeline westTimeline;
+
+    /**
+     * Determines which row of the sprite sheet, that contains the animation, that shows the character walking north.
+     */
     private int northRow;
+    /**
+     * Determines which row of the sprite sheet, that contains the animation, that shows the character walking south.
+     */
     private int southRow;
+    /**
+     * Determines which row of the sprite sheet, that contains the animation, that shows the character walking east.
+     */
     private int eastRow;
+    /**
+     * Determines which row of the sprite sheet, that contains the animation, that shows the character walking west.
+     */
     private int westRow;
     private List<Timeline> timelines;
 
@@ -42,7 +61,7 @@ public class Sprite {
     }
 
     /**
-     * Set the image for the sprite, from a {@link Image}
+     * Set the image for the sprite, from a {@link Image}.
      *
      * @param i image
      */
@@ -53,7 +72,7 @@ public class Sprite {
     }
 
     /**
-     * Set the image for the sprite, from a {@link String}
+     * Set the image for the sprite, from a {@link String}.
      *
      * @param filename the path to the image
      */
@@ -63,7 +82,7 @@ public class Sprite {
     }
 
     /**
-     * Set the image for the sprite, from a spritesheet
+     * Set the image for the sprite, from a spritesheet.
      *
      * @param filename              filename of the spritesheet
      * @param amountOfImagesInSheet how many images are in the sprite sheet
@@ -94,42 +113,79 @@ public class Sprite {
         this.eastRow = eastRow;
         this.westRow = westRow;
 
-        initNorthKeyframes();
-        initSouthKeyframes();
-        initEastKeyframes();
-        initWestKeyframes();
+        initKeyFrames();
+
         Collections.addAll(timelines, northTimeline, southTimeline, eastTimeline, westTimeline);
 
         setImage(images[0]);
     }
 
+    /**
+     * Set the position of the sprite.
+     *
+     * @param x x value.
+     * @param y y value.
+     */
     public void setPosition(double x, double y) {
         positionX = x;
         positionY = y;
     }
 
+    /**
+     * Set the velocity of the sprite.
+     *
+     * @param x x value.
+     * @param y y value.
+     */
     public void setVelocity(double x, double y) {
         velocityX = x;
         velocityY = y;
     }
 
+    /**
+     * Add to the current velocity of the sprite.
+     *
+     * @param x x value.
+     * @param y y value.
+     */
     public void addVelocity(double x, double y) {
         velocityX += x;
         velocityY += y;
     }
 
+    /**
+     * Update the sprites position, according to the time that has passed.
+     *
+     * @param time time since last update.
+     */
     public void update(double time) {
         positionX += velocityX * time;
         positionY += velocityY * time;
     }
 
+    /**
+     * Draw the sprite to the canvas
+     *
+     * @param gc GraphicsContext of the canvas to draw on.
+     */
     public void render(GraphicsContext gc) {
         gc.drawImage(image, positionX, positionY);
     }
 
-    public void initNorthKeyframes() {
+    /**
+     * Initialize all the timelines and key frames, one for each direction.
+     */
+    private void initKeyFrames() {
+        initNorthKeyframes();
+        initSouthKeyframes();
+        initEastKeyframes();
+        initWestKeyframes();
+    }
+
+    private void initNorthKeyframes() {
         northTimeline = new Timeline();
         Collection<KeyFrame> frames = northTimeline.getKeyFrames();
+        // How long should each frame be displayed.
         Duration frameGap = Duration.millis(256);
         Duration frameTime = Duration.ZERO;
         for (int i = northRow * 4; i < 4 + (northRow * 4); i++) {
@@ -139,7 +195,7 @@ public class Sprite {
         }
     }
 
-    public void initSouthKeyframes() {
+    private void initSouthKeyframes() {
         southTimeline = new Timeline();
         Collection<KeyFrame> frames = southTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
@@ -151,7 +207,7 @@ public class Sprite {
         }
     }
 
-    public void initEastKeyframes() {
+    private void initEastKeyframes() {
         eastTimeline = new Timeline();
         Collection<KeyFrame> frames = eastTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
@@ -163,7 +219,7 @@ public class Sprite {
         }
     }
 
-    public void initWestKeyframes() {
+    private void initWestKeyframes() {
         westTimeline = new Timeline();
         Collection<KeyFrame> frames = westTimeline.getKeyFrames();
         Duration frameGap = Duration.millis(256);
@@ -176,10 +232,21 @@ public class Sprite {
     }
 
 
-    public Rectangle2D getBoundary() {
+    /**
+     * Get the boundary of the sprite.
+     *
+     * @return a {@link Rectangle2D} of the sprite.
+     */
+    private Rectangle2D getBoundary() {
         return new Rectangle2D(positionX, positionY, width, height);
     }
 
+    /**
+     * Check if the sprite is intersecting with another sprite.
+     *
+     * @param s another sprite
+     * @return true if the sprites are intersecting.
+     */
     public boolean intersects(Sprite s) {
         return s.getBoundary().intersects(this.getBoundary());
     }
@@ -189,23 +256,53 @@ public class Sprite {
                 + " Velocity: [" + velocityX + "," + velocityY + "]";
     }
 
+    /**
+     * Get the x position of the sprite.
+     *
+     * @return x position of sprite.
+     */
     public double getPositionX() {
         return positionX;
     }
 
+    /**
+     * Get the y position of the sprite.
+     *
+     * @return y position of sprite.
+     */
     public double getPositionY() {
         return positionY;
     }
 
+    /**
+     * Get the width of the sprite.
+     *
+     * @return width of sprite.
+     */
     public double getWidth() {
         return width;
     }
 
+    /**
+     * Get the height of the sprite.
+     *
+     * @return height of sprite.
+     */
     public double getHeight() {
         return height;
     }
 
-    // https://stackoverflow.com/a/36073509
+    /**
+     * Crop the image according to the parameters
+     *
+     * @param src         source image
+     * @param col         which column of the source image
+     * @param row         which row of the source image
+     * @param imageWidth  width of the individual sprite
+     * @param imageHeight height of the individual sprite
+     * @return a new cropped image.
+     * @author https://stackoverflow.com/a/36073509
+     */
     private static Image crop(Image src, int col, int row, int imageWidth, int imageHeight) {
         PixelReader r = src.getPixelReader();
         WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbInstance();

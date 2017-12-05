@@ -7,6 +7,11 @@ package Presentation.Animation;
 public class LongValue {
     public long value;
 
+    /**
+     * Create a new LongValue, with a long i.
+     *
+     * @param i long value
+     */
     public LongValue(long i) {
         value = i;
     }
