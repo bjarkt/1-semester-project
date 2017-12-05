@@ -1,25 +1,33 @@
 package Acq;
 
 /**
- * @author Michael Kolling and David J. Barnes
- * @version 2006.03.30
+ * Direction used to tell direction in game
  */
-// Makes a datatype that enables a variable to be set of predifened contants.
 public enum Direction {
     NORTH("north"), SOUTH("south"), WEST("west"), EAST("east"), NORTHWEST("northwest"), NORTHEAST("northeast"), SOUTHWEST("southwest"), SOUTHEAST("southeast"), NOWHERE("nowhere");
     //  Here is a atributes of a string defined.
     private String commandString;
-// Mathod that sets a parameter to another parameter. 
 
+    /**
+     * constructor
+     *
+     * @param commandString
+     */
     Direction(String commandString) {
         this.commandString = commandString;
     }
 
-    // Returns the string representation of the enum
+    /**
+     * @return the string representation of the enum
+     */
     public String toString() {
         return commandString;
     }
 
+    /**
+     * @param value string value that may be an instance of this enum
+     * @return true if the string has a corresponding enum
+     */
     public static boolean isInEnum(String value) {
         for (Direction direction : Direction.values()) {
             if (direction.commandString.equals(value)) {
