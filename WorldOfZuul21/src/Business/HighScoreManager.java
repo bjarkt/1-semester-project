@@ -5,12 +5,15 @@ import Acq.IHighScore;
 
 import java.util.*;
 
+/**
+ * Handles all highscore stuff.
+ */
 class HighScoreManager {
 
+    /**
+     * Needs the data facade, so it can tell the data facade to save the data.
+     */
     private IData data;
-
-    HighScoreManager() {
-    }
 
     /**
      * @return A top five list of {@link IHighScore}

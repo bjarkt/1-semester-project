@@ -19,26 +19,44 @@ public class Guard implements IGuard {
     private Room currentRoom;
     private Room oldRoom;
 
+    /**
+     * Create a new guard object
+     *
+     * @param ID id of the guard.
+     */
     public Guard(int ID) {
-        // ID for Guard objekt
         this.ID = ID;
     }
 
+    /**
+     * Get the id for the guard
+     *
+     * @return id
+     */
     public int getID() {
-        // metohod for getting ID
         return ID;
     }
 
+    @Override
     public Room getRoom() {
-        //metodhod for getting currentRoom
         return currentRoom;
     }
 
+    /**
+     * Set the current room of the guard
+     *
+     * @param room new current room.
+     */
     public void setRoom(Room room) {
-        // set metodhod for room
         currentRoom = room;
     }
 
+    /**
+     * Spawn the guard the guard in one of the places specified by the rooms parameter.
+     *
+     * @param rooms a list of possible spawn places.
+     * @return a list containing the room, that the guard was spawned in.
+     */
     public static List<Room> Spawn(List<Room> rooms) {
         Guard[] guards = new Guard[2];
         List<Room> rooms_ = new ArrayList<>();
@@ -52,17 +70,21 @@ public class Guard implements IGuard {
         return rooms_;
     }
 
-    public void moveGuard(HashMap<Location, Room> rooms) {
+    /**
+     * Move the guard randomly. Will sometimes stand still.
+     *
+     * @param rooms All the rooms of the game, in a map.
+     */
+    public void moveGuard(Map<Location, Room> rooms) {
         Room nextRoom;
         Direction direction;
 
         Set<Direction> validDirections = new HashSet<>(this.getRoom().getExits().keySet());
         validDirections.add(Direction.NOWHERE); // An extra option, that will make the guard not move, sometimes.
-        do {
-            direction = Game.generateRandomDirection();
-            nextRoom = rooms.get(this.getRoom().getExit(direction));
-        }
-        while (!validDirections.contains(direction));
+
+        direction = Game.generateRandomDirection();
+        // If Direction.NOWHERE is generated, nextRoom will be null.
+        nextRoom = rooms.get(this.getRoom().getExit(direction));
 
         if (nextRoom != null) {
             this.setOldRoom(this.getRoom());
@@ -72,10 +94,20 @@ public class Guard implements IGuard {
         }
     }
 
+    /**
+     * Set the old room of the guard.
+     *
+     * @param oldRoom new old room.
+     */
     public void setOldRoom(Room oldRoom) {
         this.oldRoom = oldRoom;
     }
 
+    /**
+     * Get the old room of the guard.
+     *
+     * @return the old room.
+     */
     public Room getOldRoom() {
         return oldRoom;
     }

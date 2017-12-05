@@ -12,10 +12,13 @@ import java.util.List;
 
 /**
  * @author jeppe
+ * The friendly npc will tell the player where the guards are, compared to him.
  */
 public class FriendlyNpc {
 
     /**
+     * Print the help text, which contains information about the guards location.
+     *
      * @param currenLocation the location of the player
      * @param guards         an array of guards
      * @return description of the guards location compared to yours

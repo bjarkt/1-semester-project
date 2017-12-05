@@ -16,17 +16,19 @@ public class CommandWords {
 
     public CommandWords() // Constructor
     {
-        validCommands = new HashMap<String, CommandWord>(); // Creating an object
+        validCommands = new HashMap<>(); // Creating an object
         noPrintList = new ArrayList<>();
         Collections.addAll(noPrintList, CommandWord.YES.toString(), CommandWord.NO.toString(), CommandWord.LOAD.toString(), CommandWord.NEW.toString());
-        for (CommandWord command : CommandWord.values()) { //For each loop - runs 4 times as CommandWord.values has 4 values.
-            if (command != CommandWord.UNKNOWN) {  //Checks if command isn't UNKNOWN, YES or NO
+        for (CommandWord command : CommandWord.values()) {
+            if (command != CommandWord.UNKNOWN) {  //Checks if command isn't UNKNOWN,
                 validCommands.put(command.toString(), command); //If it isn't, a new entry is added to the validCommands HashMap
             }
         }
     }
 
     /**
+     * Get the {@link CommandWord} for the parameter.
+     *
      * @param commandWord
      * @return the corresponding CommandWord to the parameter. return unknown if the command is not recognized
      */
@@ -39,8 +41,14 @@ public class CommandWords {
         }
     }
 
+    /**
+     * true if the given parameter is a command.
+     *
+     * @param aString
+     * @return true if the HashMap contains an entry for the key
+     */
     public boolean isCommand(String aString) {
-        return validCommands.containsKey(aString); //Returns true if the HashMap contains an entry for the key
+        return validCommands.containsKey(aString);
     }
 
     /**

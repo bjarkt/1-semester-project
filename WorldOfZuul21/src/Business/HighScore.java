@@ -2,6 +2,9 @@ package Business;
 
 import Acq.IHighScore;
 
+/**
+ * The HighScore object holds one highscore and one name. A list of highscores is made up of many of this object.
+ */
 public class HighScore implements IHighScore {
     private String name;
     private int score;
@@ -17,6 +20,11 @@ public class HighScore implements IHighScore {
         this.score = score;
     }
 
+    /**
+     * toString method for HighScore.
+     *
+     * @return String representation of the object. Name followed by the score.
+     */
     @Override
     public String toString() {
         return name + " - " + score;

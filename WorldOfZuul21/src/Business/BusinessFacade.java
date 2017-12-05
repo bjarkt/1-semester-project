@@ -7,12 +7,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Business facade to facilitate communication between presentation layer and business layer.
+ */
 public class BusinessFacade implements IBusiness {
 
+    /**
+     * The game.
+     */
     private Game game;
+
+    /**
+     * HighScoreManager handles highscores.
+     */
     private HighScoreManager highScoreManager;
+
+    /**
+     * Access to the data layer.
+     */
     private IData data;
 
+    /**
+     * Create a new business facade, and instantiate the game and highscore manager.
+     */
     public BusinessFacade() {
         game = new Game(false);
         highScoreManager = new HighScoreManager();
@@ -179,10 +196,12 @@ public class BusinessFacade implements IBusiness {
         return game.interact();
     }
 
+    @Override
     public boolean hide() {
         return game.hide();
     }
 
+    @Override
     public void escape(boolean wantToGoBackInside) {
         Command command;
         if (wantToGoBackInside) {
