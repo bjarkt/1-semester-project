@@ -25,7 +25,7 @@ public class PowerRelay implements IPowerRelay {
      * @param ID        id
      * @param timeBoost how much to increase the time if interacted with
      */
-    public PowerRelay(int ID, int timeBoost) {
+    private PowerRelay(int ID, int timeBoost) {
         this.ID = ID;
         this.status = true;
         this.timeBoost = timeBoost;

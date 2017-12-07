@@ -14,7 +14,7 @@ import java.util.List;
  * @author jeppe
  * The friendly npc will tell the player where the guards are, compared to him.
  */
-public class FriendlyNpc {
+class FriendlyNpc {
 
     /**
      * Print the help text, which contains information about the guards location.
@@ -41,7 +41,7 @@ public class FriendlyNpc {
      * @param guards          the guard array
      * @return a list of {@link Direction}s, which contains the direction of the guards
      */
-    public List<Direction> getDirectionOfGuards(Location currentLocation, Guard[] guards) {
+    private List<Direction> getDirectionOfGuards(Location currentLocation, Guard[] guards) {
         List<Direction> directions = new ArrayList<>();
         for (Guard guard : guards) {
             if (currentLocation.getX() == guard.getRoom().getLocation().getX()) {

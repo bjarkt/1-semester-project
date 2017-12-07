@@ -29,7 +29,7 @@ public class CommandWords {
     /**
      * Get the {@link CommandWord} for the parameter.
      *
-     * @param commandWord
+     * @param commandWord string version of CommandWord
      * @return the corresponding CommandWord to the parameter. return unknown if the command is not recognized
      */
     public CommandWord getCommandWord(String commandWord) {
@@ -44,7 +44,7 @@ public class CommandWords {
     /**
      * true if the given parameter is a command.
      *
-     * @param aString
+     * @param aString string version of command
      * @return true if the HashMap contains an entry for the key
      */
     public boolean isCommand(String aString) {

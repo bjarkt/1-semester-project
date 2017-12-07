@@ -2,7 +2,7 @@ package Data;
 
 import java.util.Map;
 
-public interface LoadableSavable {
+interface LoadableSavable {
     /**
      * Load some data into a map
      *

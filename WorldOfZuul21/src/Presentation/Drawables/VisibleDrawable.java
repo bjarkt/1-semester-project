@@ -13,7 +13,7 @@ public abstract class VisibleDrawable extends Drawable {
     /**
      * Constructor for VisibleDrawable. Seen is false be default.
      *
-     * @param location
+     * @param location location for drawable
      */
     public VisibleDrawable(ILocation location) {
         super(location);

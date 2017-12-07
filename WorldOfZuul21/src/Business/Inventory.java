@@ -2,7 +2,7 @@ package Business;
 
 import java.util.ArrayList;
 
-public class Inventory {
+class Inventory {
 
     // the amount of space in the inventory
     private final int inventorySpace = 2;

@@ -381,7 +381,7 @@ public class Game {
         return booleanMessage;
     }
 
-    public BooleanMessage checkTimer() {
+    private BooleanMessage checkTimer() {
         // return true, if the player has lost the game
         // check how many turns there are left before power turns back on
         BooleanMessage message = new BooleanMessage();

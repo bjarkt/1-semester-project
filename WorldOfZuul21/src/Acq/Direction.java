@@ -11,7 +11,7 @@ public enum Direction {
     /**
      * constructor
      *
-     * @param commandString
+     * @param commandString string to create new Direction from
      */
     Direction(String commandString) {
         this.commandString = commandString;

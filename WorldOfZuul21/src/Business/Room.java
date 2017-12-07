@@ -30,10 +30,10 @@ public class Room implements IRoom {
      * creates a new room, with a name, description and location via x y
      * coordinates.
      *
-     * @param name
-     * @param description
-     * @param x
-     * @param y
+     * @param name name of room
+     * @param description description of room
+     * @param x x location of room
+     * @param y y location of room
      */
     public Room(String name, String description, String visualDescription, int x, int y) {
         this.name = name;
@@ -57,10 +57,10 @@ public class Room implements IRoom {
     /**
      * adds a possible exit for this room.
      *
-     * @param direction
-     * @param neighbor
+     * @param direction which direction the exit is
+     * @param neighbor the next room
      */
-    public void setExit(Direction direction, Location neighbor) {
+    private void setExit(Direction direction, Location neighbor) {
         exits.put(direction, neighbor);
     }
 
@@ -75,15 +75,15 @@ public class Room implements IRoom {
 
     /* Returns all the exits for the room as a string. */
     private String getExitString() {
-        String returnString = "Exits:";
+        StringBuilder returnString = new StringBuilder("Exits:");
         // Get the keys from the exits map (the strings).
         Set<Direction> keys = exits.keySet();
         for (Direction exit : keys) {
             // For each string, called exit, in the Set of keys, 
             // append it to the string.
-            returnString += " " + exit;
+            returnString.append(" ").append(exit);
         }
-        return returnString;
+        return returnString.toString();
     }
 
     /* Returns room, that has the corresponding direction. 
@@ -161,7 +161,7 @@ public class Room implements IRoom {
     /**
      * @return a string, indicating if there is a powerswitch in this room.
      */
-    public String getPowerSwitchToString() {
+    private String getPowerSwitchToString() {
         if (this.powerSwitch
                 == null) {
             return "";
@@ -179,7 +179,7 @@ public class Room implements IRoom {
     /**
      * Sets a powerswitch in this room.
      *
-     * @param powerSwitch
+     * @param powerSwitch a powerswitch
      */
     public void setPowerSwitch(PowerSwitch powerSwitch) {
         if (powerSwitch == null) {
@@ -193,7 +193,7 @@ public class Room implements IRoom {
     /**
      * @return a string, indicating if there is an item in this room.
      */
-    public String getItemToString() {
+    private String getItemToString() {
         if (items[0] != null) {
             return "\nThere is a " + items[0].getName() + " here";
         } else {
@@ -211,7 +211,7 @@ public class Room implements IRoom {
     /**
      * sets the first item of the items array.
      *
-     * @param item
+     * @param item a item
      */
     public void setItem(Item item) {
         if (item == null) {
@@ -241,7 +241,7 @@ public class Room implements IRoom {
      * Adds a guard to this room. The method figures out which array index to
      * place the guard in.
      *
-     * @param guard
+     * @param guard a guard
      */
     public void addGuard(Guard guard) {
         if (guards[0] != null) {
@@ -265,7 +265,7 @@ public class Room implements IRoom {
     /**
      * @return a string indicating if there is a powerrelay in this room
      */
-    public String getPowerRelayToString() {
+    private String getPowerRelayToString() {
         if (this.powerRelay == null) {
             return "";
         }

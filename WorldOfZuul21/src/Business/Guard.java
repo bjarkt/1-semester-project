@@ -24,7 +24,7 @@ public class Guard implements IGuard {
      *
      * @param ID id of the guard.
      */
-    public Guard(int ID) {
+    private Guard(int ID) {
         this.ID = ID;
     }
 

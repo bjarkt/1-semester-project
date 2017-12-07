@@ -23,7 +23,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -84,7 +83,7 @@ public class PrimaryWindowController implements Initializable {
     private Item item;
     private List<Drawable> drawables;
 
-    public PrimaryWindowController(boolean nameLoaded) {
+    PrimaryWindowController(boolean nameLoaded) {
         this.paneMap = new HashMap<>();
         this.boardBackgroundMap = new HashMap<>();
         forcedToQuit = false;
@@ -812,8 +811,6 @@ public class PrimaryWindowController implements Initializable {
         mapToSave.put("powerSwitchStatus", String.valueOf(powerSwitch.hasSeen()));
         for (int i = 0; i < business.getPowerRelayLocations().length; i++) {
             mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].hasSeen()));
-            mapToSave.put("powerRelayLocation_" + i,
-                    business.getPowerRelayLocations()[i].getX() + "," + business.getPowerRelayLocations()[i].getY());
         }
         business.saveSeenStatus(mapToSave);
     }
@@ -830,8 +827,8 @@ public class PrimaryWindowController implements Initializable {
             powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
 
             for (int i = 0; i < business.getPowerRelayLocations().length; i++) {
-                for (int j = 0; j < powerRelays.length; j++) {
-                    if (business.getPowerRelays()[i].getID() == powerRelays[j].getID()) {
+                for (PowerRelay powerRelay : powerRelays) {
+                    if (business.getPowerRelays()[i].getID() == powerRelay.getID()) {
                         powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
                         powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
                     }

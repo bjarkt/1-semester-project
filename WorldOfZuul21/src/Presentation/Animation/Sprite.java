@@ -65,7 +65,7 @@ public class Sprite {
      *
      * @param i image
      */
-    public void setImage(Image i) {
+    private void setImage(Image i) {
         image = i;
         width = i.getWidth();
         height = i.getHeight();
