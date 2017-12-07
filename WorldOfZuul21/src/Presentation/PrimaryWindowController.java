@@ -303,7 +303,7 @@ public class PrimaryWindowController implements Initializable {
         ILocation[] powerRelayLocations = business.getPowerRelayLocations();
         this.powerRelays = new PowerRelay[powerRelayLocations.length];
         for (int i = 0; i < powerRelays.length; i++) {
-            this.powerRelays[i] = new PowerRelay(powerRelayLocations[i]);
+            this.powerRelays[i] = new PowerRelay(powerRelayLocations[i], i);
         }
         this.item = new Item(business.getItemLocation());
 
@@ -823,14 +823,19 @@ public class PrimaryWindowController implements Initializable {
      */
     private void loadVisibleDrawablesSeenStatus() {
         setAllDrawablesSeen(false);
+
         Map<String, String> loadedMap = business.loadSeenStatus();
         if (loadedMap != null) {
             item.setSeen(Boolean.valueOf(loadedMap.get("itemStatus")));
             powerSwitch.setSeen(Boolean.valueOf(loadedMap.get("powerSwitchStatus")));
 
             for (int i = 0; i < business.getPowerRelayLocations().length; i++) {
-                powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
-                powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
+                for (int j = 0; j < powerRelays.length; j++) {
+                    if (business.getPowerRelays()[i].getID() == powerRelays[j].getID()) {
+                        powerRelays[i].setSeen(Boolean.valueOf(loadedMap.get("powerRelayStatus_" + i)));
+                        powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
+                    }
+                }
                 /*String locationString = loadedMap.get("powerRelayLocation_" + i);
                 double x = Double.parseDouble(locationString.split(",")[0]);
                 double y = Double.parseDouble(locationString.split(",")[1]);

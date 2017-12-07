@@ -700,18 +700,14 @@ public class Game {
 
         mapToSave.put("currentRoom", currentRoom.getName());
         mapToSave.put("powerSwitchStatus", String.valueOf(powerStatus));
+        mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
         for (int i = 0; i < powerRelays.length; i++) {
             mapToSave.put("powerRelayStatus_" + i, String.valueOf(powerRelays[i].getStatus()));
             mapToSave.put("powerRelayID_" + i, String.valueOf(powerRelays[i].getID()));
+            mapToSave.put("powerRelayLocation_" + i, powerRelayLocations.get(i).getName());
         }
-        mapToSave.put("powerSwitchRoom", powerSwitchRoom.getName());
 
-        int ii = 0;
-        for (Room powerRelayRoom : powerRelayLocations) {
-            mapToSave.put("powerRelayLocation_" + ii, powerRelayRoom.getName());
-            ii++;
-        }
         mapToSave.put("itemName", itemName);
 
         for (int i = 0; i < inventory.getInventory().size(); i++) {
@@ -777,34 +773,17 @@ public class Game {
 
         powerStatus = Boolean.parseBoolean(map.get("powerSwitchStatus"));
 
-        int i = 0;
-        for (Room room : rooms.values()) {
-            for (String s : map.keySet()) {
-                if (s.startsWith("powerRelayLocation_")) {
-                    if (room.getName().equals(map.get(s))) {
-                        powerRelayLocations.add(room);
-                        room.setPowerRelay(powerRelays[i]);
-                        i++;
-                    }
+        for (int i = 0; i < powerRelays.length; i++) {
+            powerRelays[i].setStatus(Boolean.parseBoolean(map.get("powerRelayStatus_" + i)));
+            powerRelays[i].setID(Integer.parseInt(map.get("powerRelayID_" + i)));
+            for (Room room : rooms.values()) {
+                if (room.getName().equalsIgnoreCase(map.get("powerRelayLocation_" + i))) {
+                    powerRelayLocations.add(room);
+                    room.setPowerRelay(powerRelays[i]);
                 }
             }
         }
 
-        i = 0;
-        for (String s : map.keySet()) {
-            if (s.startsWith("powerRelayStatus_")) {
-                powerRelays[i].setStatus(Boolean.parseBoolean(map.get(s)));
-                i++;
-            }
-        }
-
-        i = 0;
-        for (String s : map.keySet()) {
-            if (s.startsWith("powerRelayID_")) {
-                powerRelays[i].setID(Integer.parseInt(map.get(s)));
-                i++;
-            }
-        }
 
         for (Room room : rooms.values()) {
             if (room.getName().equals(map.get("powerSwitchRoom"))) {
@@ -859,7 +838,7 @@ public class Game {
             }
         }
 
-        i = 0;
+        int i = 0;
         for (String s : map.keySet()) {
             if (s.startsWith("lockedRoomName_")) {
                 for (Room room : rooms.values()) {
@@ -952,6 +931,10 @@ public class Game {
 
     public void setGlobalMessage(String globalMessage) {
         this.globalMessage = globalMessage;
+    }
+
+    public PowerRelay[] getPowerRelays() {
+        return powerRelays;
     }
 
     public void injectData(IData data) {

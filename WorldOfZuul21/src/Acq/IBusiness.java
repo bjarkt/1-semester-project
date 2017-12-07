@@ -37,6 +37,13 @@ public interface IBusiness {
     ILocation[] getPowerRelayLocations();
 
     /**
+     * Get the power relays in the game
+     *
+     * @return an array of {@link IPowerRelay}
+     */
+    IPowerRelay[] getPowerRelays();
+
+    /**
      * Get the location of the powerswitch.
      *
      * @return location of the power switch.

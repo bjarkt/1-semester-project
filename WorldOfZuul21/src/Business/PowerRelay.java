@@ -5,13 +5,15 @@
  */
 package Business;
 
+import Acq.IPowerRelay;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Nikolaj
  */
-public class PowerRelay {
+public class PowerRelay implements IPowerRelay {
 
     private int ID;
     private boolean status; // false when sabotaged

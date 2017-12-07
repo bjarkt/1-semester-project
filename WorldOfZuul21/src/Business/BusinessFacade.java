@@ -70,6 +70,11 @@ public class BusinessFacade implements IBusiness {
     }
 
     @Override
+    public IPowerRelay[] getPowerRelays() {
+        return game.getPowerRelays();
+    }
+
+    @Override
     public ILocation getPowerSwitchLocation() {
         for (Room room : game.getSwitchSpawnPointRooms()) {
             if (room.getPowerSwitch() != null) {
