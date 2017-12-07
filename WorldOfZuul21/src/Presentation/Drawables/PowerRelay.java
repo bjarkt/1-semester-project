@@ -13,6 +13,10 @@ public class PowerRelay extends VisibleDrawable {
         this.ID = id;
     }
 
+    /**
+     * Get the ID for this power relay. This ID should match the one from the business layer.
+     * @return the ID.
+     */
     public int getID() {
         return ID;
     }

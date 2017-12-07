@@ -836,11 +836,6 @@ public class PrimaryWindowController implements Initializable {
                         powerRelays[i].setLocation(business.getPowerRelayLocations()[i]);
                     }
                 }
-                /*String locationString = loadedMap.get("powerRelayLocation_" + i);
-                double x = Double.parseDouble(locationString.split(",")[0]);
-                double y = Double.parseDouble(locationString.split(",")[1]);
-                ILocation location = business.newLocation(x, y);
-                powerRelays[i].setLocation(location);*/
             }
         }
     }
