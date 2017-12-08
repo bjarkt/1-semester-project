@@ -30,10 +30,10 @@ public class Room implements IRoom {
      * creates a new room, with a name, description and location via x y
      * coordinates.
      *
-     * @param name name of room
+     * @param name        name of room
      * @param description description of room
-     * @param x x location of room
-     * @param y y location of room
+     * @param x           x location of room
+     * @param y           y location of room
      */
     public Room(String name, String description, String visualDescription, int x, int y) {
         this.name = name;
@@ -48,6 +48,8 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get the name of the room
+     *
      * @return name of room
      */
     public String getName() {
@@ -58,22 +60,35 @@ public class Room implements IRoom {
      * adds a possible exit for this room.
      *
      * @param direction which direction the exit is
-     * @param neighbor the next room
+     * @param neighbor  the next room
      */
     private void setExit(Direction direction, Location neighbor) {
         exits.put(direction, neighbor);
     }
 
+    /**
+     * Get the short description
+     *
+     * @return short description
+     */
     public String getShortDescription() {
         return description;
     }
 
-    /* Returns the description of the room, and exits for the room. */
+    /**
+     * Get the long description
+     *
+     * @return long description
+     */
     public String getLongDescription() {
         return "You are " + description + ".\n" + getExitString() + getPowerSwitchToString() + getPowerRelayToString() + getItemToString();
     }
 
-    /* Returns all the exits for the room as a string. */
+    /**
+     * Returns all the exits for the room as a string.
+     *
+     * @return String of exits
+     */
     private String getExitString() {
         StringBuilder returnString = new StringBuilder("Exits:");
         // Get the keys from the exits map (the strings).
@@ -88,11 +103,20 @@ public class Room implements IRoom {
 
     /* Returns room, that has the corresponding direction. 
        Returns null if there is no room, for a certain direction. */
+
+    /**
+     * Get the exit location for the direction
+     *
+     * @param direction a direction
+     * @return a location
+     */
     public Location getExit(Direction direction) {
         return exits.get(direction);
     }
 
     /**
+     * Get the location
+     *
      * @return the location of this room
      */
     public Location getLocation() {
@@ -100,6 +124,8 @@ public class Room implements IRoom {
     }
 
     /**
+     * Is the room locked?
+     *
      * @return true if the room is locked
      */
     public boolean isLocked() {
@@ -130,6 +156,8 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get the power switch
+     *
      * @return the powerswitch placed in this room. Returns null if there is no
      * powerswitch.
      */
@@ -138,6 +166,8 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get the power relay
+     *
      * @return return the powerrelay placed in this room, returns null if there is no powerrelay
      */
     public PowerRelay getPowerRelay() {
@@ -159,6 +189,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get a string that will tell you, if there a power switch in the current room
      * @return a string, indicating if there is a powerswitch in this room.
      */
     private String getPowerSwitchToString() {
@@ -191,6 +222,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get a string that will tell you, if there a item in the current room
      * @return a string, indicating if there is an item in this room.
      */
     private String getItemToString() {
@@ -202,6 +234,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get the item for this room
      * @return the first item of the items array.
      */
     public Item getItems() {
@@ -231,6 +264,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get the guards in this room
      * @return an array containing the guards in this room
      */
     public Guard[] getGuards() {
@@ -263,6 +297,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Get a string that will tell you, if there a power relay in the current room
      * @return a string indicating if there is a powerrelay in this room
      */
     private String getPowerRelayToString() {
@@ -280,6 +315,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Place an item in this room
      * @param item item to set in this room
      */
     public void setSpawn(Item item) {
@@ -287,6 +323,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Place a guard in this room
      * @param guard guard to set in this room
      */
     public void setSpawn(Guard guard) {
@@ -294,6 +331,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Place a power relay in this room
      * @param pr powerrelay to set in this room
      */
     public void setSpawn(PowerRelay pr) {
@@ -301,6 +339,7 @@ public class Room implements IRoom {
     }
 
     /**
+     * Place a power switch in this room
      * @param pw powerswitch to set in this room
      */
     public void setSpawn(PowerSwitch pw) {
@@ -421,10 +460,18 @@ public class Room implements IRoom {
         }
     }
 
+    /**
+     * Get the visual description. Used to tell how the room looks
+     * @return a visual description of the room
+     */
     public String getVisualDescription() {
         return visualDescription;
     }
 
+    /**
+     * Get all the exits in this room
+     * @return map of exits.
+     */
     public HashMap<Direction, Location> getExits() {
         return exits;
     }

@@ -19,6 +19,11 @@ public class Location extends Point2D implements ILocation {
     private double x;
     private double y;
 
+    /**
+     * Create a new location, from a x and y value
+     * @param x x value
+     * @param y y value
+     */
     public Location(double x, double y) {
         this.x = x;
         this.y = y;
@@ -69,6 +74,11 @@ public class Location extends Point2D implements ILocation {
         return this.y;
     }
 
+    /**
+     * Set the x and y value of this location
+     * @param x x value
+     * @param y y value
+     */
     @Override
     public void setLocation(double x, double y) {
         this.x = x;

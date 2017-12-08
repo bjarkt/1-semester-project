@@ -14,8 +14,10 @@ public class CommandWords {
     private HashMap<String, CommandWord> validCommands; //A hashmap with the constants from the enom class CommandWords as values.
     private List<String> noPrintList;
 
-    public CommandWords() // Constructor
-    {
+    /**
+     * Create a new CommandWords
+     */
+    public CommandWords() {
         validCommands = new HashMap<>(); // Creating an object
         noPrintList = new ArrayList<>();
         Collections.addAll(noPrintList, CommandWord.YES.toString(), CommandWord.NO.toString(), CommandWord.LOAD.toString(), CommandWord.NEW.toString());

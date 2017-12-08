@@ -30,6 +30,11 @@ public class HighScore implements IHighScore {
         return name + " - " + score;
     }
 
+    /**
+     * Compare this highscore to another highscore
+     * @param other another highscore.
+     * @return positive number if this highscore is bigger, 0 if they are equal, negative number if other is larger.
+     */
     @Override
     public int compareTo(IHighScore other) {
         return this.score - other.getScore();

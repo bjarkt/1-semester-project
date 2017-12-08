@@ -14,17 +14,26 @@ public class Item implements IItem {
     private static List<String> usedItems = new ArrayList<>();
     private final boolean isKey;
 
-    //Constructor for Item.
+    /**
+     * Create a new item, with a name
+     * @param name name of item
+     */
     public Item(String name) {
         this.name = name;
         isKey = false;
     }
 
+    /**
+     * Create a new item, that is not a key
+     */
     public Item() {
         isKey = false;
     }
 
-    // constructor for the Key Item
+    /**
+     * Create a new item, that can be a key
+     * @param isKey is this item a key?
+     */
     public Item(boolean isKey) {
         this.isKey = isKey;
         if (isKey) {
@@ -32,16 +41,26 @@ public class Item implements IItem {
         }
     }
 
-    //Getter method for "name"
+    /**
+     * Get the name of item
+     * @return name of item
+     */
     public String getName() {
         return name;
     }
 
-    //Setter method for "name"
+    /**
+     * Set the name of the item
+     * @param name new name of item
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Is this item a key?
+     * @return true if key
+     */
     public boolean isKey() {
         return isKey;
     }
@@ -71,6 +90,10 @@ public class Item implements IItem {
         return rooms_;
     }
 
+    /**
+     * string representation of item,
+     * @return name of item.
+     */
     @Override
     public String toString() {
         return name;

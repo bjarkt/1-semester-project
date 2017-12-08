@@ -12,7 +12,7 @@ class Inventory {
     private ArrayList<Item> inventory;
 
     /**
-     * initialises the lists
+     * Create a new inventory and initialize the lists
      */
     public Inventory() {
         loot = new ArrayList<>();
@@ -20,17 +20,23 @@ class Inventory {
     }
 
     /**
+     * Get the inventory
      * @return the inventory
      */
     public ArrayList<Item> getInventory() {
         return inventory;
     }
 
+    /**
+     * Get the loot list
+     * @return list of items in loot (not inventory)
+     */
     public ArrayList<Item> getLoot() {
         return loot;
     }
 
     /**
+     * Add an item to the inventory
      * @param item to add to inventory
      * @return returns true if the item was added successfully, false if there
      * is not enough room in the inventory.
@@ -47,6 +53,7 @@ class Inventory {
     }
 
     /**
+     * Add all items in the inventory to the loot list
      * @return true if the item added was successfully, false if there is no
      * item in the inventory
      */
@@ -76,6 +83,7 @@ class Inventory {
     }
 
     /**
+     * Get the points this player has gotten. points = loot.size()*2
      * @return the amount of points earned for the amount of items that has been
      * stolen.
      */

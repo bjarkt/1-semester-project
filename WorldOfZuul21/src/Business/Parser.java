@@ -11,13 +11,19 @@ public class Parser {
     private CommandWords commands;
     private Scanner reader;
 
-    /* No arg constructor */
+    /**
+     * Create a new parser that can read commands from the console
+     */
     public Parser() {
         commands = new CommandWords();
         reader = new Scanner(System.in);
     }
 
-    /*Method for getting command from user input*/
+
+    /**
+     * Get a string and turn it into a {@link Command}.
+     * @return a new command
+     */
     public Command getCommand() {
         String inputLine;
         String word1 = null;
@@ -38,7 +44,10 @@ public class Parser {
         return new Command(commands.getCommandWord(word1), word2);
     }
 
-    /*Method for showing all acceptable commands */
+
+    /**
+     * print all the usable commands
+     */
     public void showCommands() {
         commands.showAll();
     }

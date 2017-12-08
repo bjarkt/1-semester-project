@@ -16,6 +16,7 @@ class HighScoreManager {
     private IData data;
 
     /**
+     * Get the top five highscores
      * @return A top five list of {@link IHighScore}
      */
     List<IHighScore> getHighScores() {

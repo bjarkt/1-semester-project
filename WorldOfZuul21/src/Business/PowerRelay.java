@@ -31,22 +31,24 @@ public class PowerRelay implements IPowerRelay {
         this.timeBoost = timeBoost;
     }
 
-    /**
-     * @return the id of this powerrelay
-     */
+    @Override
     public int getID() {
         return this.ID;
     }
 
     /**
-     * @return true if turned on, false if turned off
+     * true if turned on, false if turned off.
+     *
+     * @return the status.
      */
     public boolean getStatus() {
         return this.status;
     }
 
     /**
-     * @return the amount of time boosted
+     * Get the amount of time this relay can boost the time.
+     *
+     * @return the amount of time boosted.
      */
     public int getTimeBoost() {
         return this.timeBoost;
@@ -67,6 +69,8 @@ public class PowerRelay implements IPowerRelay {
     }
 
     /**
+     * Set the time boost
+     *
      * @param timeBoost new time boost
      */
     public void setTimeBoost(int timeBoost) {
@@ -74,6 +78,8 @@ public class PowerRelay implements IPowerRelay {
     }
 
     /**
+     * Set the status
+     *
      * @param status the status to set (on=true, off=false)
      */
     public void setStatus(boolean status) {
@@ -81,6 +87,8 @@ public class PowerRelay implements IPowerRelay {
     }
 
     /**
+     * Set the ID
+     *
      * @param ID new id
      */
     public void setID(int ID) {
