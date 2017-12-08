@@ -306,9 +306,12 @@ public class PrimaryWindowController implements Initializable {
         }
         this.item = new Item(business.getItemLocation());
 
-        Collections.addAll(drawables, powerSwitch, item, player);
+        // player and guard are added first, so the drawables are drawn in the correct order.
+        drawables.add(player);
         drawables.addAll(Arrays.asList(guards));
+        
         drawables.addAll(Arrays.asList(powerRelays));
+        Collections.addAll(drawables, powerSwitch, item);
     }
 
     private void initButtons() {

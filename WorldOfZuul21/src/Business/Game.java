@@ -326,9 +326,8 @@ public class Game {
 
         // Stop the method if a second word isn't supplied.
         if (!command.hasSecondWord()) {
-            if (textMode) System.out.println("Go where?");
             booleanMessage.setMessage("Go where?");
-            booleanMessage.setaBoolean(forcedToQuit);
+            booleanMessage.setaBoolean(false);
             return booleanMessage;
         }
 
@@ -351,7 +350,6 @@ public class Game {
         // Retrieve the room, which is stored in the hashmap of exits.
         // null is assigned to nextRoom, if there is no value for the key (direction).
         Room nextRoom = rooms.get(currentRoom.getExit(Direction.valueOf(direction.toUpperCase())));
-        //Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
             booleanMessage.setMessage("There is no door!"); // when there is no exit
@@ -922,19 +920,19 @@ public class Game {
         return (timerPoint + powerOffTime + policeArrivalTime) - timer;
     }
 
-    public String callFriendlyNpc() {
+    String callFriendlyNpc() {
         return friendlyNpc.help(currentRoom.getLocation(), guards);
     }
 
-    public String getGlobalMessage() {
+    String getGlobalMessage() {
         return globalMessage;
     }
 
-    public void setGlobalMessage(String globalMessage) {
+    void setGlobalMessage(String globalMessage) {
         this.globalMessage = globalMessage;
     }
 
-    public PowerRelay[] getPowerRelays() {
+    PowerRelay[] getPowerRelays() {
         return powerRelays;
     }
 
