@@ -22,6 +22,7 @@ public class Parser {
 
     /**
      * Get a string and turn it into a {@link Command}.
+     *
      * @return a new command
      */
     public Command getCommand() {

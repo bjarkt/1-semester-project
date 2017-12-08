@@ -16,6 +16,7 @@ public class Item implements IItem {
 
     /**
      * Create a new item, with a name
+     *
      * @param name name of item
      */
     public Item(String name) {
@@ -32,6 +33,7 @@ public class Item implements IItem {
 
     /**
      * Create a new item, that can be a key
+     *
      * @param isKey is this item a key?
      */
     public Item(boolean isKey) {
@@ -43,6 +45,7 @@ public class Item implements IItem {
 
     /**
      * Get the name of item
+     *
      * @return name of item
      */
     public String getName() {
@@ -51,6 +54,7 @@ public class Item implements IItem {
 
     /**
      * Set the name of the item
+     *
      * @param name new name of item
      */
     public void setName(String name) {
@@ -59,6 +63,7 @@ public class Item implements IItem {
 
     /**
      * Is this item a key?
+     *
      * @return true if key
      */
     public boolean isKey() {
@@ -92,6 +97,7 @@ public class Item implements IItem {
 
     /**
      * string representation of item,
+     *
      * @return name of item.
      */
     @Override

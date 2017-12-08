@@ -12,6 +12,7 @@ import java.awt.geom.Point2D;
 
 /**
  * This class extends Point2D, so we can make our own additional methods
+ *
  * @author Nikolaj
  */
 public class Location extends Point2D implements ILocation {
@@ -21,6 +22,7 @@ public class Location extends Point2D implements ILocation {
 
     /**
      * Create a new location, from a x and y value
+     *
      * @param x x value
      * @param y y value
      */
@@ -76,6 +78,7 @@ public class Location extends Point2D implements ILocation {
 
     /**
      * Set the x and y value of this location
+     *
      * @param x x value
      * @param y y value
      */

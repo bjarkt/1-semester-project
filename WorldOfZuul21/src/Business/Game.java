@@ -509,7 +509,8 @@ public class Game {
         // reset the game
         reset();
         boolean lootAdded = inventory.addToLoot();
-        if (textMode) System.out.println("You hide in the bush outside the museum. The police arrive. For some reason, they don't notice you");
+        if (textMode)
+            System.out.println("You hide in the bush outside the museum. The police arrive. For some reason, they don't notice you");
         if (lootAdded) {
             if (textMode) System.out.println("You hide the item you stole, in the bush");
         }

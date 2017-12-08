@@ -190,6 +190,7 @@ public class Room implements IRoom {
 
     /**
      * Get a string that will tell you, if there a power switch in the current room
+     *
      * @return a string, indicating if there is a powerswitch in this room.
      */
     private String getPowerSwitchToString() {
@@ -223,6 +224,7 @@ public class Room implements IRoom {
 
     /**
      * Get a string that will tell you, if there a item in the current room
+     *
      * @return a string, indicating if there is an item in this room.
      */
     private String getItemToString() {
@@ -235,6 +237,7 @@ public class Room implements IRoom {
 
     /**
      * Get the item for this room
+     *
      * @return the first item of the items array.
      */
     public Item getItems() {
@@ -265,6 +268,7 @@ public class Room implements IRoom {
 
     /**
      * Get the guards in this room
+     *
      * @return an array containing the guards in this room
      */
     public Guard[] getGuards() {
@@ -298,6 +302,7 @@ public class Room implements IRoom {
 
     /**
      * Get a string that will tell you, if there a power relay in the current room
+     *
      * @return a string indicating if there is a powerrelay in this room
      */
     private String getPowerRelayToString() {
@@ -316,6 +321,7 @@ public class Room implements IRoom {
 
     /**
      * Place an item in this room
+     *
      * @param item item to set in this room
      */
     public void setSpawn(Item item) {
@@ -324,6 +330,7 @@ public class Room implements IRoom {
 
     /**
      * Place a guard in this room
+     *
      * @param guard guard to set in this room
      */
     public void setSpawn(Guard guard) {
@@ -332,6 +339,7 @@ public class Room implements IRoom {
 
     /**
      * Place a power relay in this room
+     *
      * @param pr powerrelay to set in this room
      */
     public void setSpawn(PowerRelay pr) {
@@ -340,6 +348,7 @@ public class Room implements IRoom {
 
     /**
      * Place a power switch in this room
+     *
      * @param pw powerswitch to set in this room
      */
     public void setSpawn(PowerSwitch pw) {
@@ -462,6 +471,7 @@ public class Room implements IRoom {
 
     /**
      * Get the visual description. Used to tell how the room looks
+     *
      * @return a visual description of the room
      */
     public String getVisualDescription() {
@@ -470,6 +480,7 @@ public class Room implements IRoom {
 
     /**
      * Get all the exits in this room
+     *
      * @return map of exits.
      */
     public HashMap<Direction, Location> getExits() {

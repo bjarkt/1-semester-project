@@ -17,6 +17,7 @@ class HighScoreManager {
 
     /**
      * Get the top five highscores
+     *
      * @return A top five list of {@link IHighScore}
      */
     List<IHighScore> getHighScores() {

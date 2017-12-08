@@ -451,7 +451,7 @@ public class PrimaryWindowController implements Initializable {
     }
 
     private void checkForBusted() {
-        if (forcedToQuit || business.getPolicedArrived()  || business.isGotBusted()) {
+        if (forcedToQuit || business.getPolicedArrived() || business.isGotBusted()) {
             // clear the inputs, so the player stops moving
             inputs.clear();
             // update the highscore
@@ -461,7 +461,7 @@ public class PrimaryWindowController implements Initializable {
             for (Node node : rootVBox.getChildren()) {
                 node.setDisable(true);
             }
-            
+
             ButtonType close = new ButtonType("", ButtonBar.ButtonData.CANCEL_CLOSE); // make the built in button invisible
             Alert quitPopup = new Alert(Alert.AlertType.INFORMATION, "You got " + business.getCurrentHighScore() + " points.", close);
             quitPopup.getDialogPane().lookupButton(close).setVisible(false); // make the built in button invisible
@@ -796,6 +796,7 @@ public class PrimaryWindowController implements Initializable {
 
     /**
      * inject business facade into gui layer
+     *
      * @param business the business facade
      */
     public void injectBusiness(IBusiness business) {

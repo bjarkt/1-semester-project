@@ -32,6 +32,7 @@ public class HighScore implements IHighScore {
 
     /**
      * Compare this highscore to another highscore
+     *
      * @param other another highscore.
      * @return positive number if this highscore is bigger, 0 if they are equal, negative number if other is larger.
      */
