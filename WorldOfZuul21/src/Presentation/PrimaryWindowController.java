@@ -132,21 +132,20 @@ public class PrimaryWindowController implements Initializable {
 
     private void initSprites() {
         sPlayer = new Sprite();
-        //sPlayer.setImage("/Presentation/Pictures/spriteSheetTest3.png", 16, 4, 4, 64, 64, 1, 0, 2, 3);
-        sPlayer.setImage("/Presentation/Pictures/spriteSheetTest4.png", 16, 4, 4, 48, 71, 3, 0, 2, 1);
+        sPlayer.setImage("/Presentation/Pictures/Sprites/playerSpriteSheet.png", 16, 4, 4, 48, 71, 3, 0, 2, 1);
 
         doors = new ArrayList<>();
         northDoor = new Sprite();
-        northDoor.setImage("/Presentation/Pictures/door2.png");
+        northDoor.setImage("/Presentation/Pictures/Sprites/door_horizontal.png");
 
         southDoor = new Sprite();
-        southDoor.setImage("/Presentation/Pictures/door2.png");
+        southDoor.setImage("/Presentation/Pictures/Sprites/door_horizontal.png");
 
         eastDoor = new Sprite();
-        eastDoor.setImage("/Presentation/Pictures/door.png");
+        eastDoor.setImage("/Presentation/Pictures/Sprites/door_vertical.png");
 
         westDoor = new Sprite();
-        westDoor.setImage("/Presentation/Pictures/door.png");
+        westDoor.setImage("/Presentation/Pictures/Sprites/door_vertical.png");
 
         updateSpritePosition();
         Collections.addAll(doors, northDoor, southDoor, eastDoor, westDoor);
@@ -271,7 +270,7 @@ public class PrimaryWindowController implements Initializable {
                 // render
                 gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
 
-                //for (Sprite door : doors) { door.render(gc); }
+                for (Sprite door : doors) { door.render(gc); }
                 sPlayer.render(gc);
             }
         }.start();
@@ -316,10 +315,10 @@ public class PrimaryWindowController implements Initializable {
 
     private void initButtons() {
         HashMap<Button, Image> btnMap = new HashMap<>();
-        btnMap.put(northButton, new Image(getClass().getResourceAsStream("Pictures/north2.png")));
-        btnMap.put(southButton, new Image(getClass().getResourceAsStream("Pictures/south2.png")));
-        btnMap.put(eastButton, new Image(getClass().getResourceAsStream("Pictures/east2.png")));
-        btnMap.put(westButton, new Image(getClass().getResourceAsStream("Pictures/west2.png")));
+        btnMap.put(northButton, new Image(getClass().getResourceAsStream("Pictures/north.png")));
+        btnMap.put(southButton, new Image(getClass().getResourceAsStream("Pictures/south.png")));
+        btnMap.put(eastButton, new Image(getClass().getResourceAsStream("Pictures/east.png")));
+        btnMap.put(westButton, new Image(getClass().getResourceAsStream("Pictures/west.png")));
 
         for (Map.Entry<Button, Image> entry : btnMap.entrySet()) {
             entry.getKey().setText("");
@@ -368,7 +367,7 @@ public class PrimaryWindowController implements Initializable {
 
     private void initImages() {
         for (IRoom room : business.getRooms()) {
-            String filename = "Pictures/" + room.getVisualDescription() + ".png";
+            String filename = "Pictures/Rooms/" + room.getVisualDescription() + ".png";
             boardBackgroundMap.put(room.getLocation(), new Image(getClass().getResourceAsStream(filename)));
         }
     }
