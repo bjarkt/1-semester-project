@@ -5,14 +5,14 @@ import java.util.Map;
 interface LoadableSavable {
     /**
      * Load some data into a map
-     *
+     * Part of source code from: https://stackoverflow.com/a/25814158
      * @return return the file data as a map of String, String
      */
     Map<String, String> load();
 
     /**
      * save a map.
-     *
+     * Part of source code from: https://stackoverflow.com/a/25814158
      * @param map map of strings.
      */
     void save(Map<String, String> map);
