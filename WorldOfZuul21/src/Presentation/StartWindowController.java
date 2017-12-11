@@ -23,6 +23,12 @@ public class StartWindowController {
     private IBusiness business;
     private boolean nameLoaded;
 
+    /**
+     * Handle action on the load button
+     * Attempt to load the game. If no save game file is found, start a new game
+     *
+     * @param e Action event
+     */
     @FXML
     private void handleLoadButtonAction(ActionEvent e) {
         if (business.doesGameSaveFileExist()) {
@@ -43,6 +49,11 @@ public class StartWindowController {
         }
     }
 
+    /**
+     * Handle action on the new game button
+     *
+     * @param e Action event
+     */
     @FXML
     private void handleNewGameButtonAction(ActionEvent e) {
         nameLoaded = false;
@@ -73,6 +84,9 @@ public class StartWindowController {
         }
     }
 
+    /**
+     * Make the imageview resizable.
+     */
     @FXML
     public void initialize() {
         Pane parentOfImageView = (Pane) imageView.getParent();

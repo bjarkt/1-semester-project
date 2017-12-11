@@ -63,7 +63,14 @@ public class PrimaryWindowController implements Initializable {
     private Sprite westDoor;
     private Point2DProperty westDoorPos;
 
+    /**
+     * Canvas that the sprites are drawn on
+     */
     private ResizableCanvas canvas;
+
+    /**
+     * List that contains keyboard inputs
+     */
     private List<String> inputs;
 
     private IBusiness business;
@@ -90,9 +97,16 @@ public class PrimaryWindowController implements Initializable {
         this.nameLoaded = nameLoaded;
     }
 
+    /**
+     * Initialize various parts of the controller
+     *
+     * @param location url location
+     * @param resources ResourceBoundle resource
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initMinimapGrid();
+        initImages();
         initGroundImageView();
         initButtons();
         initDrawables();
@@ -130,6 +144,9 @@ public class PrimaryWindowController implements Initializable {
         update();
     }
 
+    /**
+     * Create the sprites and set their images
+     */
     private void initSprites() {
         sPlayer = new Sprite();
         sPlayer.setImage("/Presentation/Pictures/Sprites/playerSpriteSheet.png", 16, 4, 4, 48, 71, 3, 0, 2, 1);
@@ -151,6 +168,9 @@ public class PrimaryWindowController implements Initializable {
         Collections.addAll(doors, northDoor, southDoor, eastDoor, westDoor);
     }
 
+    /**
+     * Create the position of the sprites, and their initial position.
+     */
     public void updateSpritePosition() {
         playerStartPos = new Point2DProperty();
         if (stackPane.getWidth() == 0) {
@@ -189,10 +209,16 @@ public class PrimaryWindowController implements Initializable {
         westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
     }
 
+    /**
+     * Set the player's position at the middle of the room
+     */
     private void setPlayerStartPos() {
         sPlayer.setPosition(playerStartPos.getPropertyX(), playerStartPos.getPropertyY());
     }
 
+    /**
+     * Animate and move the sprite.
+     */
     private void animateSprite() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -204,7 +230,7 @@ public class PrimaryWindowController implements Initializable {
                 double elapsedTime = (currentNanoTime - lastNanoTime.value) / 1000000000.0;
                 lastNanoTime.value = currentNanoTime;
 
-                // logic
+                // handle inputs
                 int speed = 150;
                 sPlayer.setVelocity(0, 0);
                 if (inputs.contains("A")) {
@@ -270,17 +296,31 @@ public class PrimaryWindowController implements Initializable {
                 // render
                 gc.clearRect(0, 0, stackPane.getWidth(), stackPane.getHeight());
 
+                // Door sprites are not rendered, but still collidable
                 //for (Sprite door : doors) { door.render(gc); }
                 sPlayer.render(gc);
             }
         }.start();
     }
 
+    /**
+     * Check if a sprite is outside a rectangle, defined by two points (four x/y values).
+     *
+     * @param sprite The sprite to check
+     * @param x1     x value of first point
+     * @param y1     y value of first point
+     * @param x2     x value of second point
+     * @param y2     y value of second point
+     * @return true if the sprite is outside the rectangle
+     */
     private boolean isSpriteOutsideRectangle(Sprite sprite, double x1, double y1, double x2, double y2) {
         return sprite.getPositionX() > x1 && sprite.getPositionX() + sprite.getWidth() < x2
                 && sprite.getPositionY() > y1 && sprite.getPositionY() + sprite.getHeight() < y2;
     }
 
+    /**
+     * Create the canvas, ,make it resizable and add it to the GUI
+     */
     private void initCanvas() {
         canvas = new ResizableCanvas(this);
         canvas.widthProperty().bind(((Pane) groundImageView.getParent()).widthProperty());
@@ -291,6 +331,9 @@ public class PrimaryWindowController implements Initializable {
         stackPane.getChildren().add(canvas);
     }
 
+    /**
+     * Create the drawable objects, base their location off of the locations from the business layer
+     */
     private void initDrawables() {
         drawables = new ArrayList<>();
 
@@ -313,6 +356,9 @@ public class PrimaryWindowController implements Initializable {
         Collections.addAll(drawables, powerSwitch, item);
     }
 
+    /**
+     * Put pictures and remove text from buttons
+     */
     private void initButtons() {
         HashMap<Button, Image> btnMap = new HashMap<>();
         btnMap.put(northButton, new Image(getClass().getResourceAsStream("Pictures/north.png")));
@@ -326,14 +372,20 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Make the backgroundimage view resizable
+     */
     private void initGroundImageView() {
-        // make the imageview of the background resizable
         Pane parentOfImageView = (Pane) groundImageView.getParent();
         groundImageView.setPreserveRatio(false);
         groundImageView.fitWidthProperty().bind(parentOfImageView.widthProperty());
         groundImageView.fitHeightProperty().bind(parentOfImageView.heightProperty());
     }
 
+    /**
+     * Add pane with number to each cell of the gridpane minimap.
+     * Initialize hashmap paneMap with location and pane.
+     */
     private void initMinimapGrid() {
         int maxCol = getColCount(minimapGrid);
         int maxRow = getRowCount(minimapGrid);
@@ -361,10 +413,11 @@ public class PrimaryWindowController implements Initializable {
                 paneMap.put(business.newLocation(c, rowIndex), p);
             }
         }
-
-        initImages();
     }
 
+    /**
+     * Add images to map according to location and Room visual description.
+     */
     private void initImages() {
         for (IRoom room : business.getRooms()) {
             String filename = "Pictures/Rooms/" + room.getVisualDescription() + ".png";
@@ -372,6 +425,10 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Position door sprites according to exits in the current room
+     * This method is also called each time the canvas is resized.
+     */
     public void positionExitsAndDisableButtons() {
         Set<Direction> exits = business.getExitsForCurrentRoom();
         Set<Button> buttons = new HashSet<>();
@@ -404,6 +461,10 @@ public class PrimaryWindowController implements Initializable {
 
     }
 
+    /**
+     * Update various parts of the gui
+     * Check for changes from the business layer
+     */
     private void update() {
         updateInventoryList();
         updateLootList();
@@ -431,8 +492,11 @@ public class PrimaryWindowController implements Initializable {
         checkForBusted();
     }
 
+    /**
+     * Check if any of the drawables can be seen, and update their seen status
+     * Update the player and guards locations
+     */
     private void updateDrawables() {
-        // Check if any of the VisibleDrawables can be seen in the current room
         if (business.currentRoomContainsItem()) {
             item.setSeen(true);
         } else if (business.currentRoomContainsPowerRelay()) {
@@ -452,6 +516,9 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Popup window, if the player got busted
+     */
     private void checkForBusted() {
         if (forcedToQuit || business.getPolicedArrived() || business.isGotBusted()) {
             // clear the inputs, so the player stops moving
@@ -483,6 +550,8 @@ public class PrimaryWindowController implements Initializable {
             Button newgameBtn = new Button("New Game");
             newgameBtn.setOnAction(actionEvent -> {
                 newGameClicked.value = true;
+
+                // Disable all gui elements, so the game cannot progess.
                 for (Node node : rootVBox.getChildren()) {
                     node.setDisable(false);
                 }
@@ -534,6 +603,9 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Draw drawables on the minimap
+     */
     private void drawMinimap() {
         for (Pane pane : paneMap.values()) {
             ObservableList<Node> children = pane.getChildren();
@@ -552,38 +624,76 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Updates the inventory list
+     */
     private void updateInventoryList() {
         ObservableList<IItem> inventoryObservList = inventoryListView.getItems();
         inventoryObservList.clear();
         inventoryObservList.addAll(business.getInventoryList());
     }
 
+    /**
+     * Updates the loot list
+     */
     private void updateLootList() {
         ObservableList<IItem> lootObservList = lootListView.getItems();
         lootObservList.clear();
         lootObservList.addAll(business.getLootList());
     }
 
+    /**
+     * Handle action on the north button
+     *
+     * @param e Action event
+     */
     public void handleNorthButton(ActionEvent e) {
         goNorth();
     }
 
+    /**
+     * Handle action on the south button
+     *
+     * @param e Action event
+     */
     public void handleSouthButton(ActionEvent e) {
         goSouth();
     }
 
+    /**
+     * Handle action on the east button
+     *
+     * @param e Action event
+     */
     public void handleEastButton(ActionEvent e) {
         goEast();
     }
 
+    /**
+     * Handle action on the west button
+     *
+     * @param e Action event
+     */
     public void handleWestButton(ActionEvent e) {
         goWest();
     }
 
+    /**
+     * Handle action on the call button
+     * Write to the textarea, what master mind daniel wants to say
+     *
+     * @param e Action event
+     */
     public void handleCallButtonAction(ActionEvent e) {
         println(business.callMasterMindDaniel());
     }
 
+    /**
+     * Handle action on the steal button
+     * If possible, steal the item
+     *
+     * @param e Action event
+     */
     public void handleStealButtonAction(ActionEvent e) {
         // Do not change the seen status of the drawable item, if the item stolen is a key
         if (business.getItemForCurrentRoom() != null && !business.getItemForCurrentRoom().getName().equalsIgnoreCase("Key")) {
@@ -597,6 +707,12 @@ public class PrimaryWindowController implements Initializable {
         update();
     }
 
+    /**
+     * Handle action on the interact button
+     * If possible, interact with interactables
+     *
+     * @param e Action event
+     */
     public void handleInteractButtonAction(ActionEvent e) {
         IBooleanMessage message = business.interact();
         println(message.getMessage());
@@ -605,12 +721,24 @@ public class PrimaryWindowController implements Initializable {
         update();
     }
 
+    /**
+     * Handle action on the hide button
+     * Hide the player
+     *
+     * @param e Action event
+     */
     public void handleHideButtonAction(ActionEvent e) {
         forcedToQuit = business.hide();
         println("You hide.");
         update();
     }
 
+    /**
+     * Handle action on the escape button
+     * if possible, escape from the museum, and give the player choice of going back inside.
+     *
+     * @param e Action event
+     */
     public void handleEscapeButtonAction(ActionEvent e) {
         if (business.isAtEntrance()) {
             ButtonType yesBtn = new ButtonType("Yes", ButtonBar.ButtonData.YES);
@@ -636,11 +764,22 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Handle action on the highscore button
+     * Display list of highscores
+     *
+     * @param e Action event
+     */
     public void handleHighScoreButtonAction(ActionEvent e) {
         AlertBox.display("Highscore", business.getHighScores());
 
     }
 
+    /**
+     * Get input from the keyboard. Ignore arrow keys and consume their event
+     *
+     * @param e Key event
+     */
     public void handleKeyPress(KeyEvent e) {
         String code = e.getCode().toString();
         /*
@@ -655,11 +794,23 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Handle input from keyborad
+     * Remove the pressed key from the inputs list
+     *
+     * @param e
+     */
     public void handleKeyReleased(KeyEvent e) {
         String code = e.getCode().toString();
         inputs.remove(code);
     }
 
+    /**
+     * Handle action on save button.
+     * Saves the game and exits
+     *
+     * @param e action event
+     */
     public void handleMenuItemSaveAction(ActionEvent e) {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Save and exit?", "", "Are you sure you want to save the game and exit?");
         if (buttonType == ButtonType.OK) {
@@ -669,6 +820,12 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Handle action on the close button
+     * Closes the game
+     *
+     * @param e Action event
+     */
     public void handleMenuItemCloseAction(ActionEvent e) {
         ButtonType buttonType = createAlert(Alert.AlertType.CONFIRMATION, "Exit the game?", "", "Are you sure you want to exit the game without\nsaving?");
         if (buttonType == ButtonType.OK) {
@@ -676,14 +833,36 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Handle action on the history button
+     * Shows a window with history of the game
+     *
+     * @param e Action event
+     */
     public void handleMenuItemHistoryAction(ActionEvent e) {
         AlertBox.display("Historie", "History.txt");
     }
 
+    /**
+     * Handle action on the help button
+     * Shows a window with help text.
+     *
+     * @param e Action event
+     */
     public void handleMenuItemHelpAction(ActionEvent e) {
         AlertBox.display("Help", "HelpFile.txt");
     }
 
+    /**
+     * Create an alert window, and return the button that was pressed.
+     *
+     * @param type    Type of alert window (which icon to display)
+     * @param title   Title of alert (text in the top of the window)
+     * @param header  Header text
+     * @param content Content text
+     * @param buttons Which buttons to display
+     * @return the type of that was pressed, if any. If no button pressed, return null.
+     */
     private ButtonType createAlert(Alert.AlertType type, String title, String header, String content, ButtonType... buttons) {
         Alert alert = new Alert(type, content, buttons);
         if (header.length() > 0) {
@@ -695,6 +874,9 @@ public class PrimaryWindowController implements Initializable {
         return result.orElse(null);
     }
 
+    /**
+     * Attempt to move the player north.
+     */
     private void goNorth() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.NORTH);
@@ -704,6 +886,9 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Attempt to move the player south.
+     */
     private void goSouth() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.SOUTH);
@@ -713,6 +898,9 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Attempt to move the player east.
+     */
     private void goEast() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.EAST);
@@ -722,6 +910,9 @@ public class PrimaryWindowController implements Initializable {
         }
     }
 
+    /**
+     * Attempt to move the player west.
+     */
     private void goWest() {
         if (!forcedToQuit) {
             IBooleanMessage message = business.goDirection(Direction.WEST);

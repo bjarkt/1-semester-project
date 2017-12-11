@@ -11,6 +11,10 @@ package Presentation;
 public class BooleanValue {
     public boolean value;
 
+    /**
+     * Create a new boolean value
+     * @param b boolean to hold in this object.
+     */
     public BooleanValue(boolean b) {
         value = b;
     }
