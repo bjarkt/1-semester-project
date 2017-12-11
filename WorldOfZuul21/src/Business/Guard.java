@@ -79,9 +79,6 @@ public class Guard implements IGuard {
         Room nextRoom;
         Direction direction;
 
-        Set<Direction> validDirections = new HashSet<>(this.getRoom().getExits().keySet());
-        validDirections.add(Direction.NOWHERE); // An extra option, that will make the guard not move, sometimes.
-
         direction = Game.generateRandomDirection();
         // If Direction.NOWHERE is generated, nextRoom will be null.
         nextRoom = rooms.get(this.getRoom().getExit(direction));
