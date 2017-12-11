@@ -59,7 +59,11 @@ public class Game {
     private List<Room> itemSpawnPointRooms; // the rooms that items can spawn in
 
 
-    /* zero argument constructor. */
+    /**
+     * Create a new game
+     *
+     * @param textMode if the game is run with a GUI - false, or as console game - true.
+     */
     public Game(boolean textMode) {
         parser = new Parser(); // Instantiate the parser used to parse commands.
         highScoreManager = new HighScoreManager();
@@ -97,7 +101,9 @@ public class Game {
         createRooms(); // create the rooms
     }
 
-    /* Create the rooms and set the current room. */
+    /**
+     * Create the rooms, spawn the objects, and set the current room.
+     */
     private void createRooms() {
 
         // Create the rooms
@@ -202,7 +208,9 @@ public class Game {
         Room.setExits(rooms, specialRooms);
     }
 
-    // The method in which the main game loop happens.
+    /**
+     * The method in which the main game loop happens.
+     */
     private void play() {
         printWelcome();
         // Finished is assigned to false at the start, so the while loop will execute at least once.
@@ -216,7 +224,9 @@ public class Game {
         quit();
     }
 
-    // Print welcome and description of the current room.
+    /**
+     * Print welcome and description of the current room.
+     */
     private void printWelcome() {
         System.out.println();
         System.out.println("Welcome to Night at the Museum.");
@@ -228,8 +238,13 @@ public class Game {
         printGuardLocations();
     }
 
-    /* Processes the command, returning either false or true.
-       If true is returned, the game quits. */
+    /**
+     * Processes the command, returning either false or true.
+     * If true is returned, the game quits.
+     *
+     * @param command command to process
+     * @return if true, the game will quit.
+     */
     private boolean processCommand(Command command) {
         boolean wantToQuit = false;
 
@@ -275,6 +290,9 @@ public class Game {
         return wantToQuit;
     }
 
+    /**
+     * Start text version of game.
+     */
     public void startGame() {
         Command command;
         CommandWord commandWord;
@@ -311,7 +329,9 @@ public class Game {
 
     }
 
-    /* Prints the commands. */
+    /**
+     * Prints the commands.
+     */
     private void printHelp() {
         System.out.println("You are inside the museum");
         System.out.println();
@@ -319,7 +339,12 @@ public class Game {
         parser.showCommands();
     }
 
-    /* Updates the currentRoom variable, and prints description of the room. */
+    /**
+     * Updates the currentRoom variable, and prints description of the room.
+     *
+     * @param command command that contains the direction to go in.
+     * @return BooleanMessage that contains true, if the player was forced to quit.
+     */
     BooleanMessage goRoom(Command command) {
         BooleanMessage booleanMessage = new BooleanMessage();
         boolean forcedToQuit = false;
@@ -379,9 +404,12 @@ public class Game {
         return booleanMessage;
     }
 
+    /**
+     * check how many turns there are left before power turns back on. Alert the police if the timer runs out.
+     *
+     * @return true, if the player has lost the game
+     */
     private BooleanMessage checkTimer() {
-        // return true, if the player has lost the game
-        // check how many turns there are left before power turns back on
         BooleanMessage message = new BooleanMessage();
         String s = "";
         if (timer == timerPoint + powerOffTime / 2 && !powerStatus) {
@@ -413,7 +441,12 @@ public class Game {
         return message;
     }
 
-    // return true, if a second word has not been supplied
+    /**
+     * Quit the game if the command is quit and has no second word.
+     *
+     * @param command
+     * @return true, if a second word has not been supplied
+     */
     private boolean quit(Command command) {
         if (command.hasSecondWord()) {
             System.out.println("Quit what?");
@@ -423,8 +456,12 @@ public class Game {
         }
     }
 
+    /**
+     * used to turn off the powerswitch and sabotage powerRelays
+     *
+     * @return BooleanMessage that contains true if the player got busted while interacting.
+     */
     BooleanMessage interact() {
-        // used to turn off the powerswitch and sabotage powerRelays
         String s = "";
         BooleanMessage booleanMessage = new BooleanMessage();
         if (currentRoom.getPowerRelay() != null) {
@@ -460,6 +497,11 @@ public class Game {
         return booleanMessage;
     }
 
+    /**
+     * Attemp to steal an item
+     *
+     * @return return a BooleanMessage that contains true if the player got busted while stealing an item.
+     */
     BooleanMessage stealItem() {
         // used to steal an item
         boolean forcedToQuit = false;
@@ -492,6 +534,12 @@ public class Game {
         return message;
     }
 
+    /**
+     * Attempt to escape from the museum
+     *
+     * @param command command that contains escape command
+     * @return false if the player wants to go back inside.
+     */
     boolean escape(Command command) {
         // used to escape the museum through the entrance
         boolean wantToQuit = false;
@@ -503,6 +551,13 @@ public class Game {
         return wantToQuit;
     }
 
+    /**
+     * Add the players inventory to the loot list.
+     * Ask the player if they want to go back inside
+     *
+     * @param command a command
+     * @return false if the player wants to go back inside.
+     */
     private boolean escaped(Command command) {
         // reset the game
         reset();
@@ -529,6 +584,9 @@ public class Game {
         return false;
     }
 
+    /**
+     * Move all the guards
+     */
     private void moveGuards() {
         // move the guards
         for (Guard guard : guards) {
@@ -536,6 +594,11 @@ public class Game {
         }
     }
 
+    /**
+     * Generate a random direction. Direction.NOWHERE is one of the options. This is done to make the guards not move sometimes.
+     *
+     * @return a {@link Direction}.
+     */
     static Direction generateRandomDirection() {
         // generate a random direction
         Direction[] directions = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.NOWHERE};
@@ -543,6 +606,9 @@ public class Game {
         return directions[number];
     }
 
+    /**
+     * Print the location of the guards.
+     */
     private void printGuardLocations() {
         // print the guard's locations
         if (textMode) {
@@ -556,6 +622,11 @@ public class Game {
         }
     }
 
+    /**
+     * Attempt to hide. If a guard enters your room, 50% change to not get busted.
+     *
+     * @return true if the player got busted.
+     */
     boolean hide() {
         // used to hide from the guards
         // return true, if the players has lost the game
@@ -598,6 +669,11 @@ public class Game {
         return forcedToQuit;
     }
 
+    /**
+     * Call Mastermind Daniel, he tells you what to do.
+     *
+     * @return a string containing text from Mastermind Daniel.
+     */
     String call() {
         // call your friend
         // your friend tells you, what your current objective is
@@ -616,6 +692,12 @@ public class Game {
         return s;
     }
 
+    /**
+     * Check if the player got busted.
+     * Checks if the guard and player switched rooms.
+     *
+     * @return true if the player got busted.
+     */
     private boolean checkForBusted() {
         // return true if there is a guard in the same room as the player
         for (Guard guard : guards) {
@@ -632,14 +714,19 @@ public class Game {
         return false;
     }
 
+    /**
+     * Print busted message.
+     */
     private void printBusted() {
         // message that are printed, when the player gets busted by the guards
         System.out.println("Before you are able to scratch your ass, the guards jump you, and beat the shit out of you");
     }
 
+    /**
+     * the game is over
+     * the players points and other information are printed
+     */
     private void quit() {
-        // the game is over
-        // the players points and other information are printed
         if (saved) {
             System.out.println("The game has been saved.");
         } else {
@@ -666,6 +753,9 @@ public class Game {
         }
     }
 
+    /**
+     * Reset the game.
+     */
     private void reset() {
         // reset the guards
         guards[0].setRoom(rooms.get(new Location(4, 0)));
@@ -693,6 +783,11 @@ public class Game {
         }
     }
 
+    /**
+     * Save the state of the game
+     *
+     * @param playerName the name of the current player.
+     */
     public void save(String playerName) {
         LinkedHashMap<String, String> mapToSave = new LinkedHashMap<>();
         mapToSave.put("playerName", playerName);
@@ -747,6 +842,9 @@ public class Game {
         saved = true;
     }
 
+    /**
+     * Load the state of the game.
+     */
     public void load() {
         Map<String, String> map;
         map = data.load();
@@ -864,78 +962,174 @@ public class Game {
 
     }
 
+    /**
+     * Get the possible rooms, where an item can spawn in.
+     *
+     * @return List of rooms
+     */
     List<Room> getItemSpawnPointRooms() {
         return itemSpawnPointRooms;
     }
 
+    /**
+     * Get the possible rooms that a power switch can spawn in.
+     *
+     * @return list of rooms
+     */
     List<Room> getSwitchSpawnPointRooms() {
         return switchSpawnPointRooms;
     }
 
+    /**
+     * Get the rooms that a power relay is in
+     *
+     * @return list of rooms
+     */
     List<Room> getPowerRelayLocations() {
         return powerRelayLocations;
     }
 
+    /**
+     * Get the inventory
+     *
+     * @return inventory
+     */
     Inventory getInventory() {
         return inventory;
     }
 
+    /**
+     * Get the current room
+     *
+     * @return a room
+     */
     Room getCurrentRoom() {
         return currentRoom;
     }
 
+    /**
+     * Get the guards
+     *
+     * @return array of guards
+     */
     IGuard[] getGuards() {
         return guards;
     }
 
+    /**
+     * Get the rooms in the game
+     *
+     * @return list of rooms
+     */
     List<Room> getRooms() {
         return new ArrayList<>(rooms.values());
     }
 
+    /**
+     * Is the player at the entrance?
+     *
+     * @return true if the player is at the entrance of the museum
+     */
     boolean isAtEntrace() {
         return currentRoom.getLocation().equals(new Location(0, 0));
     }
 
+    /**
+     * Is the power turned on?
+     *
+     * @return the status of the power
+     */
     boolean isPowerStatus() {
         return powerStatus;
     }
 
+    /**
+     * Is the policed alerted?
+     *
+     * @return true if the police is alerted
+     */
     boolean isPoliceAlerted() {
         return policeAlerted;
     }
 
+    /**
+     * Has the player been busted.
+     *
+     * @return true if the player got busted
+     */
     boolean isGotBusted() {
         return gotBusted;
     }
 
+    /**
+     * has the police arrived?
+     *
+     * @return true if the police has arrived
+     */
     boolean isPoliceArrived() {
         return policeArrived;
     }
 
+    /**
+     * The amount if time left, before the power turns on
+     *
+     * @return time left before power turns on.
+     */
     int getTimeBeforePowerTurnsBackOn() {
         return (timerPoint + powerOffTime) - timer;
     }
 
+    /**
+     * Get the amount of time left, before the police arrives.
+     *
+     * @return time left before the police arrives
+     */
     int getTimeBeforePoliceArrives() {
         return (timerPoint + powerOffTime + policeArrivalTime) - timer;
     }
 
+    /**
+     * Call the friendly NPC. He tells about guard location
+     *
+     * @return String containing text from NPC
+     */
     String callFriendlyNpc() {
         return friendlyNpc.help(currentRoom.getLocation(), guards);
     }
 
+    /**
+     * Get the global message
+     *
+     * @return String with message
+     */
     String getGlobalMessage() {
         return globalMessage;
     }
 
+    /**
+     * Set the global message.
+     * To clear the message, use empty string ("")
+     *
+     * @param globalMessage new global message
+     */
     void setGlobalMessage(String globalMessage) {
         this.globalMessage = globalMessage;
     }
 
+    /**
+     * Get the power relays
+     *
+     * @return array of power relays
+     */
     PowerRelay[] getPowerRelays() {
         return powerRelays;
     }
 
+    /**
+     * Inject data layer into the game
+     *
+     * @param data data facade.
+     */
     public void injectData(IData data) {
         this.data = data;
         highScoreManager.injectData(data);
