@@ -719,7 +719,7 @@ public class Game {
      */
     private void printBusted() {
         // message that are printed, when the player gets busted by the guards
-        System.out.println("Before you are able to scratch your ass, the guards jump you, and beat the shit out of you");
+        if (textMode) System.out.println("Before you are able to scratch your ass, the guards jump you, and beat the shit out of you");
     }
 
     /**
