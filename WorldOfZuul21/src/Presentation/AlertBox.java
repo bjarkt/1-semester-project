@@ -22,9 +22,9 @@ public class AlertBox {
      * Display a popup window
      *
      * @param header       the text in the title bar of the window
-     * @param textfilename the filename of the textfile. Textfile must be placed in Presentation/Textfiles/
+     * @param filename the filename of the textfile. Textfile must be placed in Presentation/Textfiles/
      */
-    static void display(String header, String textfilename) {
+    static void display(String header, String filename) {
         StringBuilder text = new StringBuilder();
         Stage window = new Stage();
         window.setTitle(header);
@@ -35,9 +35,9 @@ public class AlertBox {
         File directory = new File("");
         String realFilePath;
         if (directory.getAbsolutePath().contains("WorldOfZuul21")) {
-            realFilePath = directory.getAbsolutePath() + "/src/Presentation/Textfiles/" + textfilename;
+            realFilePath = directory.getAbsolutePath() + "/src/Presentation/Textfiles/" + filename;
         } else {
-            realFilePath = directory.getAbsolutePath() + "/WorldOfZuul21/src/Presentation/Textfiles/" + textfilename;
+            realFilePath = directory.getAbsolutePath() + "/WorldOfZuul21/src/Presentation/Textfiles/" + filename;
         }
         File file = new File(realFilePath);
 
