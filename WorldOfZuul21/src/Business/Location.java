@@ -32,33 +32,33 @@ public class Location extends Point2D implements ILocation {
     }
 
     /**
-     * @param loc another location
+     * @param location another location
      * @return true if the this location is next to the other location
      */
-    public boolean isNextTo(Location loc) {
-        if (this.x == loc.getX() + 1 || this.x == loc.getX() - 1) {
-            return this.y == loc.getY();
-        } else if (this.y == loc.getY() + 1 || this.y == loc.getY() - 1) {
-            return this.x == loc.getX();
+    public boolean isNextTo(Location location) {
+        if (this.x == location.getX() + 1 || this.x == location.getX() - 1) {
+            return this.y == location.getY();
+        } else if (this.y == location.getY() + 1 || this.y == location.getY() - 1) {
+            return this.x == location.getX();
         }
         return false;
     }
 
     /**
-     * @param loc another location
+     * @param location another location
      * @return the direction that the other location is, compared to this
      */
-    public Direction getDirectionOfAdjacentLocation(Location loc) {
-        if (!isNextTo(loc)) {
+    public Direction getDirectionOfAdjacentLocation(Location location) {
+        if (!isNextTo(location)) {
             return null;
         } else {
-            if (this.x < loc.getX()) {
+            if (this.x < location.getX()) {
                 return Direction.EAST;
-            } else if (this.x > loc.getX()) {
+            } else if (this.x > location.getX()) {
                 return Direction.WEST;
-            } else if (this.y < loc.getY()) {
+            } else if (this.y < location.getY()) {
                 return Direction.NORTH;
-            } else if (this.y > loc.getY()) {
+            } else if (this.y > location.getY()) {
                 return Direction.SOUTH;
             } else {
                 return null;
