@@ -10,7 +10,7 @@ public class PowerSwitch {
     /**
      * Create a new PowerSwitch.
      */
-    PowerSwitch() {
+    public PowerSwitch() {
     }
 
 

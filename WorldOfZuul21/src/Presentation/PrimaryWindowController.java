@@ -798,7 +798,7 @@ public class PrimaryWindowController implements Initializable {
      * Handle input from keyborad
      * Remove the pressed key from the inputs list
      *
-     * @param e
+     * @param e key event
      */
     public void handleKeyReleased(KeyEvent e) {
         String code = e.getCode().toString();

@@ -43,15 +43,6 @@ public class CommandWords {
         }
     }
 
-    /**
-     * true if the given parameter is a command.
-     *
-     * @param aString string version of command
-     * @return true if the HashMap contains an entry for the key
-     */
-    public boolean isCommand(String aString) {
-        return validCommands.containsKey(aString);
-    }
 
     /**
      * prints all valid commands, except the commands in noPrintList

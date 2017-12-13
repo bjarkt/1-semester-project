@@ -28,14 +28,6 @@ public class Guard implements IGuard {
         this.ID = ID;
     }
 
-    /**
-     * Get the id for the guard
-     *
-     * @return id
-     */
-    public int getID() {
-        return ID;
-    }
 
     @Override
     public Room getRoom() {

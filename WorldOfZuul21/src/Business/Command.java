@@ -41,14 +41,6 @@ public class Command {
         return secondWord;
     }
 
-    /**
-     * Boolean Method that checks if the attribute commandWord is equal to that of CommandWord.UNNKOWN.
-     *
-     * @return true if the commandWord is CommandWord.UNKNOWN.
-     */
-    public boolean isUnknown() {
-        return (commandWord == CommandWord.UNKNOWN);
-    }
 
     /**
      * Method that checks the boolen expression: secondWord != null,

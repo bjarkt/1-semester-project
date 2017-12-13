@@ -68,14 +68,6 @@ public class PowerRelay implements IPowerRelay {
         this.status = true;
     }
 
-    /**
-     * Set the time boost
-     *
-     * @param timeBoost new time boost
-     */
-    public void setTimeBoost(int timeBoost) {
-        this.timeBoost = timeBoost;
-    }
 
     /**
      * Set the status

@@ -444,7 +444,7 @@ public class Game {
     /**
      * Quit the game if the command is quit and has no second word.
      *
-     * @param command
+     * @param command a command
      * @return true, if a second word has not been supplied
      */
     private boolean quit(Command command) {
