@@ -19,13 +19,13 @@ class FriendlyNpc {
     /**
      * Print the help text, which contains information about the guards location.
      *
-     * @param currenLocation the location of the player
+     * @param currentLocation the location of the player
      * @param guards         an array of guards
      * @return description of the guards location compared to yours
      */
-    public String help(Location currenLocation, Guard[] guards) {
+    public String help(Location currentLocation, Guard[] guards) {
         StringBuilder s = new StringBuilder();
-        for (Direction direction : getDirectionOfGuards(currenLocation, guards)) {
+        for (Direction direction : getDirectionOfGuards(currentLocation, guards)) {
             if (s.toString().length() != 0) {
                 s.append(System.lineSeparator());
             }
