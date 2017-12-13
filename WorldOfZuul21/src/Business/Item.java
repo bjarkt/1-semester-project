@@ -76,7 +76,7 @@ public class Item implements IItem {
      * @param rooms a list of possible rooms, in which the item may spawn
      * @return a list of size 1, containing the room that the item spawned in
      */
-    public static List<Room> Spawn(List<Room> rooms) {
+    public static List<Room> spawn(List<Room> rooms) {
         List<Room> rooms_ = new ArrayList<>();
         for (Room room : rooms) {
             room.setItem(null);

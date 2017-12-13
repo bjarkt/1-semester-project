@@ -52,12 +52,12 @@ public class Guard implements IGuard {
     }
 
     /**
-     * Spawn the guard the guard in one of the places specified by the rooms parameter.
+     * spawn the guard the guard in one of the places specified by the rooms parameter.
      *
      * @param rooms a list of possible spawn places.
      * @return a list containing the room, that the guard was spawned in.
      */
-    public static List<Room> Spawn(List<Room> rooms) {
+    public static List<Room> spawn(List<Room> rooms) {
         Guard[] guards = new Guard[2];
         List<Room> rooms_ = new ArrayList<>();
         for (int i = 0; i < guards.length; i++) {

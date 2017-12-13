@@ -42,12 +42,12 @@ public class PowerSwitch {
     }
 
     /**
-     * Spawn a PowerSwitch in one of the rooms in the parameter room
+     * spawn a PowerSwitch in one of the rooms in the parameter room
      *
      * @param rooms list of possible rooms to spawn in
      * @return a list of rooms that have been spawned in
      */
-    public static List<Room> Spawn(List<Room> rooms) {
+    public static List<Room> spawn(List<Room> rooms) {
         int number = (int) (Math.random() * 3);
         List<Room> rooms_ = new ArrayList<>();
 

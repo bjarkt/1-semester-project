@@ -152,7 +152,7 @@ public class Game {
         Collections.addAll(relaySpawnPointRooms, room03, room05, room09, room11, room14, room18);
 
         // spawn the guards
-        List<Room> guardRooms = Guard.Spawn(guardSpawnPointRooms);
+        List<Room> guardRooms = Guard.spawn(guardSpawnPointRooms);
         guards[0] = guardRooms.get(0).getGuards()[0];
         guards[1] = guardRooms.get(1).getGuards()[0];
 
@@ -160,19 +160,19 @@ public class Game {
         guards[1].setOldRoom(guardSpawnPointRooms.get(1));
 
         // spawn the powerswitch in one of three rooms
-        powerSwitchRoom = PowerSwitch.Spawn(switchSpawnPointRooms).get(0);
+        powerSwitchRoom = PowerSwitch.spawn(switchSpawnPointRooms).get(0);
         powerSwitchLocation = powerSwitchRoom.getLocation();
 
         // spawn powerRelays in three out of 6 random rooms
-        powerRelayLocations = new ArrayList<>(PowerRelay.Spawn(relaySpawnPointRooms));
+        powerRelayLocations = new ArrayList<>(PowerRelay.spawn(relaySpawnPointRooms));
         int i = 0;
         for (Room relayRoom : powerRelayLocations) {
             powerRelays[i] = relayRoom.getPowerRelay();
             i++;
         }
 
-        // Spawn items
-        itemName = Item.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
+        // spawn items
+        itemName = Item.spawn(itemSpawnPointRooms).get(0).getItems().getName();
 
         // Add the rooms to a map, using their locations' coordinates as keys
         rooms = new HashMap<>();
@@ -779,7 +779,7 @@ public class Game {
         // spawn a new item, if you stole the last one
         inventory.getInventory().trimToSize();
         if (!inventory.getInventory().isEmpty()) {
-            itemName = Item.Spawn(itemSpawnPointRooms).get(0).getItems().getName();
+            itemName = Item.spawn(itemSpawnPointRooms).get(0).getItems().getName();
         }
     }
 

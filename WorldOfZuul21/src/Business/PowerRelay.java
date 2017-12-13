@@ -99,7 +99,7 @@ public class PowerRelay implements IPowerRelay {
      * @param rooms list of possible spawn rooms
      * @return a list of rooms, that has been spawned in
      */
-    public static List<Room> Spawn(List<Room> rooms) {
+    public static List<Room> spawn(List<Room> rooms) {
         List<Room> rooms_ = new ArrayList<>();
         while (rooms_.size() < 3) {
             int randomIndex = (int) (Math.random() * rooms.size());
