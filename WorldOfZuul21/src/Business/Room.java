@@ -340,19 +340,19 @@ public class Room implements IRoom {
     /**
      * Place a power relay in this room
      *
-     * @param pr powerrelay to set in this room
+     * @param powerRelay powerrelay to set in this room
      */
-    public void setSpawn(PowerRelay pr) {
-        this.setPowerRelay(pr);
+    public void setSpawn(PowerRelay powerRelay) {
+        this.setPowerRelay(powerRelay);
     }
 
     /**
      * Place a power switch in this room
      *
-     * @param pw powerswitch to set in this room
+     * @param powerSwitch powerswitch to set in this room
      */
-    public void setSpawn(PowerSwitch pw) {
-        this.setPowerSwitch(pw);
+    public void setSpawn(PowerSwitch powerSwitch) {
+        this.setPowerSwitch(powerSwitch);
     }
 
     /**
