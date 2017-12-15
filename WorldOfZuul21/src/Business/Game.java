@@ -758,8 +758,9 @@ public class Game {
      */
     private void reset() {
         // reset the guards
-        guards[0].setRoom(rooms.get(new Location(4, 0)));
-        guards[1].setRoom(rooms.get(new Location(0, 3)));
+        for (int i = 0; i < guards.length; i++) {
+            guards[i].setRoom(rooms.get(guardSpawnPointRooms.get(i).getLocation()));
+        }
 
         // turn the power back on
         rooms.get(powerSwitchLocation).getPowerSwitch().turnPowerOn();
