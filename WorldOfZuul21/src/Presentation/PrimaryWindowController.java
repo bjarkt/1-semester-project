@@ -39,6 +39,7 @@ public class PrimaryWindowController implements Initializable {
     @FXML private Button westButton;
     @FXML private Button eastButton;
     @FXML private Button southButton;
+    @FXML private Button escapeButton;
     @FXML private ImageView groundImageView;
     @FXML private TextArea textArea;
     @FXML private ListView<IItem> inventoryListView;
@@ -457,6 +458,12 @@ public class PrimaryWindowController implements Initializable {
         if (exits.contains(Direction.WEST)) {
             westDoor.setPosition(westDoorPos.getPropertyX(), westDoorPos.getPropertyY());
             westButton.setDisable(false);
+        }
+
+        if (business.isAtEntrance()) {
+            escapeButton.setDisable(false);
+        } else {
+            escapeButton.setDisable(true);
         }
 
     }

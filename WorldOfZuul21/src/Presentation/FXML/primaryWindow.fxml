@@ -49,7 +49,7 @@
                         <Tooltip text="Attempt to hide" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#handleEscapeButtonAction" text="Escape">
+                  <Button fx:id="escapeButton" mnemonicParsing="false" onAction="#handleEscapeButtonAction" text="Escape">
                      <tooltip>
                         <Tooltip text="Escape through the entrance of the museum" />
                      </tooltip>
