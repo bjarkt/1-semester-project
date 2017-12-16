@@ -1,1 +1,6 @@
-Here we will explain how the game works and how to play it.
+You are a thief, who has been tasked with stealing valuable items from a museum.
+You must enter the museum, avoid the guards and steal the items, without triggering the alarm.
+Your boss has told you, that there is a key in the museum, that unlocks the locked room.
+You may or may not need to find this key, to find the item you need to steal.
+Outside the museum there is a bush, where you can hide your stolen items.
+If the police arrives, they will not notice anything about the bush.
