@@ -30,6 +30,7 @@ public class AlertBox {
         window.setTitle(header);
         window.setMinWidth(400);
         window.setMaxWidth(600);
+        window.setResizable(false);
         Scanner input;
 
         File directory = new File("");

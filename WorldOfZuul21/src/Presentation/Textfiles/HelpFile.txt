@@ -1,1 +1,19 @@
-Here there will be help to how the game works.
+Man får point, hver gang man slipper ud af museet med tyvekoster i sin inventar. Tyvekosterne bliver lagt i en busk uden for museet,
+og man kan derefter gå ind igen, og prøve at stjæle noget mere.
+Når spillet er slut, bliver spillerens samlede antal point udregnet, ud fra antallet af tyvekoster i busken.
+
+Der er to vagter, som går rundt på museet. Man skal undgå at støde ind i disse vagter, da fanger én på stedet, hvis det sker.
+For at stjæle en genstand fra museet i museet, skal strømmen være slukket.
+Er strømmen tændt, vil et forsøg på at stjæle en genstand resultere i, at man aktiverer museets alarm, og bliver fanget på stedet.
+For at slukke for strømmen, skal man finde et håndtag, som man skal interagere med.
+Når man har slukket for strømmen, har man et begrænset antal ture, før strømmen kommer tilbage igen.
+Når strømmen kommer tilbage, bliver politiet tilkaldt, og man har kun et lille antal ture til at undslippe museet,
+inden de kommer og arresterer én.
+Det kan dermed betale sig at finde ud af, hvor genstanden, som man skal stjæle, befinder sig, før man slukker for strømmen.
+Imens strømmen er slukket, kan man sabotere nogle strømrelæer, for at få mere tid, før strømmen kommer tilbage.
+Man skal dog ikke interagere med disse, mens strømmen er tændt, da dette vil resultere at man aktiverer alarmen, og bliver fanget på stedet.
+Nogle gange ligger den genstand, som man skal stjæle, inde i et rum med en låst dør.
+Man kan komme gennem låste døre, hvis man har en nøgle. Nøglen ligger på et bord i museet, og den kan stjæles, uden at man aktiverer alarmen.
+Man har mulighed for at gemme sig, hvilket gør at vagterne kan gå gennem éns rum, uden at opdage én.
+Dette har dog ikke en succesrate på 100%. Man kan godt risikere at vagterne opdager én.
+At gemme sig er dermed ikke en god taktik, medmindre vagterne har trængt én op i en krog. Det er ment som en nødløsning.
